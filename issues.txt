@@ -1,0 +1,28 @@
+found issues:
+
+daily challenge: the answers are blinking superquick. Not possible to select an answer. Clicking does not work.
+During the 3,2,1 go timer, the first question is already shown. Let it wait until the game actually starts.
+
+UI
+credits, diamonds, etc. should be more clearly present on screen. Make it larger, put in top right corner. Check all pages if nothing is on that same position.
+The start button moves too far down, when the menu is full. Put the start game button outside of the menu frame, below it. So it always has a fixed position. Check for all pages.
+
+Guess the country
+Classic/World/Easy: gameover screen has a scroll bar. Make it wider and reposition the contents to fit all on screen. If scrolling is neccesary, we still dont want a scrollbar. High scores should be saved automatically. 
+Classic/Asia/Medium:On 1080p, I cant start the game, the highscore bubble is placed over the start game button. On 1440p it works fine.
+
+Stars system
+Earning stars should only be possible with challenges as part of a set of single player challenges.
+Playing single modes should only earn coins/diamonds and in special occasions treasure chests.
+
+Map problems
+Gambia has an area circle. Remo, Luxembourg,Palestine, Montenegro, Kosovo, Timor-leste, Djibouti,Jamaica,Equatorial-Guinea
+On light theme: The area circles in general should have a white color instead of grey.
+The world map is duplicated endlessly, by scrolling left or right. Cut the world map so that all countries are visible on the max zoom out. Make sure we can scroll to and zoom in on the farthest countries like Alaska and east Russia
+Remove Western Sahara from Morocco.
+When a country with an area circle is guessed correctly, change the border color of the circle to green.
+On light theme, change the ocean color into slightly darker blue.
+When scrolling the map and letting go the mouse button, the map keeps flowing a bit too long. Increase the slowdown with 50%
+There is an area circle east of Brazil, saying it is Kiribati. Remove that circle and place it on actual Kiribati.
+When starting a new world map, the dark theme is incorrect: the land is whit instead of dark. after switching to light and back to dark, it is fixed.
+

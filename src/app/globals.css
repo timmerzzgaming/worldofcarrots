@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Suppress blinking text caret on non-input elements */
+*:not(input):not(textarea):not([contenteditable="true"]) {
+  caret-color: transparent;
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 rounded-3xl;
+  }
+
+  .btn-tactile {
+    @apply font-headline font-extrabold uppercase tracking-wider rounded-2xl
+           transition-all duration-100 ease-in-out
+           hover:scale-[1.03] active:scale-95 active:translate-y-1;
+  }
+
+  .btn-primary {
+    @apply btn-tactile bg-geo-primary text-geo-on-primary
+           border-b-4 border-geo-on-primary
+           shadow-[0_0_20px_-5px_rgba(107,255,193,0.3)]
+           hover:shadow-[0_0_30px_-5px_rgba(107,255,193,0.5)]
+           active:border-b-0;
+  }
+
+  .btn-secondary {
+    @apply btn-tactile bg-geo-secondary text-white
+           border-b-4 border-geo-secondary-dim
+           active:border-b-0;
+  }
+
+  .btn-ghost {
+    @apply btn-tactile bg-geo-on-surface text-geo-bg
+           border-b-4 border-geo-on-surface-dim
+           hover:bg-[#e8ecff]
+           active:border-b-0;
+  }
+
+  .text-glow-primary {
+    text-shadow: 0 0 20px rgba(107, 255, 193, 0.3);
+  }
+
+  .text-glow-secondary {
+    text-shadow: 0 0 20px rgba(100, 168, 254, 0.3);
+  }
+
+  .text-glow-tertiary {
+    text-shadow: 0 0 20px rgba(255, 224, 131, 0.3);
+  }
+
+  .text-glow-error {
+    text-shadow: 0 0 20px rgba(255, 113, 108, 0.3);
+  }
+}
+
+/* MapLibre popup styling for distance mode */
+.distance-popup .maplibregl-popup-content {
+  background: rgba(6, 14, 32, 0.92);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(64, 72, 93, 0.4);
+  border-radius: 12px;
+  padding: 8px 12px;
+  color: #dee5ff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.distance-popup .maplibregl-popup-tip {
+  border-top-color: rgba(6, 14, 32, 0.92);
+}

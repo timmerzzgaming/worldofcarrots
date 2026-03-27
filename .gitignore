@@ -1,7 +1,10 @@
 node_modules/
 .env
-.env.*
+.env.local
+.env.*.local
 !.env.example
+.next/
+out/
 dist/
 build/
 coverage/
@@ -11,3 +14,15 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 tmp/
+
+# Source music files (public/music/ copies are tracked)
+music/
+
+# Dev notes and backups
+backup-pre-stitch/
+stitch-designs/
+carrot/
+MapLibre instructions.txt
+todo list.txt
+prompt-user-credits.md
+webhost.png
