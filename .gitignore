@@ -15,8 +15,9 @@ npm-debug.log*
 Thumbs.db
 tmp/
 
-# Source music files (public/music/ copies are tracked)
-music/
+# Source music files (but NOT public/music/ which is deployed)
+/music/
+!/public/music/
 
 # Dev notes and backups
 backup-pre-stitch/
