@@ -32,8 +32,13 @@ export default function RootLayout({
       <body className={`${jakarta.variable} ${vietnam.variable} font-body bg-geo-bg text-geo-on-surface antialiased`}>
         <Providers>
           <ErrorBoundary>
-            <TopBar />
-            {children}
+            <div className="fixed top-0 left-0 right-0 z-[100] bg-geo-tertiary/90 text-geo-bg text-center text-xs font-headline font-bold py-1 backdrop-blur-sm">
+              Game under development — you may encounter bugs
+            </div>
+            <div className="pt-6">
+              <TopBar />
+              {children}
+            </div>
           </ErrorBoundary>
         </Providers>
       </body>

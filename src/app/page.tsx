@@ -328,7 +328,7 @@ export default function HomePage() {
             className="text-center"
           >
             <h1 className="text-6xl sm:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
-              Geo<span className="text-geo-primary text-glow-primary">Master</span>
+              World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
             </h1>
             <p className="text-geo-on-surface-dim text-lg font-body max-w-md mx-auto mb-10">
               {t('testYourKnowledge')}
@@ -359,7 +359,7 @@ export default function HomePage() {
             className="text-center mb-10 flex-shrink-0"
           >
             <h1 className="text-6xl sm:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
-              Geo<span className="text-geo-primary text-glow-primary">Master</span>
+              World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
             </h1>
             <p className="text-geo-on-surface-dim text-lg font-body max-w-md mx-auto">
               {t('testYourKnowledge')}

@@ -63,7 +63,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-geo-bg"
         >
           <h1 className="text-5xl sm:text-6xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
-            Geo<span className="text-geo-primary text-glow-primary">Master</span>
+            World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
           </h1>
 
           <div className="w-64 mt-8">
