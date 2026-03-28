@@ -15,7 +15,7 @@ const zh: Translations = {
   moreComingSoon: '\u4e2a\u5373\u5c06\u63a8\u51fa',
 
   'mode.classic': '\u7ecf\u5178\u6a21\u5f0f',
-  'mode.classic.desc': '10\u4e2a\u56fd\u5bb6\uff0c\u6bcf\u989815\u79d2',
+  'mode.classic.desc': '10\u4e2a\u56fd\u5bb6\u2014\u2014\u8ba1\u65f6\u968f\u96be\u5ea6\u53d8\u5316',
   'mode.timed': '\u9650\u65f6\u6311\u6218',
   'mode.timed.desc': '60\u79d2\u2014\u2014\u5c3d\u53ef\u80fd\u591a\u5730\u627e\u5230\u56fd\u5bb6',
   'mode.marathon': '\u9a6c\u62c9\u677e',

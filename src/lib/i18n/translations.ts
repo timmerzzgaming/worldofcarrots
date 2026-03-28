@@ -15,7 +15,7 @@ export const en: Translations = {
   moreComingSoon: 'more coming soon',
 
   'mode.classic': 'Classic',
-  'mode.classic.desc': '10 countries, 15 seconds each',
+  'mode.classic.desc': '10 countries — timer varies by difficulty',
   'mode.timed': 'Time Attack',
   'mode.timed.desc': '60 seconds — find as many as you can',
   'mode.marathon': 'Marathon',

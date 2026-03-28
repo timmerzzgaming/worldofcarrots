@@ -15,7 +15,7 @@ const nl: Translations = {
   moreComingSoon: 'meer binnenkort',
 
   'mode.classic': 'Klassiek',
-  'mode.classic.desc': '10 landen, 15 seconden per stuk',
+  'mode.classic.desc': '10 landen — timer varieert per moeilijkheid',
   'mode.timed': 'Tijdrace',
   'mode.timed.desc': '60 seconden — vind er zoveel mogelijk',
   'mode.marathon': 'Marathon',

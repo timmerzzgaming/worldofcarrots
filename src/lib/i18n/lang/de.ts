@@ -15,7 +15,7 @@ const de: Translations = {
   moreComingSoon: 'weitere folgen',
 
   'mode.classic': 'Klassisch',
-  'mode.classic.desc': '10 Laender, je 15 Sekunden',
+  'mode.classic.desc': '10 Länder — Zeit je nach Schwierigkeit',
   'mode.timed': 'Zeitangriff',
   'mode.timed.desc': '60 Sekunden — finde so viele wie moeglich',
   'mode.marathon': 'Marathon',

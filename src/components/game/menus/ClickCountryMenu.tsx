@@ -11,6 +11,7 @@ import { useAuth } from '@/lib/auth/context'
 
 const MODE_ICONS: Record<string, string> = { classic: '\uD83C\uDFAF', timed: '\u23F1\uFE0F', marathon: '\uD83C\uDFC3', survival: '\u2764\uFE0F', practice: '\uD83D\uDCDD', borderless: '\uD83C\uDF10' }
 const DIFFICULTY_ICONS: Record<string, string> = { easy: '\uD83D\uDFE2', medium: '\uD83D\uDFE1', hard: '\uD83D\uDFE0', expert: '\uD83D\uDD34' }
+const DIFFICULTY_SECONDS: Record<string, number> = { easy: 20, medium: 15, hard: 10, expert: 6 }
 
 interface ClickCountryMenuProps {
   onStartGame: (mode: GameMode, difficulty: Difficulty, region: string, variant?: string) => void
@@ -92,6 +93,7 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
               <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
                 isMarathon ? 'text-geo-on-surface-dim' : selectedDifficulty === d.value ? 'text-geo-primary' : 'text-geo-on-surface-dim'
               }`}>{d.label}</p>
+              <p className="text-[10px] text-geo-on-surface-dim font-body mt-0.5">{DIFFICULTY_SECONDS[d.value]}s</p>
             </button>
           )
         })}

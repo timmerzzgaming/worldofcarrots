@@ -7,7 +7,7 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
   classic: {
     mode: 'classic',
     label: 'Classic',
-    description: '10 countries, 15 seconds each',
+    description: '10 countries — timer varies by difficulty',
     totalQuestions: 10,
     globalTimeLimit: null,
     perQuestionTime: 15,

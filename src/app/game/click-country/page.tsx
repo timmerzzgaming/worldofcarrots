@@ -780,6 +780,7 @@ export default function ClickCountryPage() {
                     <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
                       isMarathon ? 'text-geo-on-surface-dim' : selectedDifficulty === d.value ? 'text-geo-primary' : 'text-geo-on-surface-dim'
                     }`}>{d.label}</p>
+                    <p className="text-[10px] text-geo-on-surface-dim font-body mt-0.5">{DIFF_TIME[d.value]}s</p>
                   </button>
                 )
               })}
