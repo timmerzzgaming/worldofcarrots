@@ -11,7 +11,6 @@ const AuthContext = createContext<AuthState>({
   isLoading: true,
   signUp: async () => ({ error: 'Not initialized' }),
   signIn: async () => ({ error: 'Not initialized' }),
-  signInWithPassword: async () => ({ error: 'Not initialized' }),
   signOut: async () => {},
   refreshProfile: async () => {},
   updateCredits: () => {},
@@ -127,25 +126,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => { cancelled = true }
   }, [authUserId])
 
-  const signUp = useCallback(async (email: string, nickname: string, avatar: string): Promise<{ error: string | null }> => {
+  const signUp = useCallback(async (email: string, password: string, nickname: string, avatar: string): Promise<{ error: string | null }> => {
     if (!supabase) return { error: 'Supabase not configured' }
-
-    const { data, error: authError } = await supabase.auth.signInWithOtp({ email })
-    if (authError) return { error: authError.message }
 
     localStorage.setItem('woc-pending-signup', JSON.stringify({ nickname, avatar }))
+
+    const { error: authError } = await supabase.auth.signUp({ email, password })
+    if (authError) {
+      localStorage.removeItem('woc-pending-signup')
+      return { error: authError.message }
+    }
     return { error: null }
   }, [])
 
-  const signIn = useCallback(async (email: string): Promise<{ error: string | null }> => {
-    if (!supabase) return { error: 'Supabase not configured' }
-
-    const { error } = await supabase.auth.signInWithOtp({ email })
-    if (error) return { error: error.message }
-    return { error: null }
-  }, [])
-
-  const signInWithPassword = useCallback(async (email: string, password: string): Promise<{ error: string | null }> => {
+  const signIn = useCallback(async (email: string, password: string): Promise<{ error: string | null }> => {
     if (!supabase) return { error: 'Supabase not configured' }
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) return { error: error.message }
@@ -187,7 +181,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     isLoading,
     signUp,
     signIn,
-    signInWithPassword,
     signOut,
     refreshProfile,
     updateCredits,

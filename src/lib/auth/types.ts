@@ -20,9 +20,8 @@ export interface AuthState {
   isGuest: boolean
   isAdmin: boolean
   isLoading: boolean
-  signUp: (email: string, nickname: string, avatar: string) => Promise<{ error: string | null }>
-  signIn: (email: string) => Promise<{ error: string | null }>
-  signInWithPassword: (email: string, password: string) => Promise<{ error: string | null }>
+  signUp: (email: string, password: string, nickname: string, avatar: string) => Promise<{ error: string | null }>
+  signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
   updateCredits: (delta: number) => void
