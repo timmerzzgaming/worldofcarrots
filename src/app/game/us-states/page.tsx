@@ -600,13 +600,19 @@ export default function USStatesPage() {
         t(`us.diff.${selectedDifficulty}.desc` as keyof Translations),
       )
 
+  const pendingStartRef = useRef<(() => void) | null>(null)
+
   function launchWithCountdown(startFn: () => void) {
-    startFn()
+    pendingStartRef.current = startFn
     setShowCountdown(true)
   }
 
   function onCountdownComplete() {
     setShowCountdown(false)
+    if (pendingStartRef.current) {
+      pendingStartRef.current()
+      pendingStartRef.current = null
+    }
   }
 
   // Hurry up at 5 seconds remaining
@@ -625,7 +631,7 @@ export default function USStatesPage() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Decorative background for menu / results */}
-      {(phase === 'idle' || phase === 'results') && (
+      {(phase === 'idle' || phase === 'results') && !showCountdown && (
         <>
           <MapBackground />
           <FloatingFlags />
@@ -636,7 +642,7 @@ export default function USStatesPage() {
       <div
         ref={containerRef}
         className="absolute inset-0 w-full h-full"
-        style={{ visibility: phase === 'idle' || phase === 'results' ? 'hidden' : 'visible' }}
+        style={{ visibility: (phase === 'idle' || phase === 'results') && !showCountdown ? 'hidden' : 'visible' }}
       />
 
       {/* HUD — playing & feedback */}
@@ -731,7 +737,7 @@ export default function USStatesPage() {
       {/* ================================================================== */}
       {/* MODE SELECTION — idle                                              */}
       {/* ================================================================== */}
-      {phase === 'idle' && (
+      {phase === 'idle' && !showCountdown && (
         <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button

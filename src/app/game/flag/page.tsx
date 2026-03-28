@@ -649,13 +649,19 @@ export default function FlagGamePage() {
     startGame('flag', selectedDifficulty, selectedRegion)
   }
 
+  const pendingStartRef = useRef<(() => void) | null>(null)
+
   function launchWithCountdown(startFn: () => void) {
-    startFn()
+    pendingStartRef.current = startFn
     setShowCountdown(true)
   }
 
   function onCountdownComplete() {
     setShowCountdown(false)
+    if (pendingStartRef.current) {
+      pendingStartRef.current()
+      pendingStartRef.current = null
+    }
   }
 
   // Hurry up at 5 seconds remaining
@@ -674,7 +680,7 @@ export default function FlagGamePage() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Decorative background for selection/results */}
-      {(phase === 'idle' || phase === 'results') && (
+      {(phase === 'idle' || phase === 'results') && !showCountdown && (
         <>
           <MapBackground />
           <FloatingFlags />
@@ -685,7 +691,7 @@ export default function FlagGamePage() {
       <div
         ref={containerRef}
         className="absolute inset-0 w-full h-full"
-        style={{ visibility: phase === 'idle' || phase === 'results' ? 'hidden' : 'visible' }}
+        style={{ visibility: (phase === 'idle' || phase === 'results') && !showCountdown ? 'hidden' : 'visible' }}
       />
 
       {/* Quit/Restart buttons */}
@@ -786,7 +792,7 @@ export default function FlagGamePage() {
       )}
 
       {/* Mode selection */}
-      {phase === 'idle' && (
+      {phase === 'idle' && !showCountdown && (
         <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button
