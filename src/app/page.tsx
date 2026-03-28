@@ -395,20 +395,31 @@ export default function HomePage() {
 
                   <div className="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
                   {categories.map((cat, i) => {
+                    const guestCatLocked = isGuest && cat.id !== 'mapGames'
                     const available = cat.modes.filter((m) => m.available).length
                     const upcoming = cat.modes.filter((m) => !m.available).length
                     return (
                       <motion.button
                         key={cat.id}
-                        onMouseEnter={() => playHover()}
-                        onClick={() => handleCategoryClick(cat.id)}
+                        onMouseEnter={() => !guestCatLocked && playHover()}
+                        onClick={() => !guestCatLocked && handleCategoryClick(cat.id)}
+                        disabled={guestCatLocked}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 * (i + 1) }}
-                        className="group relative flex flex-col items-center text-center p-4 sm:p-8 lg:p-10 glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
+                        className={`group relative flex flex-col items-center text-center p-4 sm:p-8 lg:p-10 glass-panel transition-all ${
+                          guestCatLocked
+                            ? 'opacity-50 cursor-not-allowed'
+                            : 'hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] cursor-pointer'
+                        }`}
                       >
-                        <div className="text-3xl sm:text-6xl lg:text-7xl mb-2 sm:mb-5">{cat.icon}</div>
-                        <h2 className="text-xl sm:text-2xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors">
+                        {guestCatLocked && (
+                          <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                            🔒
+                          </span>
+                        )}
+                        <div className={`text-3xl sm:text-6xl lg:text-7xl mb-2 sm:mb-5 ${guestCatLocked ? 'grayscale' : ''}`}>{cat.icon}</div>
+                        <h2 className={`text-xl sm:text-2xl font-headline font-extrabold uppercase tracking-wide ${guestCatLocked ? 'text-geo-on-surface-dim' : 'text-geo-on-surface group-hover:text-geo-primary transition-colors'}`}>
                           {t(cat.titleKey)}
                         </h2>
                         <p className="text-geo-on-surface-dim mt-2 text-base leading-relaxed">
@@ -430,6 +441,11 @@ export default function HomePage() {
                     )
                   })}
                   </div>
+                  {isGuest && (
+                    <p className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide">
+                      🔒 Create an account to unlock more game modes
+                    </p>
+                  )}
                 </motion.div>
               ) : activeCategory ? (
                 <>
@@ -508,8 +524,25 @@ export default function HomePage() {
                             )
                           }
 
+                          // Guest restriction: only click-country is available
+                          const guestLocked = isGuest && mode.href !== '/game/click-country'
+
+                          if (guestLocked) {
+                            return (
+                              <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
+                                <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                                  🔒
+                                </span>
+                                <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3 grayscale opacity-50">{mode.icon}</div>
+                                <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
+                                  {t(mode.titleKey)}
+                                </h3>
+                              </div>
+                            )
+                          }
+
                           const unlockReq = GAME_UNLOCK_REQUIREMENTS[mode.href]
-                          const unlocked = isGuest || !user || isGameUnlocked(mode.href, user.level, unlockedSet)
+                          const unlocked = !user || isGameUnlocked(mode.href, user.level, unlockedSet)
 
                           if (!unlocked) {
                             // Locked — show requirement
@@ -551,6 +584,18 @@ export default function HomePage() {
                       </motion.div>
                     ))}
                   </motion.div>
+
+                  {/* Guest unlock prompt */}
+                  {isGuest && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide"
+                    >
+                      🔒 Create an account to unlock more game modes
+                    </motion.p>
+                  )}
 
                   {/* Zoom panel — selected game grows to replace the grid, shows actual menu */}
                   <AnimatePresence>

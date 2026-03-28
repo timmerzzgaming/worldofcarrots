@@ -7,6 +7,7 @@ import type { GameMode, GameModeConfig } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playClick, playHover } from '@/lib/sounds'
+import { useAuth } from '@/lib/auth/context'
 
 const MODE_ICONS: Record<string, string> = { classic: '\uD83C\uDFAF', timed: '\u23F1\uFE0F', marathon: '\uD83C\uDFC3', survival: '\u2764\uFE0F', practice: '\uD83D\uDCDD', borderless: '\uD83C\uDF10' }
 const DIFFICULTY_ICONS: Record<string, string> = { easy: '\uD83D\uDFE2', medium: '\uD83D\uDFE1', hard: '\uD83D\uDFE0', expert: '\uD83D\uDD34' }
@@ -17,6 +18,7 @@ interface ClickCountryMenuProps {
 
 export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps) {
   const { t } = useTranslation()
+  const { isGuest } = useAuth()
   const [selectedMode, setSelectedMode] = useState<GameMode>('classic')
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('easy')
   const [selectedRegion, setSelectedRegion] = useState('World')
@@ -26,7 +28,7 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
     <>
       {/* Game modes */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
-        {(Object.values(GAME_MODES) as GameModeConfig[]).filter((m) => m.mode !== 'flag' && m.mode !== 'distance').map((m) => (
+        {(Object.values(GAME_MODES) as GameModeConfig[]).filter((m) => m.mode !== 'flag' && m.mode !== 'distance').filter((m) => !isGuest || m.mode === 'classic').map((m) => (
             <button
               key={m.mode}
               onMouseEnter={() => playHover()}
