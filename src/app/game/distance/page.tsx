@@ -739,7 +739,7 @@ export default function DistanceGamePage() {
             </button>
           </div>
           <h1 className="text-6xl sm:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-center mt-6 mb-4 flex-shrink-0">
-            Geo<span className="text-geo-primary text-glow-primary">Master</span>
+            World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
           </h1>
           <div className="max-w-xl w-full flex-1 min-h-0 overflow-y-auto">
             <h2 className="text-2xl sm:text-3xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-center mb-1">
