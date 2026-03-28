@@ -24,7 +24,7 @@ import {
   initialViewState,
 } from '@/lib/mapConfig'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
-import { mapBgColor, countryFillColor, countryLineColor, countryHoverColor, circleStrokeColor } from '@/lib/theme'
+import { mapBgColor, countryFillColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor } from '@/lib/theme'
 import StarRating from '@/components/credits/StarRating'
 import LevelBadge from '@/components/xp/LevelBadge'
 import { cn } from '@/lib/cn'
@@ -171,6 +171,7 @@ export default function DailyChallengePage() {
                 ['boolean', ['feature-state', 'wrong'], false], '#dc2626',
                 ['boolean', ['feature-state', 'target'], false], '#2563eb',
                 ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+                ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                 countryLineColor(),
               ],
               'line-width': [
@@ -201,7 +202,16 @@ export default function DailyChallengePage() {
             id: SMALL_COUNTRIES_RING_LAYER, type: 'circle', source: SMALL_COUNTRIES_SOURCE,
             paint: {
               'circle-radius': ['get', 'radius'], 'circle-color': 'transparent',
-              'circle-stroke-width': 2, 'circle-stroke-color': circleStrokeColor(), 'circle-stroke-opacity': 0.8,
+              'circle-stroke-width': 2,
+              'circle-stroke-color': [
+                'case',
+                ['boolean', ['feature-state', 'correct'], false], '#22c55e',
+                ['boolean', ['feature-state', 'wrong'], false], '#ef4444',
+                ['boolean', ['feature-state', 'target'], false], '#3b82f6',
+                ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
+                circleStrokeColor(),
+              ],
+              'circle-stroke-opacity': 0.8,
             },
           })
 

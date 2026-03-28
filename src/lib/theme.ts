@@ -42,3 +42,8 @@ export function circleStrokeColor(theme?: Theme): string {
 export function countryHoverColor(theme?: Theme): string {
   return (theme ?? getTheme()) === 'light' ? '#cbd5e1' : '#cbd5e1'
 }
+
+/** Country hover border/circle color — green on light, lighter gray on dark */
+export function countryHoverLineColor(theme?: Theme): string {
+  return (theme ?? getTheme()) === 'light' ? '#22c55e' : '#94a3b8'
+}

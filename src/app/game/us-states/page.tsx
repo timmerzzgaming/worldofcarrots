@@ -21,7 +21,7 @@ import {
   playCorrect, playWrong, playGameStart, playGameOver,
   playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic,
 } from '@/lib/sounds'
-import { getTheme, mapBgColor, countryLineColor, type Theme } from '@/lib/theme'
+import { getTheme, mapBgColor, countryLineColor, countryHoverLineColor, type Theme } from '@/lib/theme'
 import { centroid, createFeatureStateSetter, shuffle } from '@/lib/mapHelpers'
 import { useMapThemeListener } from '@/hooks/useMapThemeListener'
 import { useGameRewards } from '@/hooks/useGameRewards'
@@ -223,6 +223,7 @@ export default function USStatesPage() {
                 ['boolean', ['feature-state', 'wrong'], false], '#dc2626',
                 ['boolean', ['feature-state', 'target'], false], '#2563eb',
                 ['boolean', ['feature-state', 'solved'], false], '#334155',
+                ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                 countryLineColor(),
               ],
               'line-width': [

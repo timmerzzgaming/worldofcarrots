@@ -12,7 +12,7 @@ import type { GameMode } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic } from '@/lib/sounds'
-import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryLineColor, circleStrokeColor } from '@/lib/theme'
+import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor } from '@/lib/theme'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
 import MapBackground from '@/components/home/MapBackground'
@@ -164,6 +164,7 @@ export default function ClickCountryPage() {
                   ['boolean', ['feature-state', 'wrong'], false], '#dc2626',
                   ['boolean', ['feature-state', 'target'], false], '#2563eb',
                   ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+                  ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                   countryLineColor(),
                 ],
                 'line-width': [
@@ -220,6 +221,7 @@ export default function ClickCountryPage() {
                   ['boolean', ['feature-state', 'wrong'], false], '#ef4444',
                   ['boolean', ['feature-state', 'target'], false], '#3b82f6',
                   ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+                  ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                   circleStrokeColor(),
                 ],
                 'circle-stroke-opacity': 0.8,
@@ -485,6 +487,7 @@ export default function ClickCountryPage() {
         ['boolean', ['feature-state', 'wrong'], false], '#dc2626',
         ['boolean', ['feature-state', 'target'], false], '#2563eb',
         ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+        ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
         countryLineColor(),
       ])
       map.setPaintProperty?.(COUNTRIES_LINE_LAYER, 'line-width', [
