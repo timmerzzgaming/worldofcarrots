@@ -42,23 +42,23 @@ export default function UserBadge() {
     <div className="relative">
       <button
         onClick={() => { playClick(); setShowMenu(!showMenu) }}
-        className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-4 sm:py-2 rounded-xl bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 hover:border-geo-primary/30 transition-all"
+        className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-3 rounded-xl bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 hover:border-geo-primary/30 transition-all"
       >
-        <span className="text-xl sm:text-2xl">{user!.avatar}</span>
-        <div className="flex flex-col items-start gap-0.5">
-          <div className="flex items-center gap-1.5">
-            <LevelBadge level={user!.level} />
-            <span className="text-xs sm:text-sm font-headline font-bold text-geo-on-surface">{user!.nickname}</span>
+        <span className="text-2xl sm:text-3xl">{user!.avatar}</span>
+        <div className="flex flex-col items-start gap-0.5 sm:gap-1">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <LevelBadge level={user!.level} size="md" />
+            <span className="text-sm sm:text-base font-headline font-bold text-geo-on-surface">{user!.nickname}</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="text-[10px] sm:text-xs font-headline font-bold text-geo-tertiary-bright">
-              💰{user!.credits.toLocaleString()}
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="text-xs sm:text-sm font-headline font-bold text-geo-tertiary-bright">
+              💰 {user!.credits.toLocaleString()}
             </span>
-            <span className="text-[10px] sm:text-xs font-headline font-bold text-orange-400">
-              🥕{user!.carrots}
+            <span className="text-xs sm:text-sm font-headline font-bold text-orange-400">
+              🥕 {user!.carrots}
             </span>
-            <span className="text-[10px] sm:text-xs font-headline font-bold text-geo-secondary">
-              ✨{user!.xp.toLocaleString()}
+            <span className="text-xs sm:text-sm font-headline font-bold text-geo-secondary">
+              ✨ {user!.xp.toLocaleString()}
             </span>
           </div>
         </div>
