@@ -21,7 +21,7 @@ export const en: Translations = {
   'mode.marathon': 'Marathon',
   'mode.marathon.desc': 'All countries — fill the entire map',
   'mode.survival': 'Survival',
-  'mode.survival.desc': '3 lives — lose one per mistake, earn one back every 25 correct',
+  'mode.survival.desc': '3 lives, 10s timer — earn a life back every 10 correct',
   'mode.practice': 'Practice',
   'mode.practice.desc': 'No timer, no lives — explore at your own pace',
   'mode.borderless': 'Borderless',

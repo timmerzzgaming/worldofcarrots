@@ -34,10 +34,10 @@ export const GAME_MODES: Record<GameMode, GameModeConfig> = {
   survival: {
     mode: 'survival',
     label: 'Survival',
-    description: '3 lives — lose one per mistake, earn one back every 25 correct',
+    description: '3 lives, 10s per question — earn a life back every 10 correct',
     totalQuestions: null,
     globalTimeLimit: null,
-    perQuestionTime: 15,
+    perQuestionTime: 10,
     feedbackDelay: 1000,
   },
   practice: {

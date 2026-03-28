@@ -62,7 +62,7 @@ Defined in `lib/gameEngine.ts` as `GAME_MODES` record:
 - **classic** — 10 questions, 15s each
 - **timed** — 60s global timer, unlimited questions
 - **marathon** — all 197 countries, no timer
-- **survival** — 3 lives, lose 1 per mistake, earn 1 back every 25 correct
+- **survival** — 3 lives, 10s per question, earn 1 life back every 10 correct
 - **practice** — no timer, no lives, optional region filter
 - **borderless** — no visible borders, 3 lives, fully opaque landmass
 - **flag** — see flag, click country. 3 hints (continent/eliminate/narrow), skip with re-queue, 3 lives

@@ -21,7 +21,7 @@ const nl: Translations = {
   'mode.marathon': 'Marathon',
   'mode.marathon.desc': 'Alle landen — vul de hele kaart',
   'mode.survival': 'Overleven',
-  'mode.survival.desc': '3 levens — verlies er een per fout, verdien er een per 25 goed',
+  'mode.survival.desc': '3 levens, 10s timer — verdien een leven terug per 10 goed',
   'mode.practice': 'Oefenen',
   'mode.practice.desc': 'Geen timer, geen levens — verken op je eigen tempo',
   'mode.borderless': 'Grenzeloos',

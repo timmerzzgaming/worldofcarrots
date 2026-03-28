@@ -21,7 +21,7 @@ const fr: Translations = {
   'mode.marathon': 'Marathon',
   'mode.marathon.desc': 'Tous les pays — remplissez la carte',
   'mode.survival': 'Survie',
-  'mode.survival.desc': '3 vies — perdez-en une par erreur, gagnez-en une tous les 25 corrects',
+  'mode.survival.desc': '3 vies, 10s par question — gagnez une vie tous les 10 corrects',
   'mode.practice': 'Entrainement',
   'mode.practice.desc': 'Pas de chrono, pas de vies — explorez a votre rythme',
   'mode.borderless': 'Sans frontieres',

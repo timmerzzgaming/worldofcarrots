@@ -3,7 +3,7 @@ import type { GamePhase, GameMode, GameModeConfig, Question, AnswerResult, Count
 import { GAME_MODES, generateQuestions, calculateScore } from '@/lib/gameEngine'
 import { type Difficulty, filterByDifficulty } from '@/lib/countryDifficulty'
 
-const LIVES_PER_LIFE_BACK = 25
+const LIVES_PER_LIFE_BACK = 10
 
 interface GameStore {
   phase: GamePhase
