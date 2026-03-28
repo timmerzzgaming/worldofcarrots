@@ -21,6 +21,7 @@ interface GameStore {
   elapsed: number
   feedbackCountry: string | null
   feedbackCorrect: boolean | null
+  lifeEarned: boolean
   correctCountries: Set<string>
 
   variant: string
@@ -50,6 +51,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   elapsed: 0,
   feedbackCountry: null,
   feedbackCorrect: null,
+  lifeEarned: false,
   correctCountries: new Set(),
   variant: '',
   countryRegions: new Map(),
@@ -99,6 +101,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       elapsed: 0,
       feedbackCountry: null,
       feedbackCorrect: null,
+      lifeEarned: false,
       correctCountries: new Set(),
     })
   },
@@ -126,11 +129,13 @@ export const useGameStore = create<GameStore>((set, get) => ({
     // Lives tracking: survival and borderless
     let newLives = lives
     let newStreak = streak
+    let earnedLife = false
     if (mode === 'survival') {
       if (correct) {
         newStreak = streak + 1
         if (newStreak > 0 && newStreak % LIVES_PER_LIFE_BACK === 0) {
           newLives = lives + 1
+          earnedLife = true
         }
       } else {
         newLives = lives - 1
@@ -164,6 +169,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
       streak: newStreak,
       feedbackCountry: question.country.name,
       feedbackCorrect: correct,
+      lifeEarned: earnedLife,
       correctCountries: newCorrect,
     })
   },

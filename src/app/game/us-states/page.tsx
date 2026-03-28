@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { motion } from 'framer-motion'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import {
   US_STATES, US_REGION_VIEWS, STATE_COLORS,
@@ -124,6 +125,7 @@ export default function USStatesPage() {
   const livesRef = useRef(3)
   const [streak, setStreak] = useState(0)
   const streakRef = useRef(0)
+  const lifeEarnedRef = useRef(false)
   const [timeRemaining, setTimeRemaining] = useState(0)
   const timeRemainingRef = useRef(0)
   const [elapsed, setElapsed] = useState(0)
@@ -441,10 +443,14 @@ export default function USStatesPage() {
     // Lives
     let newLives = livesRef.current
     let newStreak = streakRef.current
+    let earnedLife = false
     if (cfg.lives !== null) {
       if (correct) {
         newStreak = streakRef.current + 1
-        if (newStreak > 0 && newStreak % LIVES_PER_LIFE_BACK === 0) newLives++
+        if (newStreak > 0 && newStreak % LIVES_PER_LIFE_BACK === 0) {
+          newLives++
+          earnedLife = true
+        }
       } else {
         newLives--
         newStreak = 0
@@ -452,6 +458,7 @@ export default function USStatesPage() {
     }
     livesRef.current = newLives
     streakRef.current = newStreak
+    lifeEarnedRef.current = earnedLife
 
     // Feedback visuals
     const lookup = nameToIdRef.current
@@ -711,6 +718,17 @@ export default function USStatesPage() {
                   </p>
                 )}
               </div>
+              {lifeEarnedRef.current && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.8 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  className="mt-2 text-center"
+                >
+                  <span className="inline-block px-5 py-2 rounded-full bg-geo-primary/20 border-2 border-geo-primary/50 text-geo-primary font-headline font-extrabold text-sm sm:text-base uppercase tracking-wider animate-pulse shadow-[0_0_20px_rgba(107,255,193,0.3)]">
+                    {streak} in a row: 1UP ♥
+                  </span>
+                </motion.div>
+              )}
             </div>
           )}
         </>

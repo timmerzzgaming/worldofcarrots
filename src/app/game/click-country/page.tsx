@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import { motion } from 'framer-motion'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useGameStore } from '@/store/gameStore'
 import { getCountriesFromGeoJSON, GAME_MODES } from '@/lib/gameEngine'
@@ -55,7 +56,7 @@ export default function ClickCountryPage() {
   const {
     phase, mode, modeConfig, variant, questions, currentIndex, answers, score,
     timeRemaining, elapsed, lives, streak, correctCountries,
-    feedbackCountry, feedbackCorrect,
+    feedbackCountry, feedbackCorrect, lifeEarned,
     startGame, nextQuestion, reset,
   } = useGameStore()
 
@@ -637,6 +638,17 @@ export default function ClickCountryPage() {
             delay={modeConfig.feedbackDelay}
             onContinue={nextQuestion}
           />
+          {lifeEarned && (
+            <motion.div
+              initial={{ opacity: 0, y: 10, scale: 0.8 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              className="mt-2 text-center"
+            >
+              <span className="inline-block px-5 py-2 rounded-full bg-geo-primary/20 border-2 border-geo-primary/50 text-geo-primary font-headline font-extrabold text-sm sm:text-base uppercase tracking-wider animate-pulse shadow-[0_0_20px_rgba(107,255,193,0.3)]">
+                {streak} in a row: 1UP ♥
+              </span>
+            </motion.div>
+          )}
         </div>
       )}
 
