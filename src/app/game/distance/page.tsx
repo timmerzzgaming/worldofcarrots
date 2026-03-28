@@ -623,9 +623,9 @@ export default function DistanceGamePage() {
         />
       )}
 
-      {/* Question card — just above center */}
+      {/* Question card — top center */}
       {phase === 'playing' && q && (
-        <div className="absolute top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
           <CityQuestionCard
             cityName={q.city}
             countryName={q.country}
