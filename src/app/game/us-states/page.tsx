@@ -773,14 +773,14 @@ export default function USStatesPage() {
             </p>
 
             {/* Game modes */}
-            <div className="grid grid-cols-3 gap-3 mb-5">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-5">
               {MODE_KEYS.map((m) => {
                 const icons: Record<string, string> = { classic: '🎯', timed: '⏱️', marathon: '🏃', survival: '❤️', practice: '📝' }
                 return (
                   <button
                     key={m}
                     onClick={() => { playClick(); setSelectedMode(m) }}
-                    className={`group glass-panel p-4 aspect-square flex flex-col items-center justify-center text-center transition-all cursor-pointer ${
+                    className={`group glass-panel p-3 sm:p-4 aspect-square flex flex-col items-center justify-center text-center transition-all cursor-pointer ${
                       selectedMode === m
                         ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_20px_-5px_rgba(107,255,193,0.2)]'
                         : 'hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)]'
@@ -795,7 +795,7 @@ export default function USStatesPage() {
                 )
               })}
               {/* Jigsaw — coming soon placeholder */}
-              <div className="glass-panel p-4 aspect-square flex flex-col items-center justify-center text-center opacity-70 cursor-not-allowed">
+              <div className="glass-panel p-3 sm:p-4 aspect-square flex flex-col items-center justify-center text-center opacity-70 cursor-not-allowed">
                 <div className="text-2xl mb-2">🧩</div>
                 <p className="text-sm font-headline font-extrabold uppercase tracking-wide text-white">{t('mode.jigsaw' as keyof Translations) || 'Jigsaw'}</p>
                 <p className="text-xs mt-1 bg-geo-primary text-black font-headline font-bold leading-relaxed px-2 py-0.5 rounded-full">{t('comingSoon')}</p>
@@ -804,7 +804,7 @@ export default function USStatesPage() {
 
             {/* Difficulty */}
             <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectDifficulty')}</p>
-            <div className="grid grid-cols-4 gap-2 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
               {DIFFICULTIES.map((d) => {
                 const isMarathon = selectedMode === 'marathon'
                 const icons: Record<string, string> = { easy: '🟢', medium: '🟡', hard: '🟠', expert: '🔴' }

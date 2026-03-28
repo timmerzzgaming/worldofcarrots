@@ -62,11 +62,11 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           transition={{ duration: 0.4 }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-geo-bg"
         >
-          <h1 className="text-5xl sm:text-6xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
             World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
           </h1>
 
-          <div className="w-64 mt-8">
+          <div className="w-56 sm:w-64 mt-8">
             <div className="flex justify-between mb-2">
               <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest">
                 {t('loadingGame')}

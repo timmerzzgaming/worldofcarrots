@@ -31,8 +31,8 @@ export default class ErrorBoundary extends Component<Props, State> {
       if (this.props.fallback) return this.props.fallback
 
       return (
-        <div className="min-h-screen bg-geo-bg flex items-center justify-center p-8">
-          <div className="glass-panel p-8 max-w-md w-full text-center">
+        <div className="min-h-screen bg-geo-bg flex items-center justify-center p-4 sm:p-8">
+          <div className="glass-panel p-4 sm:p-6 lg:p-8 max-w-md w-full text-center">
             <p className="text-4xl mb-4">⚠️</p>
             <h2 className="text-xl font-headline font-extrabold text-geo-on-surface uppercase mb-2">
               Something went wrong

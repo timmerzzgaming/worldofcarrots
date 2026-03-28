@@ -41,9 +41,9 @@ export default function DailyChallengeBanner({ onPlay }: DailyChallengeBannerPro
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel p-4 border-2 border-geo-tertiary/30"
+      className="glass-panel p-3 sm:p-4 border-2 border-geo-tertiary/30"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
         <div>
           <p className="text-xs font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest">
             Daily Challenge

@@ -45,9 +45,9 @@ export default function FlagQuestionCard({
       key={flagUrl}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel px-2 py-1.5 sm:px-5 sm:py-3 lg:px-8 lg:py-5 2xl:px-10 2xl:py-6 text-center max-w-[240px] sm:max-w-sm 2xl:max-w-md"
+      className="glass-panel px-2 py-1.5 sm:px-5 sm:py-3 lg:px-8 lg:py-5 2xl:px-10 2xl:py-6 text-center max-w-[240px] sm:max-w-sm lg:max-w-md 2xl:max-w-lg"
     >
-      <p className="text-geo-on-surface-dim text-[10px] 2xl:text-xs font-headline font-bold uppercase tracking-widest mb-2 2xl:mb-3">
+      <p className="text-geo-on-surface-dim text-[10px] sm:text-xs 2xl:text-sm font-headline font-bold uppercase tracking-widest mb-2 2xl:mb-3">
         {questionNumber} {t('of')} {totalQuestions} — {t('guessTheFlag')}
       </p>
 
@@ -69,7 +69,7 @@ export default function FlagQuestionCard({
         )}
       </div>
 
-      <p className="text-geo-on-surface text-xs sm:text-sm 2xl:text-lg font-body mb-2 sm:mb-3 2xl:mb-4">
+      <p className="text-geo-on-surface text-xs sm:text-sm lg:text-base 2xl:text-lg font-body mb-2 sm:mb-3 2xl:mb-4">
         {t('clickCountryOnMap')}
       </p>
 
@@ -114,7 +114,7 @@ export default function FlagQuestionCard({
       <div className="flex items-center justify-center gap-4 mt-3 2xl:mt-4">
         <button
           onClick={onSkip}
-          className="px-4 py-1.5 2xl:px-5 2xl:py-2 rounded-full text-xs 2xl:text-sm font-headline font-bold uppercase tracking-wider transition-all border border-geo-outline-dim/30 text-geo-on-surface-dim hover:text-geo-secondary hover:border-geo-secondary/40"
+          className="px-4 py-1.5 2xl:px-5 2xl:py-2 rounded-full text-xs lg:text-sm font-headline font-bold uppercase tracking-wider transition-all border border-geo-outline-dim/30 text-geo-on-surface-dim hover:text-geo-secondary hover:border-geo-secondary/40"
         >
           {t('skip')}
         </button>

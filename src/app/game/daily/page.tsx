@@ -498,7 +498,7 @@ export default function DailyChallengePage() {
         <>
           {/* Question card — top center */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-            <div className="glass-panel px-4 py-2 2xl:px-6 2xl:py-3 text-center min-w-[240px] 2xl:min-w-[280px]">
+            <div className="glass-panel px-3 py-2 sm:px-4 2xl:px-6 2xl:py-3 text-center min-w-[200px] sm:min-w-[240px] 2xl:min-w-[280px]">
               <p className="text-[10px] font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest mb-1">
                 Daily Challenge — {currentIndex + 1}/{QUESTION_COUNT}
               </p>
@@ -544,7 +544,7 @@ export default function DailyChallengePage() {
       {/* Results */}
       {phase === 'results' && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-geo-bg/80 backdrop-blur-sm p-4">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-6 max-w-md w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-4 sm:p-6 max-w-md w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
             <StarRating stars={stars as 0 | 1 | 2 | 3} />
 
             <h2 className="text-2xl font-headline font-extrabold text-geo-on-surface uppercase text-center mt-3 mb-4">

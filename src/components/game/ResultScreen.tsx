@@ -165,10 +165,10 @@ export default function ResultScreen({ mode, difficulty, variant, answers, elaps
         </h2>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:gap-4 mb-4 sm:mb-5">
           {getStats().map((stat, i) => (
             <div key={stat.label} className="bg-geo-surface-high/50 rounded-xl sm:rounded-2xl p-2 sm:p-3 text-center border border-geo-outline-dim/20">
-              <p className="text-geo-on-surface-dim text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-widest mb-0.5">{stat.label}</p>
+              <p className="text-geo-on-surface-dim text-[9px] sm:text-[10px] lg:text-xs font-headline font-bold uppercase tracking-widest mb-0.5">{stat.label}</p>
               <p className={`text-xl sm:text-2xl font-headline font-extrabold ${statColors[i]} drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]`}>{stat.value}</p>
             </div>
           ))}
@@ -275,7 +275,7 @@ export default function ResultScreen({ mode, difficulty, variant, answers, elaps
             <summary className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest cursor-pointer hover:text-geo-on-surface mb-2">
               {t('answerDetails')}
             </summary>
-            <div className="max-h-40 overflow-y-auto space-y-1">
+            <div className="max-h-40 sm:max-h-48 overflow-y-auto space-y-1">
               {answers.map((a, i) => (
                 <div
                   key={i}

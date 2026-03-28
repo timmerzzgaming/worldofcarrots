@@ -20,7 +20,7 @@ export default function FlagMenu({ onStartGame }: FlagMenuProps) {
   return (
     <>
       {/* How it works */}
-      <div className="glass-panel p-5 mb-5">
+      <div className="glass-panel p-3 sm:p-5 mb-4 sm:mb-5">
         <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest mb-3">{t('howItWorks')}</p>
         <div className="space-y-2 text-sm font-body text-geo-on-surface-dim">
           <div className="flex items-start gap-2">

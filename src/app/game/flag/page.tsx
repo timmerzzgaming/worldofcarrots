@@ -868,7 +868,7 @@ export default function FlagGamePage() {
 
             {/* Difficulty */}
             <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectDifficulty')}</p>
-            <div className="grid grid-cols-4 gap-2 mb-5">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
               {DIFFICULTIES.map((d) => {
                 const icons: Record<string, string> = { easy: '🟢', medium: '🟡', hard: '🟠', expert: '🔴' }
                 return (

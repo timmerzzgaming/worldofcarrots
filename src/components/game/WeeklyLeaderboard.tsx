@@ -43,7 +43,7 @@ export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-panel p-6 max-w-lg w-full max-h-[80vh] overflow-hidden flex flex-col"
+        className="glass-panel p-4 sm:p-6 max-w-lg w-full max-h-[90vh] sm:max-h-[80vh] overflow-hidden flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-4">
@@ -64,7 +64,7 @@ export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
               aria-selected={selectedMode === id}
               onClick={() => setSelectedMode(id)}
               className={cn(
-                'px-3 py-1 rounded-lg text-xs font-headline font-bold whitespace-nowrap transition-colors',
+                'px-2.5 py-1.5 sm:px-3 sm:py-1 rounded-lg text-xs font-headline font-bold whitespace-nowrap transition-colors',
                 selectedMode === id ? 'bg-geo-primary/20 text-geo-primary' : 'text-geo-on-surface-dim hover:text-geo-on-surface',
               )}
             >

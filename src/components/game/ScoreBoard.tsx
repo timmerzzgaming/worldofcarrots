@@ -38,7 +38,7 @@ export default function ScoreBoard({
     <div className="glass-panel px-2 py-1.5 sm:px-5 sm:py-3 flex items-center gap-1.5 sm:gap-4 lg:gap-5 flex-wrap">
       {/* Score */}
       <div>
-        <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">
+        <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">
           {mode === 'timed' ? t('found') : t('score')}
         </p>
         <p className="text-geo-primary text-base sm:text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
@@ -49,7 +49,7 @@ export default function ScoreBoard({
       {/* Lives (survival / borderless / flag) */}
       {(mode === 'survival' || mode === 'borderless' || mode === 'flag') && (
         <div>
-          <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('lives')}</p>
+          <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('lives')}</p>
           <p className="text-geo-error text-base sm:text-2xl font-headline font-extrabold tabular-nums">
             {'♥'.repeat(lives)}
             <span className="text-geo-outline">{'♡'.repeat(Math.max(0, 3 - lives))}</span>
@@ -60,7 +60,7 @@ export default function ScoreBoard({
       {/* Progress (marathon/survival/flag) */}
       {(mode === 'marathon' || mode === 'survival' || mode === 'flag') && (
         <div>
-          <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('progress')}</p>
+          <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('progress')}</p>
           <p className="text-geo-secondary text-base sm:text-lg font-headline font-extrabold tabular-nums">
             {currentIndex + 1}/{totalQuestions}
           </p>
@@ -70,7 +70,7 @@ export default function ScoreBoard({
       {/* Timer */}
       {hasTimer && (
         <div className="flex-1 min-w-[80px] sm:min-w-[100px]">
-          <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest mb-1">{t('time')}</p>
+          <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest mb-1">{t('time')}</p>
           <div className="h-3 bg-geo-surface-highest rounded-full overflow-hidden border border-geo-outline-dim/30">
             <div
               className={cn(
@@ -92,7 +92,7 @@ export default function ScoreBoard({
       {/* Elapsed (marathon) */}
       {!hasTimer && mode === 'marathon' && (
         <div>
-          <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('time')}</p>
+          <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('time')}</p>
           <p className="text-geo-on-surface text-base sm:text-lg font-headline font-extrabold tabular-nums">
             {Math.floor(elapsed / 60)}:{String(Math.floor(elapsed % 60)).padStart(2, '0')}
           </p>
@@ -102,7 +102,7 @@ export default function ScoreBoard({
       {/* Streak (survival / borderless / flag) */}
       {(mode === 'survival' || mode === 'borderless' || mode === 'flag') && streak >= 2 && (
         <div>
-          <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('streak')}</p>
+          <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('streak')}</p>
           <p className="text-geo-tertiary text-base sm:text-lg font-headline font-extrabold tabular-nums text-glow-tertiary">{streak}</p>
         </div>
       )}

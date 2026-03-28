@@ -662,16 +662,16 @@ export default function DistanceGamePage() {
       {/* Scoreboard during game */}
       {(phase === 'playing' || phase === 'feedback') && (
         <div className="absolute top-4 right-4 z-10">
-          <div className="glass-panel px-5 py-3 flex items-center gap-5">
+          <div className="glass-panel px-3 py-2 sm:px-5 sm:py-3 flex items-center gap-3 sm:gap-5">
             <div>
-              <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('score')}</p>
-              <p className="text-geo-primary text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
+              <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('score')}</p>
+              <p className="text-geo-primary text-lg sm:text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
                 {totalScore}
               </p>
             </div>
             <div>
-              <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('progress')}</p>
-              <p className="text-geo-secondary text-lg font-headline font-extrabold tabular-nums">
+              <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('progress')}</p>
+              <p className="text-geo-secondary text-base sm:text-lg font-headline font-extrabold tabular-nums">
                 {currentIndex + 1}/{questions.length}
               </p>
             </div>
@@ -769,7 +769,7 @@ export default function DistanceGamePage() {
 
             {/* Difficulty */}
             <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectDifficulty')}</p>
-            <div className="grid grid-cols-4 gap-2 mb-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4">
               {(['easy', 'medium', 'hard', 'expert'] as DistanceDifficulty[]).map((d) => {
                 const icons: Record<string, string> = { easy: '🟢', medium: '🟡', hard: '🟠', expert: '🔴' }
                 return (

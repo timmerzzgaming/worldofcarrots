@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 
 // A selection of recognizable flags spread around the viewport
 const FLAGS = [
@@ -20,6 +20,12 @@ const FLAGS = [
 ]
 
 export default function FloatingFlags() {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 640)
+  }, [])
+
   // Stable random offsets for natural staggering
   const flagData = useMemo(
     () =>
@@ -28,9 +34,9 @@ export default function FloatingFlags() {
         delay: i * 0.7,
         duration: 4 + (i % 3) * 1.5,
         yDrift: 8 + (i % 4) * 4,
-        size: 104,
+        size: isMobile ? 64 : 104,
       })),
-    []
+    [isMobile]
   )
 
   return (
