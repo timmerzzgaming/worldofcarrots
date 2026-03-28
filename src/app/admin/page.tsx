@@ -70,6 +70,29 @@ export default function AdminPage() {
     fetchUsers()
   }
 
+  async function handleResetPassword(userId: string, nickname: string) {
+    const newPassword = prompt(`Enter new password for "${nickname}" (min 6 chars):`)
+    if (!newPassword || newPassword.length < 6) {
+      if (newPassword !== null) alert('Password must be at least 6 characters')
+      return
+    }
+    if (!supabase) return
+    const { data: { session } } = await supabase.auth.getSession()
+    const res = await fetch('/api/admin/reset-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${session?.access_token}`,
+      },
+      body: JSON.stringify({ userId, newPassword }),
+    })
+    if (res.ok) alert(`Password reset for "${nickname}"`)
+    else {
+      const json = await res.json()
+      alert(`Failed: ${json.error?.message ?? 'Unknown error'}`)
+    }
+  }
+
   async function handleAdjustCredits(u: UserRow) {
     const amount = parseInt(u._adjustAmount ?? '', 10)
     if (isNaN(amount) || amount === 0 || !u._adjustReason?.trim()) return
@@ -336,6 +359,12 @@ export default function AdminPage() {
                           }`}
                         >
                           {u.is_banned ? 'Unban' : 'Ban'}
+                        </button>
+                        <button
+                          onClick={() => handleResetPassword(u.id, u.nickname)}
+                          className="px-2 py-1 rounded text-xs font-headline font-bold bg-geo-secondary/20 text-geo-secondary hover:bg-geo-secondary/30"
+                        >
+                          Reset PW
                         </button>
                         {u.role !== 'admin' && (
                           <button

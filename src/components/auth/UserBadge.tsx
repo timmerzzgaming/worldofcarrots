@@ -19,7 +19,18 @@ export default function UserBadge() {
   const [showMenu, setShowMenu] = useState(false)
 
   if (isGuest) {
-    return null
+    return (
+      <>
+        <button
+          onClick={() => { playClick(); setShowAuth(true) }}
+          className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 hover:border-geo-primary/30 transition-all"
+        >
+          <span className="text-lg">🌍</span>
+          <span className="text-xs sm:text-sm font-headline font-bold text-geo-on-surface">{t('auth.signIn' as keyof Translations)}</span>
+        </button>
+        {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+      </>
+    )
   }
 
   return (

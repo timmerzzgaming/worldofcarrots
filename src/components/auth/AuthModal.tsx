@@ -15,14 +15,17 @@ type Mode = 'choice' | 'signup' | 'signin'
 
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { t } = useTranslation()
-  const { signUp, signIn } = useAuth()
+  const { signIn } = useAuth()
   const [mode, setMode] = useState<Mode>('choice')
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [nickname, setNickname] = useState('')
   const [avatar, setAvatar] = useState('🌍')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+
+  function toEmail(name: string) {
+    return `${name.toLowerCase()}@test.woc.local`
+  }
 
   async function handleSignUp() {
     setError(null)
@@ -32,14 +35,24 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     if (!/^[a-zA-Z0-9_]+$/.test(nickname)) {
       setError(t('auth.nicknameChars' as keyof Translations)); return
     }
-    if (!email.includes('@')) {
-      setError(t('auth.invalidEmail' as keyof Translations)); return
-    }
     if (password.length < 6) {
       setError('Password must be at least 6 characters'); return
     }
     setLoading(true)
-    const result = await signUp(email, password, nickname, avatar)
+    // Register via server API (auto-confirms, creates profile)
+    const res = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nickname, password, avatar }),
+    })
+    const json = await res.json()
+    if (!res.ok) {
+      setLoading(false)
+      setError(json.error?.message ?? 'Registration failed')
+      return
+    }
+    // Auto sign-in after registration
+    const result = await signIn(toEmail(nickname), password)
     setLoading(false)
     if (result.error) setError(result.error)
     else onClose()
@@ -47,14 +60,14 @@ export default function AuthModal({ onClose }: AuthModalProps) {
 
   async function handleSignIn() {
     setError(null)
-    if (!email.includes('@')) {
-      setError(t('auth.invalidEmail' as keyof Translations)); return
+    if (!nickname.trim()) {
+      setError('Nickname is required'); return
     }
     if (!password) {
       setError('Password is required'); return
     }
     setLoading(true)
-    const result = await signIn(email, password)
+    const result = await signIn(toEmail(nickname), password)
     setLoading(false)
     if (result.error) setError(result.error)
     else onClose()
@@ -126,23 +139,13 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             />
 
             <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
-              {t('auth.email' as keyof Translations)}
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-4"
-            />
-
-            <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
               Password
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSignUp()}
               placeholder="Min. 6 characters"
               className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-5"
             />
@@ -174,13 +177,13 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             </p>
 
             <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
-              {t('auth.email' as keyof Translations)}
+              {t('auth.nickname' as keyof Translations)}
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              placeholder="Your nickname"
               className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-4"
             />
 
