@@ -17,18 +17,7 @@ export default function UserBadge() {
   const [showMenu, setShowMenu] = useState(false)
 
   if (isGuest) {
-    return (
-      <>
-        <button
-          onClick={() => { playClick(); setShowAuth(true) }}
-          className="btn-ghost px-5 py-2.5 text-sm flex items-center gap-2"
-        >
-          <span className="text-xl">👤</span>
-          {t('auth.signIn' as keyof Translations)}
-        </button>
-        {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
-      </>
-    )
+    return null
   }
 
   return (

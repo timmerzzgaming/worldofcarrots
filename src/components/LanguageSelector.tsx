@@ -24,7 +24,7 @@ export default function LanguageSelector() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-5 py-2.5 rounded-full glass-panel text-sm font-headline font-bold uppercase tracking-wider text-geo-on-surface-dim hover:text-geo-on-surface transition-colors"
+        className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full glass-panel text-xs sm:text-sm font-headline font-bold uppercase tracking-wider text-geo-on-surface-dim hover:text-geo-on-surface transition-colors"
         aria-label="Select language"
         aria-expanded={open}
         aria-haspopup="listbox"

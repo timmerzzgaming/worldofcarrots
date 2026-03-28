@@ -21,12 +21,12 @@ export default function QuestionCard({
       key={countryName}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel px-6 py-3 2xl:px-10 2xl:py-6 text-center"
+      className="glass-panel px-4 py-2 sm:px-6 sm:py-3 lg:px-8 lg:py-4 2xl:px-10 2xl:py-6 text-center"
     >
-      <p className="text-geo-on-surface-dim text-[10px] 2xl:text-xs font-headline font-bold uppercase tracking-widest mb-1 2xl:mb-2">
+      <p className="text-geo-on-surface-dim text-[10px] sm:text-[10px] 2xl:text-xs font-headline font-bold uppercase tracking-widest mb-0.5 sm:mb-1 2xl:mb-2">
         {questionNumber} {t('of')} {totalQuestions}
       </p>
-      <p className="text-geo-on-surface text-lg 2xl:text-2xl font-body">
+      <p className="text-geo-on-surface text-base sm:text-lg 2xl:text-2xl font-body">
         {t('find')} <span className="font-headline font-extrabold text-geo-primary text-glow-primary uppercase">{tc(countryName)}</span>
       </p>
     </motion.div>

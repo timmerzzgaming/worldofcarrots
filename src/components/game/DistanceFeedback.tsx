@@ -86,7 +86,7 @@ export default function DistanceFeedback({
           initial={{ opacity: 0, y: 20, scale: 0.5 }}
           animate={{ opacity: 1, y: -10, scale: 1 }}
           transition={{ delay: 0.8, type: 'spring', stiffness: 300, damping: 12 }}
-          className="absolute -top-12 left-1/2 -translate-x-1/2 font-headline font-extrabold text-3xl uppercase tracking-wider whitespace-nowrap drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
+          className="absolute -top-10 sm:-top-12 left-1/2 -translate-x-1/2 font-headline font-extrabold text-2xl sm:text-3xl uppercase tracking-wider whitespace-nowrap drop-shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
           style={{ color }}
         >
           <motion.span
@@ -109,7 +109,7 @@ export default function DistanceFeedback({
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ type: 'spring', stiffness: 400, damping: 20 }}
-        className={`bg-geo-bg/90 backdrop-blur-md border-2 border-geo-outline-dim/40 rounded-3xl px-8 py-5 text-center shadow-xl ${borderColor}`}
+        className={`bg-geo-bg/90 backdrop-blur-md border-2 border-geo-outline-dim/40 rounded-2xl sm:rounded-3xl px-5 py-3 sm:px-8 sm:py-5 text-center shadow-xl ${borderColor}`}
       >
         <p className="text-white font-body text-lg mb-1">
           {cityName}, {tc(countryName)}
@@ -145,8 +145,8 @@ export default function DistanceFeedback({
           className="mt-2"
         >
           <p className="text-geo-on-surface text-xs font-headline font-bold uppercase tracking-widest">Final Score</p>
-          <p className="text-5xl font-headline font-extrabold" style={{ color }}>
-            {score}<span className="text-xl opacity-60">/100</span>
+          <p className="text-3xl sm:text-4xl lg:text-5xl font-headline font-extrabold" style={{ color }}>
+            {score}<span className="text-base sm:text-lg lg:text-xl opacity-60">/100</span>
           </p>
         </motion.div>
       </motion.div>

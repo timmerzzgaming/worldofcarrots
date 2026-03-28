@@ -35,13 +35,13 @@ export default function ScoreBoard({
   const urgent = hasTimer && timePercent < 25
 
   return (
-    <div className="glass-panel px-5 py-3 flex items-center gap-5">
+    <div className="glass-panel px-3 py-2 sm:px-5 sm:py-3 flex items-center gap-2 sm:gap-4 lg:gap-5 flex-wrap">
       {/* Score */}
       <div>
         <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">
           {mode === 'timed' ? t('found') : t('score')}
         </p>
-        <p className="text-geo-primary text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
+        <p className="text-geo-primary text-lg sm:text-lg sm:text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
           {mode === 'timed' ? correctCount : score.toLocaleString()}
         </p>
       </div>
@@ -50,7 +50,7 @@ export default function ScoreBoard({
       {(mode === 'survival' || mode === 'borderless' || mode === 'flag') && (
         <div>
           <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('lives')}</p>
-          <p className="text-geo-error text-2xl font-headline font-extrabold tabular-nums">
+          <p className="text-geo-error text-lg sm:text-2xl font-headline font-extrabold tabular-nums">
             {'♥'.repeat(lives)}
             <span className="text-geo-outline">{'♡'.repeat(Math.max(0, 3 - lives))}</span>
           </p>
@@ -69,7 +69,7 @@ export default function ScoreBoard({
 
       {/* Timer */}
       {hasTimer && (
-        <div className="flex-1 min-w-[100px]">
+        <div className="flex-1 min-w-[80px] sm:min-w-[100px]">
           <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest mb-1">{t('time')}</p>
           <div className="h-3 bg-geo-surface-highest rounded-full overflow-hidden border border-geo-outline-dim/30">
             <div

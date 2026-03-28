@@ -46,7 +46,7 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
     <>
       {/* Region */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectRegion')}</p>
-      <div className="grid grid-cols-3 gap-2 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3 sm:mb-4">
         {['World', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'].map((r) => (
           <button
             key={r}
@@ -67,7 +67,7 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
 
       {/* Difficulty */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectDifficulty')}</p>
-      <div className="grid grid-cols-4 gap-2 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 sm:mb-4">
         {(['easy', 'medium', 'hard', 'expert'] as DistanceDifficulty[]).map((d) => (
             <button
               key={d}
@@ -121,7 +121,7 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
       <div className="sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
         <button
           onClick={() => onStartGame(difficulty, selectedRegion, unit)}
-          className="btn-primary w-full py-4 text-lg"
+          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
         >
           {t('startGame')}
         </button>

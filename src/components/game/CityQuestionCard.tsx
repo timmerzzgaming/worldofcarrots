@@ -46,17 +46,17 @@ export default function CityQuestionCard({
       key={cityName}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-geo-bg/90 backdrop-blur-md border-2 border-geo-outline-dim/40 rounded-3xl px-10 py-6 text-center shadow-xl"
+      className="bg-geo-bg/90 backdrop-blur-md border-2 border-geo-outline-dim/40 rounded-2xl sm:rounded-3xl px-5 py-3 sm:px-8 sm:py-5 lg:px-10 lg:py-6 text-center shadow-xl"
     >
       <p className="text-geo-on-surface text-xs font-headline font-bold uppercase tracking-widest mb-2">
         {questionNumber} {t('of')} {totalQuestions}
       </p>
-      <p className="text-white text-3xl font-body">
+      <p className="text-white text-xl sm:text-2xl lg:text-3xl font-body">
         {t('whereIs')} <span className="font-headline font-extrabold text-geo-primary text-glow-primary">{cityName}</span>
-        {showCountry && <span className="text-geo-on-surface text-xl">, {tc(countryName)}</span>}
+        {showCountry && <span className="text-geo-on-surface text-base sm:text-lg lg:text-xl">, {tc(countryName)}</span>}
         <span className="text-white">?</span>
       </p>
-      <p className="text-geo-on-surface-dim text-base font-body mt-3">
+      <p className="text-geo-on-surface-dim text-sm sm:text-base font-body mt-2 sm:mt-3">
         {t('pinOnMap')}
       </p>
 

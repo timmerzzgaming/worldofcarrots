@@ -45,14 +45,14 @@ export default function FlagQuestionCard({
       key={flagUrl}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel px-5 py-3 2xl:px-10 2xl:py-6 text-center max-w-sm 2xl:max-w-md"
+      className="glass-panel px-3 py-2 sm:px-5 sm:py-3 lg:px-8 lg:py-5 2xl:px-10 2xl:py-6 text-center max-w-[280px] sm:max-w-sm 2xl:max-w-md"
     >
       <p className="text-geo-on-surface-dim text-[10px] 2xl:text-xs font-headline font-bold uppercase tracking-widest mb-2 2xl:mb-3">
         {questionNumber} {t('of')} {totalQuestions} — {t('guessTheFlag')}
       </p>
 
       {/* Flag display */}
-      <div className="relative w-48 h-32 2xl:w-72 2xl:h-48 mx-auto mb-3 2xl:mb-4 rounded-lg overflow-hidden border-2 border-geo-outline-dim/30 shadow-lg bg-geo-surface-highest">
+      <div className="relative w-36 h-24 sm:w-48 sm:h-32 lg:w-56 lg:h-40 2xl:w-72 2xl:h-48 mx-auto mb-2 sm:mb-3 2xl:mb-4 rounded-lg overflow-hidden border-2 border-geo-outline-dim/30 shadow-lg bg-geo-surface-highest">
         {!imageError ? (
           <Image
             src={flagUrl}

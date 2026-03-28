@@ -9,13 +9,13 @@ export default function TopBar() {
   return (
     <>
       {/* Top-right: User identity + currency + chests */}
-      <div className="fixed top-4 right-4 z-50 flex items-center gap-3">
+      <div className="fixed top-2 right-2 sm:top-4 sm:right-4 z-50 flex items-center gap-1.5 sm:gap-3 scale-[0.85] sm:scale-100 origin-top-right">
         <ChestSlots />
         <UserBadge />
       </div>
 
       {/* Bottom-right: Settings controls */}
-      <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2">
+      <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 flex items-center gap-1.5 sm:gap-2 scale-[0.85] sm:scale-100 origin-bottom-right">
         <SoundToggle />
         <LanguageSelector />
       </div>

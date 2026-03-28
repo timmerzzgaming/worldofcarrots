@@ -20,7 +20,7 @@ export default function SoundToggle() {
   return (
     <button
       onClick={toggle}
-      className="flex items-center justify-center w-14 h-14 rounded-full glass-panel text-geo-on-surface-dim hover:text-geo-on-surface transition-colors"
+      className="flex items-center justify-center w-11 h-11 sm:w-14 sm:h-14 rounded-full glass-panel text-geo-on-surface-dim hover:text-geo-on-surface transition-colors"
       aria-label={enabled ? 'Mute sound' : 'Unmute sound'}
     >
       {enabled ? (

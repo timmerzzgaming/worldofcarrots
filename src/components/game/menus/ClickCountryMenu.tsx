@@ -25,13 +25,13 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
   return (
     <>
       {/* Game modes */}
-      <div className="grid grid-cols-3 gap-3 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
         {(Object.values(GAME_MODES) as GameModeConfig[]).filter((m) => m.mode !== 'flag' && m.mode !== 'distance').map((m) => (
             <button
               key={m.mode}
               onMouseEnter={() => playHover()}
               onClick={() => { playClick(); setSelectedMode(m.mode) }}
-              className={`group glass-panel p-4 flex flex-col items-center text-center transition-all cursor-pointer ${
+              className={`group glass-panel p-3 sm:p-4 flex flex-col items-center text-center transition-all cursor-pointer ${
                 selectedMode === m.mode
                   ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_20px_-5px_rgba(107,255,193,0.2)]'
                   : 'hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)]'
@@ -48,7 +48,7 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
 
       {/* Region */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectRegion')}</p>
-      <div className="grid grid-cols-3 gap-2 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3 sm:mb-4">
         {['World', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'].map((r) => (
           <button
             key={r}
@@ -69,7 +69,7 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
 
       {/* Difficulty */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectDifficulty')}</p>
-      <div className="grid grid-cols-4 gap-2 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 sm:mb-4">
         {DIFFICULTIES.map((d) => {
           const isMarathon = selectedMode === 'marathon'
           return (
@@ -151,7 +151,7 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
               selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined,
             )
           }}
-          className="btn-primary w-full py-4 text-lg"
+          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
         >
           {t('startGame')}
         </button>

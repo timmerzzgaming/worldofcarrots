@@ -40,7 +40,7 @@ export default function FlagMenu({ onStartGame }: FlagMenuProps) {
 
       {/* Region */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectRegion')}</p>
-      <div className="grid grid-cols-3 gap-2 mb-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3 sm:mb-4">
         {['World', 'Africa', 'Americas', 'Asia', 'Europe', 'Oceania'].map((r) => (
           <button
             key={r}
@@ -61,7 +61,7 @@ export default function FlagMenu({ onStartGame }: FlagMenuProps) {
 
       {/* Difficulty */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectDifficulty')}</p>
-      <div className="grid grid-cols-4 gap-2 mb-5">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 sm:mb-5">
         {DIFFICULTIES.map((d) => (
             <button
               key={d.value}
@@ -84,7 +84,7 @@ export default function FlagMenu({ onStartGame }: FlagMenuProps) {
       <div className="sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
         <button
           onClick={() => onStartGame(selectedDifficulty, selectedRegion)}
-          className="btn-primary w-full py-4 text-lg"
+          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
         >
           {t('startGame')}
         </button>

@@ -327,10 +327,10 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-6xl sm:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
               World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
             </h1>
-            <p className="text-geo-on-surface-dim text-lg font-body max-w-md mx-auto mb-10">
+            <p className="text-geo-on-surface-dim text-base sm:text-lg font-body max-w-md mx-auto mb-8 sm:mb-10">
               {t('testYourKnowledge')}
             </p>
             <motion.button
@@ -338,7 +338,7 @@ export default function HomePage() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, type: 'spring', stiffness: 300, damping: 20 }}
-              className="btn-primary px-12 py-4 text-xl"
+              className="btn-primary px-8 py-3 sm:px-12 sm:py-4 text-lg sm:text-xl"
             >
               {t('startGame')}
             </motion.button>
@@ -348,7 +348,7 @@ export default function HomePage() {
 
       {/* Main menu */}
       {entered && (
-        <main className="relative min-h-screen flex flex-col items-center px-4 pt-10 pb-16">
+        <main className="relative min-h-screen flex flex-col items-center px-3 sm:px-4 pt-8 sm:pt-10 pb-12 sm:pb-16">
           {/* TopBar (UserBadge, SoundToggle, LanguageSelector) is in layout */}
 
           {/* Header — fixed at top, fade in */}
@@ -358,10 +358,10 @@ export default function HomePage() {
             transition={{ duration: 0.4 }}
             className="text-center mb-10 flex-shrink-0"
           >
-            <h1 className="text-6xl sm:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
               World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
             </h1>
-            <p className="text-geo-on-surface-dim text-lg font-body max-w-md mx-auto">
+            <p className="text-geo-on-surface-dim text-base sm:text-lg font-body max-w-md mx-auto">
               {t('testYourKnowledge')}
             </p>
           </motion.div>
@@ -385,13 +385,13 @@ export default function HomePage() {
                     </div>
                     <button
                       onClick={() => { playClick(); setShowLeaderboard(true) }}
-                      className="btn-ghost px-5 py-3 text-sm flex items-center gap-2 shrink-0"
+                      className="btn-ghost px-3 py-2 sm:px-5 sm:py-3 text-xs sm:text-sm flex items-center gap-2 shrink-0"
                     >
                       🏆 Leaderboard
                     </button>
                   </div>
 
-                  <div className="grid gap-8 sm:grid-cols-3 w-full">
+                  <div className="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
                   {categories.map((cat, i) => {
                     const available = cat.modes.filter((m) => m.available).length
                     const upcoming = cat.modes.filter((m) => !m.available).length
@@ -403,10 +403,10 @@ export default function HomePage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 * (i + 1) }}
-                        className="group relative flex flex-col items-center text-center p-10 glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
+                        className="group relative flex flex-col items-center text-center p-6 sm:p-8 lg:p-10 glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
                       >
-                        <div className="text-7xl mb-5">{cat.icon}</div>
-                        <h2 className="text-2xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors">
+                        <div className="text-5xl sm:text-6xl lg:text-7xl mb-3 sm:mb-5">{cat.icon}</div>
+                        <h2 className="text-xl sm:text-2xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors">
                           {t(cat.titleKey)}
                         </h2>
                         <p className="text-geo-on-surface-dim mt-2 text-base leading-relaxed">
@@ -479,7 +479,7 @@ export default function HomePage() {
 
                   {/* Game mode grid */}
                   <motion.div
-                    className="grid grid-cols-3 gap-6"
+                    className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6"
                     animate={{ opacity: expandedGame ? 0 : 1, scale: expandedGame ? 0.9 : 1 }}
                     transition={{ duration: 0.4 }}
                   >
@@ -494,12 +494,12 @@ export default function HomePage() {
                           if (!mode.available) {
                             // Coming soon — not built yet
                             return (
-                              <div className="relative flex flex-col items-center justify-center text-center w-64 h-64 glass-panel opacity-70 cursor-not-allowed">
-                                <span className="absolute -top-2 right-2 bg-geo-primary text-black text-xs font-headline font-extrabold uppercase px-3 py-0.5 rounded-full">
+                              <div className="relative flex flex-col items-center justify-center text-center w-full aspect-square glass-panel opacity-70 cursor-not-allowed">
+                                <span className="absolute -top-2 right-2 bg-geo-primary text-black text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
                                   {t('comingSoon')}
                                 </span>
-                                <div className="text-6xl mb-3">{mode.icon}</div>
-                                <h3 className="text-lg font-headline font-extrabold text-white uppercase tracking-wide px-2 leading-tight">
+                                <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3">{mode.icon}</div>
+                                <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-white uppercase tracking-wide px-2 leading-tight">
                                   {t(mode.titleKey)}
                                 </h3>
                               </div>
@@ -512,12 +512,12 @@ export default function HomePage() {
                           if (!unlocked) {
                             // Locked — show requirement
                             return (
-                              <div className="group relative flex flex-col items-center justify-center text-center w-64 h-64 glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
-                                <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-xs font-headline font-extrabold uppercase px-3 py-0.5 rounded-full">
+                              <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
+                                <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
                                   🔒 {unlockReq ? getUnlockLabel(unlockReq) : ''}
                                 </span>
-                                <div className="text-6xl mb-3 grayscale opacity-50">{mode.icon}</div>
-                                <h3 className="text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
+                                <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3 grayscale opacity-50">{mode.icon}</div>
+                                <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
                                   {t(mode.titleKey)}
                                 </h3>
                               </div>
@@ -532,15 +532,15 @@ export default function HomePage() {
                                 playClick()
                                 setExpandedGame(mode)
                               }}
-                              className="group relative flex flex-col items-center justify-center text-center w-64 h-64 glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
+                              className="group relative flex flex-col items-center justify-center text-center w-full aspect-square glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
                             >
                               {mode.badge && (
-                                <span className="absolute -top-2 right-2 bg-geo-primary text-geo-on-primary text-xs font-headline font-extrabold uppercase px-3 py-0.5 rounded-full border-b-2 border-geo-on-primary">
+                                <span className="absolute -top-2 right-2 bg-geo-primary text-geo-on-primary text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full border-b-2 border-geo-on-primary">
                                   {mode.badge}
                                 </span>
                               )}
-                              <div className="text-6xl mb-3">{mode.icon}</div>
-                              <h3 className="text-lg font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors px-2 leading-tight">
+                              <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3">{mode.icon}</div>
+                              <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors px-2 leading-tight">
                                 {t(mode.titleKey)}
                               </h3>
                             </button>
@@ -562,7 +562,7 @@ export default function HomePage() {
                       >
                         <div className="glass-panel border-geo-primary/30 shadow-[0_0_40px_-10px_rgba(107,255,193,0.2)] flex flex-col overflow-hidden" style={{ width: 'min(820px, 90vw)', height: 'min(820px, 85vh)' }}>
                           {/* Fixed header: back button + game title */}
-                          <div className="flex-shrink-0 px-6 pt-4 pb-3">
+                          <div className="flex-shrink-0 px-4 sm:px-6 pt-3 sm:pt-4 pb-2 sm:pb-3">
                             <button
                               onClick={() => { playClick(); setExpandedGame(null) }}
                               className="btn-ghost px-4 py-2 text-sm flex items-center gap-2 mb-2"
@@ -585,7 +585,7 @@ export default function HomePage() {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             transition={{ delay: 0.3, duration: 0.3 }}
-                            className="flex-1 min-h-0 overflow-y-auto scrollbar-hide px-6 pb-6"
+                            className="flex-1 min-h-0 overflow-y-auto scrollbar-hide px-4 sm:px-6 pb-4 sm:pb-6"
                           >
                             {expandedGame.href === '/game/click-country' && (
                               <ClickCountryMenu onStartGame={(mode, diff, region, variant) => {

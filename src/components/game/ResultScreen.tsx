@@ -155,21 +155,21 @@ export default function ResultScreen({ mode, difficulty, variant, answers, elaps
       animate={{ opacity: 1, y: 0 }}
       className="absolute inset-0 z-20 flex items-center justify-center bg-geo-bg/80 backdrop-blur-sm p-4"
     >
-      <div className="glass-panel p-6 sm:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
+      <div className="glass-panel p-4 sm:p-6 lg:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto scrollbar-hide">
         {/* Stars (only for challenge modes) */}
         {rewards && rewards.stars > 0 && <div className="mb-4"><StarRating stars={rewards.stars} /></div>}
 
         {/* Title */}
-        <h2 className="text-4xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-center mb-6">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-center mb-4 sm:mb-6">
           {title}
         </h2>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-5">
           {getStats().map((stat, i) => (
-            <div key={stat.label} className="bg-geo-surface-high/50 rounded-2xl p-3 text-center border border-geo-outline-dim/20">
-              <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest mb-0.5">{stat.label}</p>
-              <p className={`text-2xl font-headline font-extrabold ${statColors[i]} drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]`}>{stat.value}</p>
+            <div key={stat.label} className="bg-geo-surface-high/50 rounded-xl sm:rounded-2xl p-2 sm:p-3 text-center border border-geo-outline-dim/20">
+              <p className="text-geo-on-surface-dim text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-widest mb-0.5">{stat.label}</p>
+              <p className={`text-xl sm:text-2xl font-headline font-extrabold ${statColors[i]} drop-shadow-[2px_2px_0_rgba(0,0,0,0.3)]`}>{stat.value}</p>
             </div>
           ))}
         </div>
@@ -293,11 +293,11 @@ export default function ResultScreen({ mode, difficulty, variant, answers, elaps
         )}
 
         {/* Action buttons */}
-        <div className="flex gap-3">
-          <button onClick={onHome} className="btn-ghost flex-1 py-3 text-sm">
+        <div className="flex gap-2 sm:gap-3">
+          <button onClick={onHome} className="btn-ghost flex-1 py-2.5 sm:py-3 text-xs sm:text-sm">
             {t('backToMenu')}
           </button>
-          <button onClick={onPlayAgain} className="btn-primary flex-1 py-3 text-sm">
+          <button onClick={onPlayAgain} className="btn-primary flex-1 py-2.5 sm:py-3 text-xs sm:text-sm">
             {t('playAgain')}
           </button>
         </div>

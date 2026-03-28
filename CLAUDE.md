@@ -130,6 +130,25 @@ All localStorage, keyed by:
 - Distance mode popup styling: `.distance-popup` class for MapLibre popups
 - Custom `next.config.js` webpack rule for `.geojson` imports as JSON
 
+### Responsive design
+
+Mobile-first responsive layout using Tailwind breakpoints:
+- Default (< 640px): Mobile phones portrait/landscape
+- `sm:` (640px): Small tablets
+- `lg:` (1024px): 1080p desktop monitors
+- `2xl:` (1536px): 1440p/4K monitors
+
+Key patterns:
+- Game mode cards use `w-full aspect-square` (not fixed pixel sizes)
+- Grids collapse: `grid-cols-2 sm:grid-cols-3` for game modes, `grid-cols-2 sm:grid-cols-4` for difficulty selectors
+- TopBar scales down on mobile with `scale-[0.85] sm:scale-100`
+- All interactive elements maintain minimum 44px touch targets on mobile
+- Text scales progressively: e.g. `text-base sm:text-lg 2xl:text-2xl`
+
+### Auth status
+
+Login/signup is **temporarily disabled** — `UserBadge` returns `null` for guests. `AuthModal` component still exists but is not rendered. Re-enable by restoring the sign-in button in `UserBadge.tsx` guest branch.
+
 ### Component inventory
 
 **Shared**: `Providers` (I18nProvider wrapper), `LanguageSelector`, `SoundToggle`
