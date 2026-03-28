@@ -24,6 +24,7 @@ import FeedbackOverlay from '@/components/game/FeedbackOverlay'
 import ResultScreen from '@/components/game/ResultScreen'
 import { useGameRewards } from '@/hooks/useGameRewards'
 import { useBasePath } from '@/lib/basePath'
+import { useAuth } from '@/lib/auth/context'
 import { calculateResults } from '@/lib/gameEngine'
 import GameAdvisor from '@/components/game/GameAdvisor'
 import ThemeToggle from '@/components/ThemeToggle'
@@ -35,6 +36,7 @@ export default function ClickCountryPage() {
   const router = useRouter()
   const { prefixPath } = useBasePath()
   const { t, tc } = useTranslation()
+  const { isGuest } = useAuth()
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -54,7 +56,7 @@ export default function ClickCountryPage() {
   const [showHurryUp, setShowHurryUp] = useState(false)
 
   const {
-    phase, mode, modeConfig, variant, questions, currentIndex, answers, score,
+    phase, mode, modeConfig, variant, difficulty: storeDifficulty, questions, currentIndex, answers, score,
     timeRemaining, elapsed, lives, streak, correctCountries,
     feedbackCountry, feedbackCorrect, lifeEarned,
     startGame, nextQuestion, reset,
@@ -532,7 +534,8 @@ export default function ClickCountryPage() {
   }, [phase])
 
   const q = questions[currentIndex]
-  const maxTime = modeConfig.globalTimeLimit ?? modeConfig.perQuestionTime ?? 0
+  const DIFF_TIME: Record<string, number> = { easy: 20, medium: 15, hard: 10, expert: 6 }
+  const maxTime = modeConfig.globalTimeLimit ?? (modeConfig.perQuestionTime ? (DIFF_TIME[storeDifficulty] ?? modeConfig.perQuestionTime) : 0)
   const correctCount = useMemo(() => answers.filter((a) => a.correct).length, [answers])
 
   const pendingStartRef = useRef<(() => void) | null>(null)
@@ -708,7 +711,7 @@ export default function ClickCountryPage() {
 
             {/* Game modes */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-5">
-              {(Object.values(GAME_MODES) as { mode: GameMode; label: string; description: string }[]).filter((m) => m.mode !== 'flag' && m.mode !== 'distance').map((m) => {
+              {(Object.values(GAME_MODES) as { mode: GameMode; label: string; description: string }[]).filter((m) => m.mode !== 'flag' && m.mode !== 'distance').filter((m) => !isGuest || m.mode === 'classic').map((m) => {
                 const icons: Record<string, string> = { classic: '🎯', timed: '⏱️', marathon: '🏃', survival: '❤️', practice: '📝', borderless: '🌐' }
                 return (
                   <button

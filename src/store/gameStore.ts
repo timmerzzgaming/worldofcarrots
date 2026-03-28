@@ -5,6 +5,14 @@ import { type Difficulty, filterByDifficulty } from '@/lib/countryDifficulty'
 
 const LIVES_PER_LIFE_BACK = 10
 
+/** Per-question time adjusted by difficulty (for modes that have a timer) */
+const DIFFICULTY_TIME: Record<string, number> = {
+  easy: 20,
+  medium: 15,
+  hard: 10,
+  expert: 6,
+}
+
 interface GameStore {
   phase: GamePhase
   mode: GameMode
@@ -83,7 +91,8 @@ export const useGameStore = create<GameStore>((set, get) => ({
 
     const count = config.totalQuestions ?? pool.length
     const questions = generateQuestions(pool, count)
-    const timeRemaining = config.globalTimeLimit ?? config.perQuestionTime ?? 0
+    const perQ = config.perQuestionTime ? (DIFFICULTY_TIME[difficulty] ?? config.perQuestionTime) : null
+    const timeRemaining = config.globalTimeLimit ?? perQ ?? 0
 
     set({
       phase: 'playing',
@@ -175,7 +184,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   },
 
   nextQuestion: () => {
-    const { currentIndex, questions, modeConfig, timeRemaining, lives, mode } = get()
+    const { currentIndex, questions, modeConfig, timeRemaining, lives, mode, difficulty } = get()
 
     // Survival / Borderless / Flag: game over if no lives
     if ((mode === 'survival' || mode === 'borderless' || mode === 'flag') && lives <= 0) {
@@ -198,7 +207,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
     set({
       phase: 'playing',
       currentIndex: currentIndex + 1,
-      timeRemaining: modeConfig.perQuestionTime ?? timeRemaining,
+      timeRemaining: modeConfig.perQuestionTime ? (DIFFICULTY_TIME[difficulty] ?? modeConfig.perQuestionTime) : timeRemaining,
       feedbackCountry: null,
       feedbackCorrect: null,
     })
