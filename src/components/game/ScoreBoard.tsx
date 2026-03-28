@@ -35,13 +35,13 @@ export default function ScoreBoard({
   const urgent = hasTimer && timePercent < 25
 
   return (
-    <div className="glass-panel px-3 py-2 sm:px-5 sm:py-3 flex items-center gap-2 sm:gap-4 lg:gap-5 flex-wrap">
+    <div className="glass-panel px-2 py-1.5 sm:px-5 sm:py-3 flex items-center gap-1.5 sm:gap-4 lg:gap-5 flex-wrap">
       {/* Score */}
       <div>
         <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">
           {mode === 'timed' ? t('found') : t('score')}
         </p>
-        <p className="text-geo-primary text-lg sm:text-lg sm:text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
+        <p className="text-geo-primary text-base sm:text-2xl font-headline font-extrabold tabular-nums text-glow-primary">
           {mode === 'timed' ? correctCount : score.toLocaleString()}
         </p>
       </div>
@@ -50,7 +50,7 @@ export default function ScoreBoard({
       {(mode === 'survival' || mode === 'borderless' || mode === 'flag') && (
         <div>
           <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('lives')}</p>
-          <p className="text-geo-error text-lg sm:text-2xl font-headline font-extrabold tabular-nums">
+          <p className="text-geo-error text-base sm:text-2xl font-headline font-extrabold tabular-nums">
             {'♥'.repeat(lives)}
             <span className="text-geo-outline">{'♡'.repeat(Math.max(0, 3 - lives))}</span>
           </p>
@@ -61,7 +61,7 @@ export default function ScoreBoard({
       {(mode === 'marathon' || mode === 'survival' || mode === 'flag') && (
         <div>
           <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('progress')}</p>
-          <p className="text-geo-secondary text-lg font-headline font-extrabold tabular-nums">
+          <p className="text-geo-secondary text-base sm:text-lg font-headline font-extrabold tabular-nums">
             {currentIndex + 1}/{totalQuestions}
           </p>
         </div>
@@ -93,7 +93,7 @@ export default function ScoreBoard({
       {!hasTimer && mode === 'marathon' && (
         <div>
           <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('time')}</p>
-          <p className="text-geo-on-surface text-lg font-headline font-extrabold tabular-nums">
+          <p className="text-geo-on-surface text-base sm:text-lg font-headline font-extrabold tabular-nums">
             {Math.floor(elapsed / 60)}:{String(Math.floor(elapsed % 60)).padStart(2, '0')}
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function ScoreBoard({
       {(mode === 'survival' || mode === 'borderless' || mode === 'flag') && streak >= 2 && (
         <div>
           <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest">{t('streak')}</p>
-          <p className="text-geo-tertiary text-lg font-headline font-extrabold tabular-nums text-glow-tertiary">{streak}</p>
+          <p className="text-geo-tertiary text-base sm:text-lg font-headline font-extrabold tabular-nums text-glow-tertiary">{streak}</p>
         </div>
       )}
     </div>

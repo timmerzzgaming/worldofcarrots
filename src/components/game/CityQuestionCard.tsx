@@ -46,27 +46,27 @@ export default function CityQuestionCard({
       key={cityName}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-geo-bg/90 backdrop-blur-md border-2 border-geo-outline-dim/40 rounded-2xl sm:rounded-3xl px-5 py-3 sm:px-8 sm:py-5 lg:px-10 lg:py-6 text-center shadow-xl"
+      className="bg-geo-bg/90 backdrop-blur-md border-2 border-geo-outline-dim/40 rounded-xl sm:rounded-3xl px-3 py-2 sm:px-8 sm:py-5 lg:px-10 lg:py-6 text-center shadow-xl"
     >
-      <p className="text-geo-on-surface text-xs font-headline font-bold uppercase tracking-widest mb-2">
+      <p className="text-geo-on-surface text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest mb-1 sm:mb-2">
         {questionNumber} {t('of')} {totalQuestions}
       </p>
-      <p className="text-white text-xl sm:text-2xl lg:text-3xl font-body">
+      <p className="text-white text-base sm:text-2xl lg:text-3xl font-body">
         {t('whereIs')} <span className="font-headline font-extrabold text-geo-primary text-glow-primary">{cityName}</span>
-        {showCountry && <span className="text-geo-on-surface text-base sm:text-lg lg:text-xl">, {tc(countryName)}</span>}
+        {showCountry && <span className="text-geo-on-surface text-sm sm:text-lg lg:text-xl">, {tc(countryName)}</span>}
         <span className="text-white">?</span>
       </p>
-      <p className="text-geo-on-surface-dim text-sm sm:text-base font-body mt-2 sm:mt-3">
+      <p className="text-geo-on-surface-dim text-xs sm:text-base font-body mt-1 sm:mt-3">
         {t('pinOnMap')}
       </p>
 
       {/* Progress dots */}
       {history && history.length > 0 && (
-        <div className="flex items-center justify-center gap-2 mt-4">
+        <div className="flex items-center justify-center gap-1 sm:gap-2 mt-2 sm:mt-4 flex-wrap">
           {history.map((dot, i) => (
             <div
               key={i}
-              className="w-3.5 h-3.5 rounded-full"
+              className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full"
               style={dotStyle(dot.score)}
               title={`${dot.score}/100`}
             />
@@ -74,7 +74,7 @@ export default function CityQuestionCard({
           {Array.from({ length: totalQuestions - history.length - 1 }).map((_, i) => (
             <div
               key={`empty-${i}`}
-              className="w-3.5 h-3.5 rounded-full bg-geo-outline-dim/30"
+              className="w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 rounded-full bg-geo-outline-dim/30"
             />
           ))}
         </div>

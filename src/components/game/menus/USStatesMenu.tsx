@@ -36,23 +36,23 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
               key={m}
               onMouseEnter={() => playHover()}
               onClick={() => { playClick(); setSelectedMode(m) }}
-              className={`group glass-panel p-3 sm:p-4 flex flex-col items-center text-center transition-all cursor-pointer ${
+              className={`group glass-panel p-2 sm:p-4 flex flex-col items-center text-center transition-all cursor-pointer ${
                 selectedMode === m
                   ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_20px_-5px_rgba(107,255,193,0.2)]'
                   : 'hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)]'
               }`}
             >
-              <div className="text-2xl mb-2">{MODE_ICONS[m]}</div>
-              <p className={`text-sm font-headline font-extrabold uppercase tracking-wide ${
+              <div className="text-xl sm:text-2xl mb-1 sm:mb-2">{MODE_ICONS[m]}</div>
+              <p className={`text-xs sm:text-sm font-headline font-extrabold uppercase tracking-wide ${
                 selectedMode === m ? 'text-geo-primary' : 'text-geo-on-surface group-hover:text-geo-primary transition-colors'
               }`}>{t(`mode.${m}` as keyof Translations)}</p>
               <p className="text-xs mt-1 text-geo-on-surface-dim leading-relaxed">{t(`mode.${m}.desc` as keyof Translations)}</p>
             </button>
         ))}
         {/* Jigsaw -- coming soon placeholder */}
-        <div className="glass-panel p-3 sm:p-4 flex flex-col items-center text-center opacity-70 cursor-not-allowed">
-          <div className="text-2xl mb-2">🧩</div>
-          <p className="text-sm font-headline font-extrabold uppercase tracking-wide text-white">{t('mode.jigsaw' as keyof Translations) || 'Jigsaw'}</p>
+        <div className="glass-panel p-2 sm:p-4 flex flex-col items-center text-center opacity-70 cursor-not-allowed">
+          <div className="text-xl sm:text-2xl mb-1 sm:mb-2">🧩</div>
+          <p className="text-xs sm:text-sm font-headline font-extrabold uppercase tracking-wide text-white">{t('mode.jigsaw' as keyof Translations) || 'Jigsaw'}</p>
           <p className="text-xs mt-1 bg-geo-primary text-black font-headline font-bold leading-relaxed px-2 py-0.5 rounded-full">{t('comingSoon')}</p>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
               onMouseEnter={() => playHover()}
               onClick={() => { if (!isMarathon) { playClick(); setSelectedDifficulty(d.value) } }}
               disabled={isMarathon}
-              className={`glass-panel p-3 flex flex-col items-center text-center transition-all ${
+              className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all ${
                 isMarathon
                   ? 'opacity-30 cursor-not-allowed'
                   : selectedDifficulty === d.value

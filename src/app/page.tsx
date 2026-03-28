@@ -356,7 +356,7 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-center mb-10 flex-shrink-0"
+            className="text-center mb-4 sm:mb-10 flex-shrink-0"
           >
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
               World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
@@ -403,9 +403,9 @@ export default function HomePage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 * (i + 1) }}
-                        className="group relative flex flex-col items-center text-center p-6 sm:p-8 lg:p-10 glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
+                        className="group relative flex flex-col items-center text-center p-4 sm:p-8 lg:p-10 glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
                       >
-                        <div className="text-5xl sm:text-6xl lg:text-7xl mb-3 sm:mb-5">{cat.icon}</div>
+                        <div className="text-3xl sm:text-6xl lg:text-7xl mb-2 sm:mb-5">{cat.icon}</div>
                         <h2 className="text-xl sm:text-2xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors">
                           {t(cat.titleKey)}
                         </h2>
@@ -494,11 +494,11 @@ export default function HomePage() {
                           if (!mode.available) {
                             // Coming soon — not built yet
                             return (
-                              <div className="relative flex flex-col items-center justify-center text-center w-full aspect-square glass-panel opacity-70 cursor-not-allowed">
+                              <div className="relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-70 cursor-not-allowed">
                                 <span className="absolute -top-2 right-2 bg-geo-primary text-black text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
                                   {t('comingSoon')}
                                 </span>
-                                <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3">{mode.icon}</div>
+                                <div className="text-2xl sm:text-5xl lg:text-6xl mb-1 sm:mb-3">{mode.icon}</div>
                                 <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-white uppercase tracking-wide px-2 leading-tight">
                                   {t(mode.titleKey)}
                                 </h3>
@@ -512,7 +512,7 @@ export default function HomePage() {
                           if (!unlocked) {
                             // Locked — show requirement
                             return (
-                              <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
+                              <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
                                 <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
                                   🔒 {unlockReq ? getUnlockLabel(unlockReq) : ''}
                                 </span>
@@ -532,7 +532,7 @@ export default function HomePage() {
                                 playClick()
                                 setExpandedGame(mode)
                               }}
-                              className="group relative flex flex-col items-center justify-center text-center w-full aspect-square glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
+                              className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
                             >
                               {mode.badge && (
                                 <span className="absolute -top-2 right-2 bg-geo-primary text-geo-on-primary text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full border-b-2 border-geo-on-primary">
@@ -560,7 +560,7 @@ export default function HomePage() {
                         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                         className="absolute inset-0 z-30 flex items-center justify-center"
                       >
-                        <div className="glass-panel border-geo-primary/30 shadow-[0_0_40px_-10px_rgba(107,255,193,0.2)] flex flex-col overflow-hidden" style={{ width: 'min(820px, 90vw)', height: 'min(820px, 85vh)' }}>
+                        <div className="glass-panel border-geo-primary/30 shadow-[0_0_40px_-10px_rgba(107,255,193,0.2)] flex flex-col overflow-hidden" style={{ width: 'min(820px, 95vw)', height: 'min(820px, 80vh)' }}>
                           {/* Fixed header: back button + game title */}
                           <div className="flex-shrink-0 px-4 sm:px-6 pt-3 sm:pt-4 pb-2 sm:pb-3">
                             <button
