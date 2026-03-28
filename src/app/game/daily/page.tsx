@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useAuth } from '@/lib/auth/context'
+import { useBasePath } from '@/lib/basePath'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import {
@@ -52,6 +53,7 @@ export default function DailyChallengePage() {
   const router = useRouter()
   const { t } = useTranslation()
   const { user, isGuest, updateCredits, updateCarrots, updateXp } = useAuth()
+  const { prefixPath } = useBasePath()
 
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
@@ -446,7 +448,7 @@ export default function DailyChallengePage() {
             <p className="text-geo-on-surface-dim text-sm font-body mb-4">
               You&apos;ve already finished today&apos;s challenge. Come back tomorrow!
             </p>
-            <button onClick={() => router.push('/')} className="btn-primary px-8 py-3">{t('backToMenu')}</button>
+            <button onClick={() => router.push(prefixPath('/'))} className="btn-primary px-8 py-3">{t('backToMenu')}</button>
           </div>
         </div>
       )}
@@ -468,7 +470,7 @@ export default function DailyChallengePage() {
             )}
             <button onClick={startGame} className="btn-primary px-10 py-3 text-lg">Start</button>
             <div className="mt-4">
-              <button onClick={() => router.push('/')} className="text-geo-on-surface-dim text-sm font-headline hover:text-geo-on-surface">
+              <button onClick={() => router.push(prefixPath('/'))} className="text-geo-on-surface-dim text-sm font-headline hover:text-geo-on-surface">
                 ← {t('back')}
               </button>
             </div>
@@ -625,7 +627,7 @@ export default function DailyChallengePage() {
               </div>
             </details>
 
-            <button onClick={() => router.push('/')} className="btn-primary w-full py-3 text-sm">
+            <button onClick={() => router.push(prefixPath('/'))} className="btn-primary w-full py-3 text-sm">
               {t('backToMenu')}
             </button>
           </motion.div>

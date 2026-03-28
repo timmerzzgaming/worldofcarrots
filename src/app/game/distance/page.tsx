@@ -30,6 +30,7 @@ import StarRating from '@/components/credits/StarRating'
 import CreditBreakdown from '@/components/credits/CreditBreakdown'
 import XpProgressBar from '@/components/xp/XpProgressBar'
 import { useAuth } from '@/lib/auth/context'
+import { useBasePath } from '@/lib/basePath'
 
 type DistanceUnit = 'km' | 'mi'
 type Phase = 'idle' | 'playing' | 'feedback' | 'review' | 'results'
@@ -96,6 +97,7 @@ function isHighScore(difficulty: DistanceDifficulty, total: number): boolean {
 
 export default function DistanceGamePage() {
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const { t, tc } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
@@ -625,7 +627,7 @@ export default function DistanceGamePage() {
           confirmLabel={t('quit')}
           confirmVariant="danger"
           onCancel={() => setShowQuitConfirm(false)}
-          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); clearAllOverlays(); phaseRef.current = 'idle'; setPhase('idle'); router.push('/?cat=mapGames&game=/game/distance') }}
+          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); clearAllOverlays(); phaseRef.current = 'idle'; setPhase('idle'); router.push(prefixPath('/?cat=mapGames&game=/game/distance')) }}
         />
       )}
 
@@ -716,7 +718,7 @@ export default function DistanceGamePage() {
         <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button
-              onClick={() => { playClick(); router.push('/?cat=mapGames&game=/game/distance') }}
+              onClick={() => { playClick(); router.push(prefixPath('/?cat=mapGames&game=/game/distance')) }}
               className="btn-ghost px-3 py-1.5 text-sm flex items-center gap-1"
               aria-label={t('home')}
             >

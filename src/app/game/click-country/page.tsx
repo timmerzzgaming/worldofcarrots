@@ -22,6 +22,7 @@ import ScoreBoard from '@/components/game/ScoreBoard'
 import FeedbackOverlay from '@/components/game/FeedbackOverlay'
 import ResultScreen from '@/components/game/ResultScreen'
 import { useGameRewards } from '@/hooks/useGameRewards'
+import { useBasePath } from '@/lib/basePath'
 import { calculateResults } from '@/lib/gameEngine'
 import GameAdvisor from '@/components/game/GameAdvisor'
 import ThemeToggle from '@/components/ThemeToggle'
@@ -31,6 +32,7 @@ import HurryUp from '@/components/game/HurryUp'
 
 export default function ClickCountryPage() {
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const { t, tc } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
@@ -612,7 +614,7 @@ export default function ClickCountryPage() {
           confirmLabel={t('quit')}
           confirmVariant="danger"
           onCancel={() => setShowQuitConfirm(false)}
-          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); reset(); router.push('/?cat=mapGames&game=/game/click-country') }}
+          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); reset(); router.push(prefixPath('/?cat=mapGames&game=/game/click-country')) }}
         />
       )}
 
@@ -661,7 +663,7 @@ export default function ClickCountryPage() {
         <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button
-              onClick={() => { playClick(); router.push('/?cat=mapGames&game=/game/click-country') }}
+              onClick={() => { playClick(); router.push(prefixPath('/?cat=mapGames&game=/game/click-country')) }}
               className="btn-ghost px-3 py-1.5 text-sm flex items-center gap-1"
               aria-label={t('home')}
             >

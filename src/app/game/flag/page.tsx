@@ -42,6 +42,7 @@ import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelp
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
 import ThemeToggle from '@/components/ThemeToggle'
 import ConfirmDialog from '@/components/game/ConfirmDialog'
+import { useBasePath } from '@/lib/basePath'
 import Countdown from '@/components/game/Countdown'
 import HurryUp from '@/components/game/HurryUp'
 
@@ -57,6 +58,7 @@ interface CountryContinent {
 export default function FlagGamePage() {
   const { t, tc } = useTranslation()
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -729,7 +731,7 @@ export default function FlagGamePage() {
           confirmLabel={t('quit')}
           confirmVariant="danger"
           onCancel={() => setShowQuitConfirm(false)}
-          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); reset(); router.push('/?cat=mapGames&game=/game/flag') }}
+          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); reset(); router.push(prefixPath('/?cat=mapGames&game=/game/flag')) }}
         />
       )}
 
@@ -796,7 +798,7 @@ export default function FlagGamePage() {
         <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button
-              onClick={() => { playClick(); router.push('/?cat=mapGames&game=/game/flag') }}
+              onClick={() => { playClick(); router.push(prefixPath('/?cat=mapGames&game=/game/flag')) }}
               className="btn-ghost px-3 py-1.5 text-sm flex items-center gap-1"
               aria-label={t('home')}
             >

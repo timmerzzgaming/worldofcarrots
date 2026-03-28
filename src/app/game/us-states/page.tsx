@@ -25,6 +25,7 @@ import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryLineC
 import { centroid, createFeatureStateSetter, shuffle } from '@/lib/mapHelpers'
 import { useMapThemeListener } from '@/hooks/useMapThemeListener'
 import { useGameRewards } from '@/hooks/useGameRewards'
+import { useBasePath } from '@/lib/basePath'
 import StarRating from '@/components/credits/StarRating'
 import CreditBreakdown from '@/components/credits/CreditBreakdown'
 import XpProgressBar from '@/components/xp/XpProgressBar'
@@ -78,6 +79,7 @@ const LINE_LAYER = 'us-states-line'
 // ---------------------------------------------------------------------------
 export default function USStatesPage() {
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const { t } = useTranslation()
   const containerRef = useRef<HTMLDivElement>(null)
   const mapRef = useRef<unknown>(null)
@@ -721,7 +723,7 @@ export default function USStatesPage() {
           confirmLabel={t('quit')}
           confirmVariant="danger"
           onCancel={() => setShowQuitConfirm(false)}
-          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); handleReset(); router.push('/?cat=mapGames&game=/game/us-states') }}
+          onConfirm={() => { setShowQuitConfirm(false); stopMusic(); handleReset(); router.push(prefixPath('/?cat=mapGames&game=/game/us-states')) }}
         />
       )}
       {showRestartConfirm && (
@@ -741,7 +743,7 @@ export default function USStatesPage() {
         <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button
-              onClick={() => { playClick(); router.push('/?cat=mapGames&game=/game/us-states') }}
+              onClick={() => { playClick(); router.push(prefixPath('/?cat=mapGames&game=/game/us-states')) }}
               className="btn-ghost px-3 py-1.5 text-sm flex items-center gap-1"
               aria-label={t('home')}
             >

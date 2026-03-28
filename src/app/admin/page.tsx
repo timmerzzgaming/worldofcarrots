@@ -8,6 +8,7 @@ import type { Profile } from '@/lib/auth/types'
 import { AVATARS } from '@/lib/auth/types'
 import EconomySettings from '@/components/admin/EconomySettings'
 import { clearHighScores } from '@/lib/highScores'
+import { useBasePath } from '@/lib/basePath'
 
 interface UserRow extends Profile {
   _adjustAmount?: string
@@ -30,6 +31,7 @@ const DEFAULT_TEST_FORM: TestAccountForm = {
 
 export default function AdminPage() {
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const { user, isAdmin, isLoading } = useAuth()
   const [users, setUsers] = useState<UserRow[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,7 +51,7 @@ export default function AdminPage() {
 
   useEffect(() => {
     if (!isLoading && !isAdmin) {
-      router.push('/')
+      router.push(prefixPath('/'))
       return
     }
     if (isAdmin) fetchUsers()
@@ -148,7 +150,7 @@ export default function AdminPage() {
             Admin Dashboard
           </h1>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => router.push(prefixPath('/'))}
             className="btn-ghost px-4 py-2 text-sm"
           >
             ← Back to Game

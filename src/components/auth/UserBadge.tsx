@@ -8,10 +8,12 @@ import type { Translations } from '@/lib/i18n'
 import AuthModal from './AuthModal'
 import { playClick } from '@/lib/sounds'
 import LevelBadge from '@/components/xp/LevelBadge'
+import { useBasePath } from '@/lib/basePath'
 
 export default function UserBadge() {
   const { t } = useTranslation()
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const { user, isGuest, isAdmin, signOut } = useAuth()
   const [showAuth, setShowAuth] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -49,7 +51,7 @@ export default function UserBadge() {
             </div>
             {isAdmin && (
               <button
-                onClick={() => { playClick(); setShowMenu(false); router.push('/admin') }}
+                onClick={() => { playClick(); setShowMenu(false); router.push(prefixPath('/admin')) }}
                 className="w-full text-left px-3 py-1.5 rounded-lg text-xs font-headline text-geo-primary hover:bg-geo-surface-high transition-colors mb-1"
               >
                 ⚙️ Admin Dashboard

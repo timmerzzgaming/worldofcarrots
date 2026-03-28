@@ -10,6 +10,7 @@ import LanguageSelector from '@/components/LanguageSelector'
 import SoundToggle from '@/components/SoundToggle'
 import { playClick, playHover, playEnter, startMenuMusic } from '@/lib/sounds'
 import { useTranslation } from '@/lib/i18n'
+import { useBasePath } from '@/lib/basePath'
 import type { Translations } from '@/lib/i18n'
 import ClickCountryMenu from '@/components/game/menus/ClickCountryMenu'
 import FlagMenu from '@/components/game/menus/FlagMenu'
@@ -241,6 +242,7 @@ type MenuView = 'categories' | string
 export default function HomePage() {
   const { t } = useTranslation()
   const router = useRouter()
+  const { prefixPath } = useBasePath()
   const [loaded, setLoaded] = useState(false)
   const [entered, setEntered] = useState(false)
   const [view, setView] = useState<MenuView>('categories')
@@ -291,14 +293,14 @@ export default function HomePage() {
   function handleCategoryClick(categoryId: string) {
     playClick()
     setView(categoryId)
-    router.push(`/?cat=${categoryId}`, { scroll: false })
+    router.push(prefixPath(`/?cat=${categoryId}`), { scroll: false })
   }
 
   function handleBack() {
     playClick()
     setExpandedGame(null)
     setView('categories')
-    router.push('/', { scroll: false })
+    router.push(prefixPath('/'), { scroll: false })
   }
 
   useEffect(() => {
@@ -381,7 +383,7 @@ export default function HomePage() {
                   {/* Daily Challenge + Leaderboard bar */}
                   <div className="flex flex-col sm:flex-row gap-3 max-w-5xl mx-auto">
                     <div className="flex-1">
-                      <DailyChallengeBanner onPlay={(mode, difficulty, seed) => router.push(`/game/daily?mode=${mode}&difficulty=${difficulty}&seed=${seed}`)} />
+                      <DailyChallengeBanner onPlay={(mode, difficulty, seed) => router.push(prefixPath(`/game/daily?mode=${mode}&difficulty=${difficulty}&seed=${seed}`))} />
                     </div>
                     <button
                       onClick={() => { playClick(); setShowLeaderboard(true) }}
@@ -589,22 +591,22 @@ export default function HomePage() {
                           >
                             {expandedGame.href === '/game/click-country' && (
                               <ClickCountryMenu onStartGame={(mode, diff, region, variant) => {
-                                router.push(`/game/click-country?mode=${mode}&difficulty=${diff}&region=${region}${variant ? `&variant=${variant}` : ''}`)
+                                router.push(prefixPath(`/game/click-country?mode=${mode}&difficulty=${diff}&region=${region}${variant ? `&variant=${variant}` : ''}`))
                               }} />
                             )}
                             {expandedGame.href === '/game/flag' && (
                               <FlagMenu onStartGame={(diff, region) => {
-                                router.push(`/game/flag?difficulty=${diff}&region=${region}`)
+                                router.push(prefixPath(`/game/flag?difficulty=${diff}&region=${region}`))
                               }} />
                             )}
                             {expandedGame.href === '/game/distance' && (
                               <DistanceMenu onStartGame={(diff, region, unit) => {
-                                router.push(`/game/distance?difficulty=${diff}&region=${region}&unit=${unit}`)
+                                router.push(prefixPath(`/game/distance?difficulty=${diff}&region=${region}&unit=${unit}`))
                               }} />
                             )}
                             {expandedGame.href === '/game/us-states' && (
                               <USStatesMenu onStartGame={(mode, diff) => {
-                                router.push(`/game/us-states?mode=${mode}&difficulty=${diff}`)
+                                router.push(prefixPath(`/game/us-states?mode=${mode}&difficulty=${diff}`))
                               }} />
                             )}
                           </motion.div>
