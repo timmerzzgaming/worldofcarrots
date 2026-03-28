@@ -11,21 +11,19 @@ interface AuthModalProps {
   onClose: () => void
 }
 
-type Mode = 'choice' | 'signup' | 'signin'
+type Mode = 'choice' | 'signup' | 'signin' | 'check-email'
 
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { t } = useTranslation()
   const { signIn } = useAuth()
   const [mode, setMode] = useState<Mode>('choice')
-  const [password, setPassword] = useState('')
   const [nickname, setNickname] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
   const [avatar, setAvatar] = useState('🌍')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-
-  function toEmail(name: string) {
-    return `${name.toLowerCase()}@test.woc.local`
-  }
 
   async function handleSignUp() {
     setError(null)
@@ -35,27 +33,29 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     if (!/^[a-zA-Z0-9_]+$/.test(nickname)) {
       setError(t('auth.nicknameChars' as keyof Translations)); return
     }
+    if (!email.includes('@')) {
+      setError(t('auth.invalidEmail' as keyof Translations)); return
+    }
     if (password.length < 6) {
       setError('Password must be at least 6 characters'); return
     }
+    if (password !== confirmPassword) {
+      setError('Passwords do not match'); return
+    }
     setLoading(true)
-    // Register via server API (auto-confirms, creates profile)
     const res = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname, password, avatar }),
+      body: JSON.stringify({ nickname, email, password, avatar }),
     })
     const json = await res.json()
+    setLoading(false)
     if (!res.ok) {
-      setLoading(false)
       setError(json.error?.message ?? 'Registration failed')
       return
     }
-    // Auto sign-in after registration
-    const result = await signIn(toEmail(nickname), password)
-    setLoading(false)
-    if (result.error) setError(result.error)
-    else onClose()
+    // Show "check your email" screen
+    setMode('check-email')
   }
 
   async function handleSignIn() {
@@ -67,15 +67,27 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       setError('Password is required'); return
     }
     setLoading(true)
-    const result = await signIn(toEmail(nickname), password)
+    // Look up email by nickname, then sign in
+    const lookupRes = await fetch('/api/auth/lookup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ nickname: nickname.trim() }),
+    })
+    if (!lookupRes.ok) {
+      setLoading(false)
+      setError('User not found')
+      return
+    }
+    const { data } = await lookupRes.json()
+    const result = await signIn(data.email, password)
     setLoading(false)
     if (result.error) setError(result.error)
     else onClose()
   }
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-8 bg-geo-bg/60 backdrop-blur-sm" onClick={onClose}>
-      <div className="glass-panel p-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
+    <div className="fixed inset-0 z-40 flex items-center justify-center p-4 sm:p-8 bg-geo-bg/60 backdrop-blur-sm" onClick={onClose}>
+      <div className="glass-panel p-6 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
 
         {/* ---- Choice screen ---- */}
         {mode === 'choice' && (
@@ -139,14 +151,36 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             />
 
             <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
+              {t('auth.email' as keyof Translations)}
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@example.com"
+              className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-4"
+            />
+
+            <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
               Password
             </label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSignUp()}
               placeholder="Min. 6 characters"
+              className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-4"
+            />
+
+            <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleSignUp()}
+              placeholder="Repeat password"
               className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-5"
             />
 
@@ -165,6 +199,37 @@ export default function AuthModal({ onClose }: AuthModalProps) {
               className="w-full text-center text-geo-on-surface-dim text-sm font-headline mt-4 hover:text-geo-primary transition-colors"
             >
               ← {t('back')}
+            </button>
+          </div>
+        )}
+
+        {/* ---- Check Email ---- */}
+        {mode === 'check-email' && (
+          <div className="text-center">
+            <p className="text-4xl mb-3">📧</p>
+            <p className="text-geo-on-surface font-headline font-extrabold text-xl uppercase mb-2">
+              Check your email
+            </p>
+            <p className="text-geo-on-surface-dim text-sm font-body mb-2">
+              We sent an activation link to:
+            </p>
+            <p className="text-geo-primary font-headline font-bold text-sm mb-6">
+              {email}
+            </p>
+            <p className="text-geo-on-surface-dim text-xs font-body mb-6">
+              Click the link in the email to activate your account, then come back and sign in.
+            </p>
+            <button
+              onClick={() => { playClick(); setMode('signin'); setError(null); setPassword(''); setConfirmPassword('') }}
+              className="btn-primary w-full py-3"
+            >
+              Go to Sign In
+            </button>
+            <button
+              onClick={() => { playClick(); onClose() }}
+              className="w-full text-center text-geo-on-surface-dim text-sm font-headline mt-4 hover:text-geo-primary transition-colors"
+            >
+              Close
             </button>
           </div>
         )}

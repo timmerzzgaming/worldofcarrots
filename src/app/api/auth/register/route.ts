@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  let body: { nickname: string; password: string; avatar?: string }
+  let body: { nickname: string; email: string; password: string; avatar?: string }
   try {
     body = await request.json()
   } catch {
@@ -21,11 +21,18 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const { nickname, password, avatar } = body
+  const { nickname, email, password, avatar } = body
 
   if (!nickname || !NICKNAME_RE.test(nickname)) {
     return NextResponse.json(
       { error: { code: 'VALIDATION_FAILED', message: 'Nickname must be 3-20 alphanumeric characters or underscores' } },
+      { status: 422 },
+    )
+  }
+
+  if (!email || !email.includes('@')) {
+    return NextResponse.json(
+      { error: { code: 'VALIDATION_FAILED', message: 'Valid email is required' } },
       { status: 422 },
     )
   }
@@ -37,19 +44,32 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  const fakeEmail = `${nickname.toLowerCase()}@test.woc.local`
+  // Check nickname uniqueness
+  const { data: existing } = await supabaseAdmin
+    .from('profiles')
+    .select('id')
+    .eq('nickname', nickname)
+    .single()
 
-  // Create auth user with email pre-confirmed (no verification email)
+  if (existing) {
+    return NextResponse.json(
+      { error: { code: 'CONFLICT', message: `Nickname "${nickname}" is already taken` } },
+      { status: 409 },
+    )
+  }
+
+  // Create auth user — email_confirm: false so Supabase sends a confirmation email
   const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
-    email: fakeEmail,
+    email,
     password,
-    email_confirm: true,
+    email_confirm: false,
+    user_metadata: { nickname, avatar: avatar ?? '🌍' },
   })
 
   if (authError) {
     if (authError.message.includes('already been registered')) {
       return NextResponse.json(
-        { error: { code: 'CONFLICT', message: `Nickname "${nickname}" is already taken` } },
+        { error: { code: 'CONFLICT', message: 'This email is already registered' } },
         { status: 409 },
       )
     }
@@ -59,7 +79,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  // Create profile row
+  // Create profile row (account exists but isn't confirmed yet — profile is ready for when they confirm)
   const { error: profileError } = await supabaseAdmin.from('profiles').insert({
     id: authData.user.id,
     nickname,
