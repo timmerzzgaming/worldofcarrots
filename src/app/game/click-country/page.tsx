@@ -6,7 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { useGameStore } from '@/store/gameStore'
 import { getCountriesFromGeoJSON, GAME_MODES } from '@/lib/gameEngine'
 import { DIFFICULTIES, type Difficulty } from '@/lib/countryDifficulty'
-import { clearHighScores, getHighScores, type HighScoreEntry } from '@/lib/highScores'
+import { getHighScores, type HighScoreEntry } from '@/lib/highScores'
 import { getMapStyle, COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER, SMALL_COUNTRIES_SOURCE, SMALL_COUNTRIES_CIRCLE_LAYER, SMALL_COUNTRIES_RING_LAYER, initialViewState, REGION_VIEWS } from '@/lib/mapConfig'
 import type { GameMode } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
@@ -800,14 +800,6 @@ export default function ClickCountryPage() {
             >
               {t('startGame')}
             </button>
-            <div className="flex justify-end mt-2">
-              <button
-                onClick={() => { playClick(); clearHighScores(); alert('High scores cleared.') }}
-                className="text-geo-outline text-xs font-headline hover:text-geo-error transition-colors"
-              >
-                {t('clearScores')}
-              </button>
-            </div>
           </div>
 
           {/* Game advisor — floating carrot character */}

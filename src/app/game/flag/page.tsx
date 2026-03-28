@@ -6,7 +6,7 @@ import 'maplibre-gl/dist/maplibre-gl.css'
 import { useGameStore } from '@/store/gameStore'
 import { getCountriesFromGeoJSON, GAME_MODES } from '@/lib/gameEngine'
 import { DIFFICULTIES, type Difficulty } from '@/lib/countryDifficulty'
-import { clearHighScores, getHighScores } from '@/lib/highScores'
+import { getHighScores } from '@/lib/highScores'
 import {
   COUNTRIES_SOURCE,
   COUNTRIES_FILL_LAYER,
@@ -890,14 +890,6 @@ export default function FlagGamePage() {
             >
               {t('startGame')}
             </button>
-            <div className="flex justify-end mt-2">
-              <button
-                onClick={() => { playClick(); clearHighScores(); alert('High scores cleared.') }}
-                className="text-geo-outline text-xs font-headline hover:text-geo-error transition-colors"
-              >
-                {t('clearScores')}
-              </button>
-            </div>
           </div>
 
           {/* Game advisor — floating carrot character */}

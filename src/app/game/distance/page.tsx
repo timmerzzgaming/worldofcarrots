@@ -822,14 +822,6 @@ export default function DistanceGamePage() {
             >
               {t('startGame')}
             </button>
-            <div className="flex justify-end mt-2">
-              <button
-                onClick={() => { playClick(); localStorage.removeItem(scoreKey(difficulty)); setScores([]) }}
-                className="text-geo-outline text-xs font-headline hover:text-geo-error transition-colors"
-              >
-                {t('clearScores')}
-              </button>
-            </div>
           </div>
 
           {/* Game advisor — floating carrot character */}

@@ -7,7 +7,6 @@ import type { GameMode, GameModeConfig } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playClick, playHover } from '@/lib/sounds'
-import { clearHighScores } from '@/lib/highScores'
 
 const MODE_ICONS: Record<string, string> = { classic: '\uD83C\uDFAF', timed: '\u23F1\uFE0F', marathon: '\uD83C\uDFC3', survival: '\u2764\uFE0F', practice: '\uD83D\uDCDD', borderless: '\uD83C\uDF10' }
 const DIFFICULTY_ICONS: Record<string, string> = { easy: '\uD83D\uDFE2', medium: '\uD83D\uDFE1', hard: '\uD83D\uDFE0', expert: '\uD83D\uDD34' }
@@ -156,14 +155,6 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
         >
           {t('startGame')}
         </button>
-        <div className="flex justify-end mt-2">
-          <button
-            onClick={() => { playClick(); clearHighScores(); alert('High scores cleared.') }}
-            className="text-geo-outline text-xs font-headline hover:text-geo-error transition-colors"
-          >
-            {t('clearScores')}
-          </button>
-        </div>
       </div>
     </>
   )

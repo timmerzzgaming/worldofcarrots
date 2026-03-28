@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import type { Profile } from '@/lib/auth/types'
 import { AVATARS } from '@/lib/auth/types'
 import EconomySettings from '@/components/admin/EconomySettings'
+import { clearHighScores } from '@/lib/highScores'
 
 interface UserRow extends Profile {
   _adjustAmount?: string
@@ -252,6 +253,27 @@ export default function AdminPage() {
 
         {/* Economy Settings */}
         <EconomySettings />
+
+        {/* Data Management */}
+        <section className="glass-panel p-5 mb-6">
+          <h2 className="text-lg font-headline font-bold text-geo-on-surface mb-3">Data Management</h2>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => {
+                if (!confirm('Clear all local high scores? This only affects your browser.')) return
+                clearHighScores()
+                // Also clear distance scores
+                const keys = Object.keys(localStorage).filter(k => k.startsWith('woc-distance-scores'))
+                keys.forEach(k => localStorage.removeItem(k))
+                alert('All local high scores cleared.')
+              }}
+              className="px-4 py-2 rounded-lg text-sm font-headline font-bold text-geo-error bg-geo-error/10 border border-geo-error/30 hover:bg-geo-error/20 transition-colors"
+            >
+              Clear Local High Scores
+            </button>
+            <span className="text-xs text-geo-on-surface-dim font-body">Removes all locally stored high scores from this browser</span>
+          </div>
+        </section>
 
         <p className="text-geo-on-surface-dim text-sm font-body mb-4">
           {users.length} registered users
