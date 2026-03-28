@@ -259,6 +259,22 @@ export function playLevelUp() {
   tone(2093, 0.15, 'sine', 0.2, 0.5)   // C7
 }
 
+export function playCountdownTick() {
+  if (!isSoundEnabled()) return
+  // Deep percussive tick — like a clock
+  tone(220, 0.08, 'triangle', 0.3, 0)
+  tone(110, 0.05, 'square', 0.15, 0)
+}
+
+export function playCountdownGo() {
+  if (!isSoundEnabled()) return
+  // Bright ascending burst — "GO!"
+  tone(523, 0.08, 'sine', 0.3, 0)      // C5
+  tone(659, 0.08, 'sine', 0.3, 0.05)   // E5
+  tone(784, 0.15, 'sine', 0.35, 0.1)   // G5
+  tone(1047, 0.2, 'sine', 0.3, 0.15)   // C6
+}
+
 // --- Background music ---
 
 const MUSIC_VOLUME = 0.15

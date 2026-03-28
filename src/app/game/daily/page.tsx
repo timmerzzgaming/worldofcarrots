@@ -496,8 +496,8 @@ export default function DailyChallengePage() {
       {/* HUD during gameplay */}
       {(phase === 'playing' || phase === 'feedback') && currentQ && (
         <>
-          {/* Question card — bottom left */}
-          <div className="absolute bottom-4 left-4 z-10">
+          {/* Question card — top center */}
+          <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
             <div className="glass-panel px-4 py-2 2xl:px-6 2xl:py-3 text-center min-w-[240px] 2xl:min-w-[280px]">
               <p className="text-[10px] font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest mb-1">
                 Daily Challenge — {currentIndex + 1}/{QUESTION_COUNT}

@@ -19,7 +19,7 @@ export default function QuestionCard({
   return (
     <motion.div
       key={countryName}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="glass-panel px-6 py-3 2xl:px-10 2xl:py-6 text-center"
     >

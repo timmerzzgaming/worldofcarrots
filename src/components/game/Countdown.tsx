@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { playCountdownTick, playCountdownGo } from '@/lib/sounds'
 
 interface CountdownProps {
   onComplete: () => void
@@ -15,6 +16,11 @@ export default function Countdown({ onComplete }: CountdownProps) {
 
   useEffect(() => {
     if (step < STEPS.length) {
+      if (step < STEPS.length - 1) {
+        playCountdownTick()
+      } else {
+        playCountdownGo()
+      }
       const timer = setTimeout(() => setStep((s) => s + 1), STEP_DURATION)
       return () => clearTimeout(timer)
     } else {

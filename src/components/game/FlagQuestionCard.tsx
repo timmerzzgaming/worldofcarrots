@@ -43,7 +43,7 @@ export default function FlagQuestionCard({
   return (
     <motion.div
       key={flagUrl}
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       className="glass-panel px-5 py-3 2xl:px-10 2xl:py-6 text-center max-w-sm 2xl:max-w-md"
     >

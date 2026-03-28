@@ -727,9 +727,9 @@ export default function FlagGamePage() {
         />
       )}
 
-      {/* Flag question card — bottom left */}
+      {/* Flag question card — top center */}
       {phase === 'playing' && q && currentFlagUrl && (
-        <div className="absolute bottom-4 left-4 z-10">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
           <FlagQuestionCard
             flagUrl={currentFlagUrl}
             questionNumber={currentIndex + 1}

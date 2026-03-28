@@ -610,9 +610,9 @@ export default function ClickCountryPage() {
         />
       )}
 
-      {/* Question card — bottom left */}
+      {/* Question card — top center */}
       {phase === 'playing' && q && (
-        <div className="absolute bottom-4 left-4 z-10">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
           <QuestionCard countryName={q.country.name} questionNumber={currentIndex + 1} totalQuestions={questions.length} />
         </div>
       )}
