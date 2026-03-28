@@ -15,7 +15,7 @@ type Mode = 'choice' | 'signup' | 'signin' | 'check-email'
 
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { t } = useTranslation()
-  const { signIn } = useAuth()
+  const { signUp, signIn } = useAuth()
   const [mode, setMode] = useState<Mode>('choice')
   const [nickname, setNickname] = useState('')
   const [email, setEmail] = useState('')
@@ -43,15 +43,23 @@ export default function AuthModal({ onClose }: AuthModalProps) {
       setError('Passwords do not match'); return
     }
     setLoading(true)
-    const res = await fetch('/api/auth/register', {
+    // 1. Check nickname availability
+    const checkRes = await fetch('/api/auth/check-nickname', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nickname, email, password, avatar }),
+      body: JSON.stringify({ nickname }),
     })
-    const json = await res.json()
+    if (!checkRes.ok) {
+      const checkJson = await checkRes.json()
+      setLoading(false)
+      setError(checkJson.error?.message ?? 'Nickname check failed')
+      return
+    }
+    // 2. Client-side signUp — this triggers Supabase confirmation email
+    const result = await signUp(email, password, nickname, avatar)
     setLoading(false)
-    if (!res.ok) {
-      setError(json.error?.message ?? 'Registration failed')
+    if (result.error) {
+      setError(result.error)
       return
     }
     // Show "check your email" screen
