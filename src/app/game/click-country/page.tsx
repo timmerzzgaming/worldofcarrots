@@ -505,8 +505,8 @@ export default function ClickCountryPage() {
         ['boolean', ['feature-state', 'wrong'], false], '#fca5a5',
         ['boolean', ['feature-state', 'target'], false], '#3b82f6',
         ['boolean', ['feature-state', 'solved'], false], '#86efac',
-        ['boolean', ['feature-state', 'hover'], false], '#cbd5e1',
-        '#ffffff',
+        ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
+        countryFillColor(),
       ])
       map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-opacity', [
         'case',
