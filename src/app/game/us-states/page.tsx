@@ -181,7 +181,7 @@ export default function USStatesPage() {
           center: [-98, 39],
           zoom: 3.5,
           attributionControl: false,
-          renderWorldCopies: false,
+          renderWorldCopies: true,
         })
 
         map.addControl(new maplibregl.NavigationControl(), 'top-right')

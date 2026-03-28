@@ -116,7 +116,7 @@ export default function ClickCountryPage() {
           center: initialViewState.center,
           zoom: initialViewState.zoom,
           attributionControl: false,
-          renderWorldCopies: false,
+          renderWorldCopies: true,
 
         })
 

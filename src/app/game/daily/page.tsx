@@ -130,7 +130,7 @@ export default function DailyChallengePage() {
           center: initialViewState.center,
           zoom: initialViewState.zoom,
           attributionControl: false,
-          renderWorldCopies: false,
+          renderWorldCopies: true,
 
         })
 
