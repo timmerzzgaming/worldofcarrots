@@ -144,7 +144,7 @@ export default function DailyChallengePage() {
               'fill-color': [
                 'case',
                 ['boolean', ['feature-state', 'correct'], false], '#22c55e',
-                ['boolean', ['feature-state', 'wrong'], false], '#fca5a5',
+                ['boolean', ['feature-state', 'wrong'], false], '#fdba74',
                 ['boolean', ['feature-state', 'target'], false], '#3b82f6',
                 ['boolean', ['feature-state', 'solved'], false], '#86efac',
                 ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
@@ -168,7 +168,7 @@ export default function DailyChallengePage() {
               'line-color': [
                 'case',
                 ['boolean', ['feature-state', 'correct'], false], '#16a34a',
-                ['boolean', ['feature-state', 'wrong'], false], '#dc2626',
+                ['boolean', ['feature-state', 'wrong'], false], '#ea580c',
                 ['boolean', ['feature-state', 'target'], false], '#2563eb',
                 ['boolean', ['feature-state', 'solved'], false], '#22c55e',
                 ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
@@ -206,7 +206,7 @@ export default function DailyChallengePage() {
               'circle-stroke-color': [
                 'case',
                 ['boolean', ['feature-state', 'correct'], false], '#22c55e',
-                ['boolean', ['feature-state', 'wrong'], false], '#ef4444',
+                ['boolean', ['feature-state', 'wrong'], false], '#f97316',
                 ['boolean', ['feature-state', 'target'], false], '#3b82f6',
                 ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                 circleStrokeColor(),
