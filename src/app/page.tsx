@@ -414,12 +414,12 @@ export default function HomePage() {
                         </p>
                         <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm">
                           {available > 0 && (
-                            <span className="bg-geo-primary/20 text-geo-primary px-3 py-1 rounded-full font-headline font-bold">
+                            <span className="bg-geo-primary text-black px-3 py-1 rounded-full font-headline font-bold">
                               {available} {t('gamesAvailable')}
                             </span>
                           )}
                           {upcoming > 0 && (
-                            <span className="bg-geo-primary/20 text-geo-primary px-3 py-1 rounded-full font-headline font-bold">
+                            <span className="bg-geo-primary text-black px-3 py-1 rounded-full font-headline font-bold">
                               +{upcoming} {t('moreComingSoon')}
                             </span>
                           )}
@@ -494,8 +494,8 @@ export default function HomePage() {
                           if (!mode.available) {
                             // Coming soon — not built yet
                             return (
-                              <div className="relative flex flex-col items-center justify-center text-center w-64 h-64 glass-panel opacity-60 cursor-not-allowed">
-                                <span className="absolute -top-2 right-2 bg-geo-primary text-white text-xs font-headline font-extrabold uppercase px-3 py-0.5 rounded-full">
+                              <div className="relative flex flex-col items-center justify-center text-center w-64 h-64 glass-panel opacity-70 cursor-not-allowed">
+                                <span className="absolute -top-2 right-2 bg-geo-primary text-black text-xs font-headline font-extrabold uppercase px-3 py-0.5 rounded-full">
                                   {t('comingSoon')}
                                 </span>
                                 <div className="text-6xl mb-3">{mode.icon}</div>
