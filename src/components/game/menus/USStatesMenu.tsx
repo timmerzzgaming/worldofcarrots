@@ -50,10 +50,10 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
             </button>
         ))}
         {/* Jigsaw -- coming soon placeholder */}
-        <div className="glass-panel p-4 flex flex-col items-center text-center opacity-40 cursor-not-allowed">
+        <div className="glass-panel p-4 flex flex-col items-center text-center opacity-60 cursor-not-allowed">
           <div className="text-2xl mb-2">🧩</div>
-          <p className="text-sm font-headline font-extrabold uppercase tracking-wide text-geo-on-surface-dim">{t('mode.jigsaw' as keyof Translations) || 'Jigsaw'}</p>
-          <p className="text-xs mt-1 text-geo-outline leading-relaxed">{t('comingSoon')}</p>
+          <p className="text-sm font-headline font-extrabold uppercase tracking-wide text-white">{t('mode.jigsaw' as keyof Translations) || 'Jigsaw'}</p>
+          <p className="text-xs mt-1 text-geo-primary font-headline font-bold leading-relaxed">{t('comingSoon')}</p>
         </div>
       </div>
 
