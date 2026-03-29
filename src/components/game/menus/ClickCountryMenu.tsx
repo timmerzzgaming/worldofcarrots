@@ -102,7 +102,8 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
       {/* Country count for selected region + difficulty */}
       {(() => {
         const counts = COUNTRY_COUNTS[selectedRegion] ?? COUNTRY_COUNTS.World
-        const poolSize = selectedMode === 'marathon' ? counts.expert : counts[selectedDifficulty]
+        const rawPool = selectedMode === 'marathon' ? counts.expert : counts[selectedDifficulty]
+        const poolSize = Math.max(rawPool, Math.min(10, counts.expert))
         const modeConfig = GAME_MODES[selectedMode]
         const questionCount = modeConfig.totalQuestions ? Math.min(modeConfig.totalQuestions, poolSize) : poolSize
         return (

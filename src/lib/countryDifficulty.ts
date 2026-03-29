@@ -111,17 +111,20 @@ export const DIFFICULTIES: { value: Difficulty; label: string; description: stri
   { value: 'expert', label: 'Expert', description: 'All 197 countries' },
 ]
 
+const MIN_POOL_SIZE = 10
+
 export function filterByDifficulty(countryNames: string[], difficulty: Difficulty): string[] {
-  switch (difficulty) {
-    case 'easy':
-      return countryNames.filter((n) => getCountryTier(n) === 1)
-    case 'medium':
-      return countryNames.filter((n) => getCountryTier(n) <= 2)
-    case 'hard':
-      return countryNames.filter((n) => getCountryTier(n) <= 3)
-    case 'expert':
-      return countryNames
+  const maxTier: Record<Difficulty, CountryTier> = { easy: 1, medium: 2, hard: 3, expert: 4 }
+  let tier = maxTier[difficulty]
+  let result = countryNames.filter((n) => getCountryTier(n) <= tier)
+
+  // If the pool is too small (e.g. Oceania easy), progressively include harder tiers
+  while (result.length < MIN_POOL_SIZE && tier < 4) {
+    tier++
+    result = countryNames.filter((n) => getCountryTier(n) <= tier)
   }
+
+  return result
 }
 
 /** Precomputed country counts per region × difficulty (based on Natural Earth 50m data). */
