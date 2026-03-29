@@ -59,8 +59,7 @@ export function continentFillColor(continent: string): string {
 }
 
 /** MapLibre expression for continent-based country fill with feature-state overrides */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function continentFillExpression(): any {
+export function continentFillExpression(): any { // eslint-disable-line
   return [
     'case',
     ['boolean', ['feature-state', 'correct'], false], '#22c55e',
