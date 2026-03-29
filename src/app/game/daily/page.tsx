@@ -20,12 +20,12 @@ import {
 import { getCountriesFromGeoJSON } from '@/lib/gameEngine'
 import { calculateStars } from '@/lib/stars'
 import {
-  COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER,
+  getMapStyle, COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER,
   SMALL_COUNTRIES_SOURCE, SMALL_COUNTRIES_CIRCLE_LAYER, SMALL_COUNTRIES_RING_LAYER,
   initialViewState,
 } from '@/lib/mapConfig'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
-import { mapBgColor, countryFillColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor } from '@/lib/theme'
+import { countryFillColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor } from '@/lib/theme'
 import StarRating from '@/components/credits/StarRating'
 import LevelBadge from '@/components/xp/LevelBadge'
 import { cn } from '@/lib/cn'
@@ -40,14 +40,16 @@ interface DailyAnswer {
   question: string
   correct: boolean
   clicked: string | null
-  score: number
-  timeUsed: number
+  points: number
 }
 
 type Phase = 'loading' | 'ready' | 'countdown' | 'playing' | 'feedback' | 'results' | 'already_done'
 
-const QUESTION_COUNT = 10
-const TIME_PER_QUESTION = 15
+const QUESTION_COUNT = 15
+const GAME_TIME = 60 // 60 seconds total
+const PERFECT_BONUS = 30 // bonus for all 15 correct
+// Progressive scoring: question 1 = 1pt, question 2 = 2pt, ... question 15 = 15pt
+// Max base = 1+2+...+15 = 120. Max total = 120 + 30 = 150 points.
 
 export default function DailyChallengePage() {
   const router = useRouter()
@@ -70,8 +72,8 @@ export default function DailyChallengePage() {
   const [answers, setAnswers] = useState<DailyAnswer[]>([])
   const answersRef = useRef<DailyAnswer[]>([])
   const [score, setScore] = useState(0)
-  const [timeRemaining, setTimeRemaining] = useState(TIME_PER_QUESTION)
-  const timeRemainingRef = useRef(TIME_PER_QUESTION)
+  const [timeRemaining, setTimeRemaining] = useState(GAME_TIME)
+  const timeRemainingRef = useRef(GAME_TIME)
   const [countdownNum, setCountdownNum] = useState(3)
   const [leaderboard, setLeaderboard] = useState<DailyChallengeResult[]>([])
   const [rewardResult, setRewardResult] = useState<{ totalCoins: number; carrots: number; xpEarned: number; leveledUp: boolean } | null>(null)
@@ -82,7 +84,6 @@ export default function DailyChallengePage() {
 
   const correctCount = useMemo(() => answers.filter((a) => a.correct).length, [answers])
   const totalQuestions = questions.length
-  const accuracy = totalQuestions > 0 ? correctCount / totalQuestions : 0
   const currentQ = questions[currentIndex]
 
   // Load challenge + init map
@@ -123,18 +124,18 @@ export default function DailyChallengePage() {
         }))
         setQuestions(qs)
 
-        // Create map
+        // Create map — use getMapStyle to match other game pages
+        const apiKey = process.env.NEXT_PUBLIC_MAPTILER_KEY ?? ''
         const map = new maplibregl.Map({
           container: containerRef.current!,
-          style: { version: 8 as const, name: 'WoC Daily', sources: {}, layers: [{ id: 'background', type: 'background' as const, paint: { 'background-color': mapBgColor() } }] },
+          style: getMapStyle(apiKey),
           center: initialViewState.center,
           zoom: initialViewState.zoom,
           attributionControl: false,
           renderWorldCopies: true,
-
         })
 
-        map.addControl(new maplibregl.NavigationControl(), 'top-left')
+        map.addControl(new maplibregl.NavigationControl(), 'top-right')
         map.getCanvas().style.cursor = 'crosshair'
 
         map.on('load', () => {
@@ -266,14 +267,14 @@ export default function DailyChallengePage() {
   const sfSmall = createFeatureStateSetter(mapRef, SMALL_COUNTRIES_SOURCE)
 
   // Handle map click
-  function handleMapClick(clickedName: string) {
+  const handleMapClick = useCallback((clickedName: string) => {
     const qi = currentIndexRef.current
     const q = questions[qi]
     if (!q) return
 
     const correct = clickedName === q.name
-    const timeUsed = TIME_PER_QUESTION - timeRemainingRef.current
-    const qScore = correct ? Math.round(1000 * (timeRemainingRef.current / TIME_PER_QUESTION)) : 0
+    // Progressive scoring: question N (1-indexed) gives N points
+    const points = correct ? qi + 1 : 0
 
     if (correct) playCorrect()
     else playWrong()
@@ -297,12 +298,12 @@ export default function DailyChallengePage() {
     setFeedbackCountry(clickedName)
     setFeedbackCorrect(correct)
 
-    const answer: DailyAnswer = { question: q.name, correct, clicked: clickedName, score: qScore, timeUsed }
+    const answer: DailyAnswer = { question: q.name, correct, clicked: clickedName, points }
     answersRef.current = [...answersRef.current, answer]
     setAnswers(answersRef.current)
-    setScore((prev) => prev + qScore)
+    setScore((prev) => prev + points)
 
-    // Stop timer during feedback
+    // Pause timer briefly during feedback
     if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
     phaseRef.current = 'feedback'
     setPhase('feedback')
@@ -328,13 +329,11 @@ export default function DailyChallengePage() {
       } else {
         currentIndexRef.current = qi + 1
         setCurrentIndex(qi + 1)
-        timeRemainingRef.current = TIME_PER_QUESTION
-        setTimeRemaining(TIME_PER_QUESTION)
         phaseRef.current = 'playing'
         setPhase('playing')
       }
-    }, 1200)
-  }
+    }, 800) // Slightly faster feedback to keep pace with 60s timer
+  }, [questions]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Countdown
   useEffect(() => {
@@ -354,7 +353,7 @@ export default function DailyChallengePage() {
     return () => clearInterval(interval)
   }, [phase])
 
-  // Game timer
+  // Global game timer — counts down from 60s
   useEffect(() => {
     if (phase !== 'playing') return
 
@@ -362,11 +361,13 @@ export default function DailyChallengePage() {
       timeRemainingRef.current -= 0.1
       setTimeRemaining(timeRemainingRef.current)
 
-      if (timeRemainingRef.current <= 3 && timeRemainingRef.current > 2.9) playTick()
+      if (timeRemainingRef.current <= 10 && timeRemainingRef.current > 9.9) playTick()
+      if (timeRemainingRef.current <= 5 && Math.abs(timeRemainingRef.current % 1) < 0.15) playTick()
 
       if (timeRemainingRef.current <= 0) {
-        // Time's up — auto-wrong
-        handleMapClick('__timeout__')
+        // Time's up — end the game immediately
+        if (timerRef.current) clearInterval(timerRef.current)
+        finishGame(answersRef.current)
       }
     }, 100)
 
@@ -379,32 +380,39 @@ export default function DailyChallengePage() {
     setAnswers([])
     answersRef.current = []
     setScore(0)
-    timeRemainingRef.current = TIME_PER_QUESTION
-    setTimeRemaining(TIME_PER_QUESTION)
+    timeRemainingRef.current = GAME_TIME
+    setTimeRemaining(GAME_TIME)
     playGameStart()
     phaseRef.current = 'countdown'
     setPhase('countdown')
   }
 
   async function finishGame(finalAnswers: DailyAnswer[]) {
+    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null }
+    if (feedbackTimerRef.current) { clearTimeout(feedbackTimerRef.current); feedbackTimerRef.current = null }
     playGameOver()
     phaseRef.current = 'results'
     setPhase('results')
 
     const finalCorrect = finalAnswers.filter((a) => a.correct).length
     const finalAccuracy = finalAnswers.length > 0 ? finalCorrect / finalAnswers.length : 0
-    const finalScore = finalAnswers.reduce((s, a) => s + a.score, 0)
-    const elapsed = finalAnswers.reduce((s, a) => s + a.timeUsed, 0)
-    const stars = calculateStars({ mode: 'classic', correctCount: finalCorrect, totalQuestions: finalAnswers.length, accuracy: finalAccuracy })
+    let finalScore = finalAnswers.reduce((s, a) => s + a.points, 0)
+
+    // Perfect bonus: all 15 correct = +30 bonus points + 1 carrot
+    const isPerfect = finalCorrect === QUESTION_COUNT
+    if (isPerfect) finalScore += PERFECT_BONUS
+    setScore(finalScore)
+
+    const stars = calculateStars({ mode: 'classic', correctCount: finalCorrect, totalQuestions: QUESTION_COUNT, accuracy: finalAccuracy })
 
     if (user && !isGuest) {
       const result = await submitDailyChallengeResult({
         userId: user.id,
         score: finalScore,
         correctCount: finalCorrect,
-        totalQuestions: finalAnswers.length,
+        totalQuestions: QUESTION_COUNT,
         stars,
-        elapsed,
+        elapsed: GAME_TIME - Math.max(0, timeRemainingRef.current),
         currentXp: user.xp,
       })
 
@@ -424,13 +432,15 @@ export default function DailyChallengePage() {
 
   const stars = useMemo(() => {
     if (phase !== 'results') return 0
-    return calculateStars({ mode: 'classic', correctCount, totalQuestions, accuracy })
-  }, [phase, correctCount, totalQuestions, accuracy])
+    return calculateStars({ mode: 'classic', correctCount, totalQuestions: QUESTION_COUNT, accuracy: totalQuestions > 0 ? correctCount / totalQuestions : 0 })
+  }, [phase, correctCount, totalQuestions])
+
+  const isPerfect = correctCount === QUESTION_COUNT && phase === 'results'
 
   return (
     <div className="relative w-full h-screen overflow-hidden bg-geo-bg">
       {/* Map container — always rendered */}
-      <div ref={containerRef} className="absolute inset-0" />
+      <div ref={containerRef} className="absolute inset-0 z-0" />
 
       {/* Loading overlay */}
       {phase === 'loading' && (
@@ -459,11 +469,14 @@ export default function DailyChallengePage() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-8 max-w-sm text-center">
             <p className="text-4xl mb-3">🏆</p>
             <h2 className="text-2xl font-headline font-extrabold text-geo-tertiary-bright uppercase mb-1">Daily Challenge</h2>
-            <p className="text-geo-on-surface-dim text-sm font-body mb-2">
-              Find {QUESTION_COUNT} countries on the map — {TIME_PER_QUESTION}s each
+            <p className="text-geo-on-surface-dim text-sm font-body mb-1">
+              Find {QUESTION_COUNT} countries in {GAME_TIME} seconds
+            </p>
+            <p className="text-geo-on-surface-dim text-xs font-body mb-1">
+              Each correct answer scores more points than the last
             </p>
             <p className="text-xs text-geo-on-surface-dim font-body mb-6">
-              🏆 +{challenge.coin_reward} coins, +{challenge.diamond_reward} 🥕
+              All {QUESTION_COUNT} correct = +{PERFECT_BONUS} bonus + 🥕
             </p>
             {isGuest && (
               <p className="text-xs text-geo-error font-body mb-4">Sign in to save your results and earn rewards!</p>
@@ -500,28 +513,39 @@ export default function DailyChallengePage() {
         <>
           {/* Question card — top center */}
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-            <div className="glass-panel px-3 py-2 sm:px-4 2xl:px-6 2xl:py-3 text-center min-w-[200px] sm:min-w-[240px] 2xl:min-w-[280px]">
+            <div className="glass-panel px-3 py-2 sm:px-4 2xl:px-6 2xl:py-3 text-center min-w-[200px] sm:min-w-[280px]">
               <p className="text-[10px] font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest mb-1">
                 Daily Challenge — {currentIndex + 1}/{QUESTION_COUNT}
               </p>
               <p className="text-xl font-headline font-extrabold text-geo-on-surface">
                 {t('find' as keyof Translations)} <span className="text-geo-primary text-glow-primary">{currentQ.name}</span>
               </p>
-              {/* Timer bar */}
-              <div className="h-1.5 rounded-full bg-geo-surface-high/50 mt-2 overflow-hidden">
-                <div
-                  className={cn('h-full rounded-full transition-all duration-100', timeRemaining > 5 ? 'bg-geo-primary' : 'bg-geo-error')}
-                  style={{ width: `${(timeRemaining / TIME_PER_QUESTION) * 100}%` }}
-                />
-              </div>
+              <p className="text-[10px] font-headline text-geo-on-surface-dim mt-0.5">
+                +{currentIndex + 1} {currentIndex + 1 === 1 ? 'point' : 'points'}
+              </p>
             </div>
           </div>
 
-          {/* Score — bottom center */}
+          {/* Timer + Score — bottom center */}
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10">
-            <div className="glass-panel px-5 py-2 flex items-center gap-4 text-sm font-headline font-bold">
-              <span className="text-geo-primary">{score.toLocaleString()} pts</span>
-              <span className="text-geo-on-surface-dim">{correctCount} ✓</span>
+            <div className="glass-panel px-4 py-2 sm:px-5">
+              <div className="flex items-center gap-4 text-sm font-headline font-bold">
+                <span className={cn(
+                  'tabular-nums',
+                  timeRemaining <= 10 ? 'text-geo-error' : 'text-geo-on-surface',
+                )}>
+                  ⏱ {Math.ceil(Math.max(0, timeRemaining))}s
+                </span>
+                <span className="text-geo-primary">{score} pts</span>
+                <span className="text-geo-on-surface-dim">{correctCount} ✓</span>
+              </div>
+              {/* Global timer bar */}
+              <div className="h-1.5 rounded-full bg-geo-surface-high/50 mt-1.5 overflow-hidden min-w-[200px]">
+                <div
+                  className={cn('h-full rounded-full transition-all duration-100', timeRemaining > 10 ? 'bg-geo-primary' : 'bg-geo-error')}
+                  style={{ width: `${(Math.max(0, timeRemaining) / GAME_TIME) * 100}%` }}
+                />
+              </div>
             </div>
           </div>
 
@@ -536,7 +560,7 @@ export default function DailyChallengePage() {
                   feedbackCorrect ? 'bg-green-500/90 text-white' : 'bg-red-500/90 text-white',
                 )}
               >
-                {feedbackCorrect ? '✓ Correct!' : `✗ ${currentQ.name}`}
+                {feedbackCorrect ? `✓ +${currentIndex + 1}` : `✗ ${currentQ.name}`}
               </motion.div>
             </div>
           )}
@@ -556,13 +580,21 @@ export default function DailyChallengePage() {
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="bg-geo-surface-high/50 rounded-2xl p-3 text-center border border-geo-outline-dim/20">
                 <p className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase tracking-widest">Score</p>
-                <p className="text-2xl font-headline font-extrabold text-geo-primary">{score.toLocaleString()}</p>
+                <p className="text-2xl font-headline font-extrabold text-geo-primary">{score}</p>
               </div>
               <div className="bg-geo-surface-high/50 rounded-2xl p-3 text-center border border-geo-outline-dim/20">
                 <p className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase tracking-widest">Correct</p>
-                <p className="text-2xl font-headline font-extrabold text-geo-secondary">{correctCount}/{totalQuestions}</p>
+                <p className="text-2xl font-headline font-extrabold text-geo-secondary">{correctCount}/{QUESTION_COUNT}</p>
               </div>
             </div>
+
+            {isPerfect && (
+              <div className="text-center mb-4 p-3 rounded-2xl bg-geo-tertiary-bright/10 border border-geo-tertiary-bright/30">
+                <p className="text-lg font-headline font-extrabold text-geo-tertiary-bright">
+                  🎉 PERFECT! +{PERFECT_BONUS} bonus + 🥕
+                </p>
+              </div>
+            )}
 
             {rewardResult && (
               <div className="glass-panel p-3 mb-4 space-y-1">
@@ -601,7 +633,7 @@ export default function DailyChallengePage() {
                         <span className={cn('flex-1 truncate font-body', isMe ? 'text-geo-primary font-bold' : 'text-geo-on-surface')}>
                           {entry.nickname ?? 'Anonymous'}
                         </span>
-                        <span className="font-headline font-bold text-xs text-geo-on-surface-dim">{entry.score.toLocaleString()}</span>
+                        <span className="font-headline font-bold text-xs text-geo-on-surface-dim">{entry.score}</span>
                       </div>
                     )
                   })}
@@ -621,7 +653,7 @@ export default function DailyChallengePage() {
                     a.correct ? 'bg-geo-primary/10 text-geo-primary-dim' : 'bg-geo-error/10 text-geo-error',
                   )}>
                     <span className="font-body">{a.question}</span>
-                    <span className="font-headline font-bold">{a.correct ? `+${a.score}` : '0'}</span>
+                    <span className="font-headline font-bold">{a.correct ? `+${a.points}` : '0'}</span>
                   </div>
                 ))}
               </div>

@@ -168,8 +168,9 @@ export async function submitDailyChallengeResult(opts: {
     await logCreditTransaction(opts.userId, totalCoins, 'daily_challenge', { date: today })
   }
 
-  // Award carrots (DB field is still diamond_reward — aliased as carrots)
-  const carrots = challenge.diamond_reward
+  // Award carrots only for perfect game (all questions correct)
+  const isPerfect = opts.correctCount === opts.totalQuestions
+  const carrots = isPerfect ? challenge.diamond_reward : 0
   if (carrots > 0) {
     await earnCarrots(opts.userId, carrots, 'daily_challenge', { date: today })
   }

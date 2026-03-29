@@ -49,10 +49,10 @@ export default function DailyChallengeBanner({ onPlay }: DailyChallengeBannerPro
             Daily Challenge
           </p>
           <p className="text-sm font-body text-geo-on-surface mt-0.5">
-            {modeLabel} / {diffLabel}
+            15 countries in 60 seconds
           </p>
           <p className="text-[10px] text-geo-on-surface-dim font-body">
-            🏆 +{challenge.coin_reward} coins, +{challenge.diamond_reward} 🥕 — Resets in {hoursLeft}h
+            🏆 +{challenge.coin_reward} coins — Perfect: +🥕 — Resets in {hoursLeft}h
           </p>
         </div>
         <div>
