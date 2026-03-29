@@ -14,7 +14,7 @@ import type { GameMode } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic, warmUpAudio } from '@/lib/sounds'
-import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor } from '@/lib/theme'
+import { mapBgColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor, continentFillExpression } from '@/lib/theme'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
 import MapBackground from '@/components/home/MapBackground'
@@ -145,24 +145,8 @@ export default function ClickCountryPage() {
               type: 'fill',
               source: COUNTRIES_SOURCE,
               paint: {
-                'fill-color': [
-                  'case',
-                  ['boolean', ['feature-state', 'correct'], false], '#22c55e',
-                  ['boolean', ['feature-state', 'wrong'], false], '#fdba74',
-                  ['boolean', ['feature-state', 'target'], false], '#3b82f6',
-                  ['boolean', ['feature-state', 'solved'], false], '#86efac',
-                  ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
-                  countryFillColor(),
-                ],
-                'fill-opacity': [
-                  'case',
-                  ['boolean', ['feature-state', 'correct'], false], 0.8,
-                  ['boolean', ['feature-state', 'wrong'], false], 0.8,
-                  ['boolean', ['feature-state', 'target'], false], 0.8,
-                  ['boolean', ['feature-state', 'solved'], false], 0.6,
-                  ['boolean', ['feature-state', 'hover'], false], 0.9,
-                  0.95,
-                ],
+                'fill-color': continentFillExpression(),
+                'fill-opacity': 0.85,
               },
             })
 
@@ -268,7 +252,6 @@ export default function ClickCountryPage() {
             map.on('click', (e) => {
               const state = useGameStore.getState()
               if (state.phase !== 'playing') return
-              // In borderless, only query the fill layer (no circles)
               const layers = state.mode === 'borderless' ? [COUNTRIES_FILL_LAYER] : queryLayers
               const features = map.queryRenderedFeatures(e.point, { layers })
               if (features.length > 0) {
@@ -512,24 +495,8 @@ export default function ClickCountryPage() {
         1.2,
       ])
       // Restore normal interactive fill
-      map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-color', [
-        'case',
-        ['boolean', ['feature-state', 'correct'], false], '#22c55e',
-        ['boolean', ['feature-state', 'wrong'], false], '#fdba74',
-        ['boolean', ['feature-state', 'target'], false], '#3b82f6',
-        ['boolean', ['feature-state', 'solved'], false], '#86efac',
-        ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
-        countryFillColor(),
-      ])
-      map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-opacity', [
-        'case',
-        ['boolean', ['feature-state', 'correct'], false], 0.8,
-        ['boolean', ['feature-state', 'wrong'], false], 0.8,
-        ['boolean', ['feature-state', 'target'], false], 0.8,
-        ['boolean', ['feature-state', 'solved'], false], 0.6,
-        ['boolean', ['feature-state', 'hover'], false], 0.9,
-        0.95,
-      ])
+      map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-color', continentFillExpression())
+      map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-opacity', 0.85)
     }
 
     const view = REGION_VIEWS[selectedRegion] ?? REGION_VIEWS.World
@@ -787,7 +754,7 @@ export default function ClickCountryPage() {
 
       {/* Mode + Difficulty selection */}
       {phase === 'idle' && !showCountdown && (
-        <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-4">
+        <div className="absolute inset-0 z-20 flex flex-col items-center px-4 pt-4 pb-0 overflow-hidden">
           <div className="absolute top-4 left-4 flex gap-2 z-30">
             <button
               onClick={() => { playClick(); router.push(prefixPath('/?cat=mapGames&game=/game/click-country')) }}
@@ -930,9 +897,18 @@ export default function ClickCountryPage() {
               </div>
             )}
 
+            {/* High scores */}
+            <div className="mb-4">
+              <HighScorePreview
+                mode={previewMode ?? selectedMode}
+                difficulty={selectedMode === 'marathon' ? 'expert' : (previewDifficulty ?? selectedDifficulty)}
+                variant={selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined}
+              />
+            </div>
+
             <button
               onClick={() => launchWithCountdown(() => { playGameStart(); startMusic(); startGame(selectedMode, selectedDifficulty, selectedRegion, selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined) })}
-              className="btn-primary w-full py-4 text-lg"
+              className="btn-primary w-full py-4 text-lg mb-4"
             >
               {t('startGame')}
             </button>
@@ -943,17 +919,6 @@ export default function ClickCountryPage() {
             <GameAdvisor
               text={t(`speech.${selectedMode}` as keyof Translations).replace('{pool}', t(`diff.${selectedDifficulty}.desc` as keyof Translations))}
             />
-          </div>
-
-          {/* High scores — fixed bottom panel */}
-          <div className="absolute bottom-0 left-0 right-0 p-4">
-            <div className="max-w-lg mx-auto">
-              <HighScorePreview
-                mode={previewMode ?? selectedMode}
-                difficulty={selectedMode === 'marathon' ? 'expert' : (previewDifficulty ?? selectedDifficulty)}
-                variant={selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined}
-              />
-            </div>
           </div>
         </div>
       )}

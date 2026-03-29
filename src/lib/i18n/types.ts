@@ -29,6 +29,8 @@ export interface Translations {
   'cat.trivia.desc': string
   'cat.challenge': string
   'cat.challenge.desc': string
+  'cat.bonus': string
+  'cat.bonus.desc': string
   back: string
   gamesAvailable: string
   moreComingSoon: string
@@ -358,4 +360,74 @@ export interface Translations {
   'ach.distancePerfect.desc': string
   'ach.speedDemon': string
   'ach.speedDemon.desc': string
+
+  // Carrot Bonus game
+  'carrotBonus.title': string
+  'carrotBonus.subtitle': string
+  'carrotBonus.carrots': string
+  'carrotBonus.coins': string
+  'carrotBonus.feed': string
+  'carrotBonus.instruction': string
+  'carrotBonus.jackpotHint': string
+  'carrotBonus.youWon': string
+  'carrotBonus.jackpot': string
+  'carrotBonus.playAgain': string
+  'carrotBonus.notEnoughCarrots': string
+  'carrotBonus.loginRequired': string
+  'carrotBonus.totalStats': string
+  'carrotBonus.plays': string
+  'carrotBonus.won': string
+  'home.carrotBonus': string
+  'home.carrotBonus.desc': string
+
+  // Sticker Album
+  'stickerAlbum.title': string
+  'stickerAlbum.subtitle': string
+  'stickerAlbum.mapView': string
+  'stickerAlbum.listView': string
+  'stickerAlbum.loginRequired': string
+  'home.stickerAlbum': string
+  'home.stickerAlbum.desc': string
+
+  // Multiplayer
+  'mp.multiplayer': string
+  'mp.multiMix': string
+  'mp.createLobby': string
+  'mp.joinByCode': string
+  'mp.joinCode': string
+  'mp.openLobbies': string
+  'mp.noLobbies': string
+  'mp.players': string
+  'mp.spectate': string
+  'mp.spectating': string
+  'mp.lobby': string
+  'mp.ready': string
+  'mp.notReady': string
+  'mp.start': string
+  'mp.waiting': string
+  'mp.kick': string
+  'mp.invite': string
+  'mp.copyCode': string
+  'mp.codeCopied': string
+  'mp.duration': string
+  'mp.minutes': string
+  'mp.public': string
+  'mp.private': string
+  'mp.chat': string
+  'mp.sendMessage': string
+  'mp.typeMessage': string
+  'mp.round': string
+  'mp.score': string
+  'mp.correct': string
+  'mp.wrong': string
+  'mp.timeUp': string
+  'mp.gameOver': string
+  'mp.finalScores': string
+  'mp.winner': string
+  'mp.playAgain': string
+  'mp.loginRequired': string
+  'mp.lobbyFull': string
+  'mp.hostLeft': string
+  'mp.kicked': string
+  'mp.ping': string
 }

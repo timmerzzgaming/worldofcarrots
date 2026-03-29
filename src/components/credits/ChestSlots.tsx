@@ -39,8 +39,10 @@ export default function ChestSlots() {
 
     const contents = await openChest(user.id, chest.id)
     if (contents) {
+      let totalCoins = contents.coins
+      if (contents.continentBonus) totalCoins += contents.continentBonus.coins
       setOpening({ chestId: chest.id, contents, tier: chest.tier })
-      updateCredits(contents.coins)
+      updateCredits(totalCoins)
       if (contents.carrots > 0) updateCarrots(contents.carrots)
       playCreditEarned()
     }

@@ -31,7 +31,12 @@ async function fetchProfile(userId: string): Promise<Profile | null> {
     .eq('id', userId)
     .single()
   if (error || !data) return null
-  return data as Profile
+  // DB column is `diamonds` but app uses `carrots`
+  const profile = data as Record<string, unknown>
+  if ('diamonds' in profile && !('carrots' in profile)) {
+    profile.carrots = profile.diamonds
+  }
+  return profile as unknown as Profile
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {

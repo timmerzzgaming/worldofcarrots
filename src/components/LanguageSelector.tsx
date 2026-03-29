@@ -24,7 +24,7 @@ export default function LanguageSelector() {
     <div ref={ref} className="relative">
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full glass-panel text-xs sm:text-sm font-headline font-bold uppercase tracking-wider text-geo-on-surface-dim hover:text-geo-on-surface transition-colors"
+        className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full bg-white border-[3px] border-geo-on-surface shadow-comic-sm text-xs sm:text-sm font-headline font-bold uppercase tracking-wider text-geo-on-surface-dim hover:text-geo-on-surface transition-colors"
         aria-label="Select language"
         aria-expanded={open}
         aria-haspopup="listbox"
@@ -43,7 +43,7 @@ export default function LanguageSelector() {
         <ul
           role="listbox"
           aria-label="Languages"
-          className="absolute right-0 bottom-full mb-1 py-1 rounded-xl glass-panel border border-geo-outline-dim/30 shadow-xl z-50 min-w-[140px]"
+          className="absolute right-0 bottom-full mb-1 py-1 rounded-xl bg-white border-[3px] border-geo-on-surface shadow-comic z-50 min-w-[140px]"
         >
           {LOCALES.map((loc) => (
             <li key={loc} role="option" aria-selected={loc === locale}>

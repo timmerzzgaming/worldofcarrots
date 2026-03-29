@@ -62,11 +62,22 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
           transition={{ duration: 0.4 }}
           className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-geo-bg"
         >
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
-            World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
+          {/* Bouncing rabbit */}
+          <motion.img
+            src="/images/rabbit-hero.svg"
+            alt=""
+            width={120}
+            height={168}
+            className="mb-4"
+            animate={{ y: [0, -10, 0] }}
+            transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
+          />
+
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-headline font-bold text-geo-on-surface uppercase tracking-tight mb-2">
+            World<span className="text-geo-primary">Of</span>Carrots
           </h1>
 
-          <div className="w-56 sm:w-64 mt-8">
+          <div className="w-56 sm:w-64 mt-6">
             <div className="flex justify-between mb-2">
               <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest">
                 {t('loadingGame')}
@@ -75,9 +86,9 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                 {Math.round(progress)}%
               </p>
             </div>
-            <div className="h-3 bg-geo-surface-highest rounded-full overflow-hidden border border-geo-outline-dim/30">
+            <div className="h-4 bg-white rounded-full overflow-hidden border-[3px] border-geo-on-surface">
               <motion.div
-                className="h-full rounded-full bg-gradient-to-r from-geo-primary-container to-geo-primary"
+                className="h-full rounded-full bg-geo-primary"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.3, ease: 'easeOut' }}

@@ -23,7 +23,7 @@ import FloatingFlags from '@/components/home/FloatingFlags'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playCorrect, playWrong, playGameStart, playGameOver, playClick, startMusic, stopMusic, startMenuMusic, playHighScore, warmUpAudio } from '@/lib/sounds'
-import { getTheme, mapBgColor, countryLineColor, type Theme } from '@/lib/theme'
+import { mapBgColor, countryLineColor } from '@/lib/theme'
 import { useMapThemeListener } from '@/hooks/useMapThemeListener'
 import { useGameRewards } from '@/hooks/useGameRewards'
 import StarRating from '@/components/credits/StarRating'
@@ -311,8 +311,10 @@ export default function DistanceGamePage() {
             type: 'fill',
             source: COUNTRIES_SOURCE,
             paint: {
-              'fill-color': '#ffffff',
-              'fill-opacity': 0.95,
+              'fill-color': ['match', ['get', 'REGION_UN'],
+                'Africa', '#FFD93D', 'Americas', '#4ECDC4', 'Asia', '#FF6B6B',
+                'Europe', '#A855F7', 'Oceania', '#4ADE80', '#FFCC66'],
+              'fill-opacity': 0.85,
             },
           })
 
@@ -432,8 +434,8 @@ export default function DistanceGamePage() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const distanceThemeUpdates = useMemo(() => [
-    { layer: 'background', property: 'background-color', value: (t: Theme) => mapBgColor(t) },
-    { layer: COUNTRIES_LINE_LAYER, property: 'line-color', value: (t: Theme) => countryLineColor(t) },
+    { layer: 'background', property: 'background-color', value: () => mapBgColor() },
+    { layer: COUNTRIES_LINE_LAYER, property: 'line-color', value: () => countryLineColor() },
   ], [])
   useMapThemeListener(mapRef, distanceThemeUpdates)
 

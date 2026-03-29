@@ -41,89 +41,88 @@ export default function FlagQuestionCard({
   const canUseHint = hintsRemaining > 0 && hintLevel < 3
 
   return (
-    <motion.div
-      key={flagUrl}
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="glass-panel px-2 py-1.5 sm:px-5 sm:py-3 lg:px-8 lg:py-5 2xl:px-10 2xl:py-6 text-center max-w-[240px] sm:max-w-sm lg:max-w-md 2xl:max-w-lg"
-    >
-      <p className="text-geo-on-surface-dim text-[10px] sm:text-xs 2xl:text-sm font-headline font-bold uppercase tracking-widest mb-2 2xl:mb-3">
-        {questionNumber} {t('of')} {totalQuestions} — {t('guessTheFlag')}
-      </p>
+    <>
+      {/* Flag display — compact top-center panel */}
+      <motion.div
+        key={flagUrl}
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="glass-panel px-2 py-1.5 sm:px-3 sm:py-2 text-center"
+      >
+        <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest mb-1">
+          {questionNumber}/{totalQuestions}
+        </p>
 
-      {/* Flag display */}
-      <div className="relative w-28 h-20 sm:w-48 sm:h-32 lg:w-56 lg:h-40 2xl:w-72 2xl:h-48 mx-auto mb-1.5 sm:mb-3 2xl:mb-4 rounded-lg overflow-hidden border-2 border-geo-outline-dim/30 shadow-lg bg-geo-surface-highest">
-        {!imageError ? (
-          <Image
-            src={flagUrl}
-            alt="Country flag"
-            fill
-            className="object-cover"
-            onError={() => setImageError(true)}
-            priority
-          />
-        ) : (
-          <div className="flex items-center justify-center h-full text-geo-outline text-base font-body">
-            {t('flagUnavailable')}
-          </div>
-        )}
-      </div>
+        <div className="relative w-24 h-16 sm:w-36 sm:h-24 mx-auto rounded-lg overflow-hidden border-2 border-geo-on-surface/30 bg-geo-surface-highest">
+          {!imageError ? (
+            <Image
+              src={flagUrl}
+              alt="Country flag"
+              fill
+              className="object-cover"
+              onError={() => setImageError(true)}
+              priority
+            />
+          ) : (
+            <div className="flex items-center justify-center h-full text-geo-on-surface-dim text-xs font-body">
+              {t('flagUnavailable')}
+            </div>
+          )}
+        </div>
+      </motion.div>
 
-      <p className="text-geo-on-surface text-xs sm:text-sm lg:text-base 2xl:text-lg font-body mb-2 sm:mb-3 2xl:mb-4">
-        {t('clickCountryOnMap')}
-      </p>
-
-      {/* Continent hint display */}
-      <AnimatePresence>
-        {hintLevel >= 1 && continentName && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="mb-4"
-          >
-            <span className="inline-block px-4 py-1.5 rounded-full bg-geo-secondary/20 border border-geo-secondary/40 text-geo-secondary text-sm font-headline font-bold uppercase tracking-wider">
-              {continentName}
-            </span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Hint button + counter */}
-      <div className="flex items-center justify-center gap-2 sm:gap-4">
-        {canUseHint && (
-          <button
-            onClick={onUseHint}
-            className={cn(
-              'px-3 py-1.5 sm:px-4 sm:py-2 2xl:px-5 2xl:py-2.5 rounded-full text-[10px] sm:text-xs 2xl:text-sm font-headline font-bold uppercase tracking-wider transition-all border-2',
-              'bg-geo-tertiary/10 border-geo-tertiary/40 text-geo-tertiary hover:bg-geo-tertiary/20 hover:border-geo-tertiary/60',
+      {/* Controls — bottom-left panel */}
+      <div className="fixed bottom-4 left-4 z-10">
+        <div className="glass-panel px-3 py-2 sm:px-4 sm:py-3 space-y-2 min-w-[160px]">
+          {/* Continent hint */}
+          <AnimatePresence>
+            {hintLevel >= 1 && continentName && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+              >
+                <span className="inline-block px-3 py-1 rounded-full bg-geo-secondary/20 border-2 border-geo-secondary/40 text-geo-secondary text-xs font-headline font-bold uppercase">
+                  {continentName}
+                </span>
+              </motion.div>
             )}
-          >
-            {nextHintLabel}
-          </button>
-        )}
-        <span className={cn(
-          'text-xs font-headline font-bold uppercase tracking-widest',
-          hintsRemaining > 0 ? 'text-geo-tertiary' : 'text-geo-outline',
-        )}>
-          {hintsRemaining} {hintsRemaining !== 1 ? t('hints') : t('hint')}
-        </span>
-      </div>
+          </AnimatePresence>
 
-      {/* Skip button */}
-      <div className="flex items-center justify-center gap-4 mt-3 2xl:mt-4">
-        <button
-          onClick={onSkip}
-          className="px-4 py-1.5 2xl:px-5 2xl:py-2 rounded-full text-xs lg:text-sm font-headline font-bold uppercase tracking-wider transition-all border border-geo-outline-dim/30 text-geo-on-surface-dim hover:text-geo-secondary hover:border-geo-secondary/40"
-        >
-          {t('skip')}
-        </button>
-        {skippedCount > 0 && (
-          <span className="text-xs font-headline font-bold uppercase tracking-widest text-geo-outline">
-            {skippedCount} {t('skipped')}
-          </span>
-        )}
+          {/* Hint button + counter */}
+          <div className="flex items-center gap-2">
+            {canUseHint && (
+              <button
+                onClick={onUseHint}
+                className="px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider transition-all border-2 bg-geo-tertiary/10 border-geo-tertiary/40 text-geo-on-surface hover:bg-geo-tertiary/20"
+              >
+                {nextHintLabel}
+              </button>
+            )}
+            <span className={cn(
+              'text-[10px] font-headline font-bold uppercase',
+              hintsRemaining > 0 ? 'text-geo-tertiary' : 'text-geo-on-surface-dim',
+            )}>
+              {hintsRemaining} {hintsRemaining !== 1 ? t('hints') : t('hint')}
+            </span>
+          </div>
+
+          {/* Skip */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onSkip}
+              className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider border-2 border-geo-outline/30 text-geo-on-surface-dim hover:text-geo-primary hover:border-geo-primary/40 transition-colors"
+            >
+              {t('skip')}
+            </button>
+            {skippedCount > 0 && (
+              <span className="text-[10px] font-headline font-bold text-geo-on-surface-dim">
+                {skippedCount} {t('skipped')}
+              </span>
+            )}
+          </div>
+        </div>
       </div>
-    </motion.div>
+    </>
   )
 }

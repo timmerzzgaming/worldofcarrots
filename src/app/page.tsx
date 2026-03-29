@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import { cn } from '@/lib/cn'
 import MapBackground from '@/components/home/MapBackground'
 import FloatingFlags from '@/components/home/FloatingFlags'
 import LoadingScreen from '@/components/home/LoadingScreen'
@@ -235,6 +236,30 @@ const categories: Category[] = [
       },
     ],
   },
+  {
+    id: 'bonus',
+    titleKey: 'cat.bonus',
+    descKey: 'cat.bonus.desc',
+    icon: '🎰',
+    modes: [
+      {
+        titleKey: 'home.carrotBonus',
+        descKey: 'home.carrotBonus.desc',
+        href: '/game/carrot-bonus',
+        available: true,
+        icon: '🥕',
+        badge: 'NEW',
+      },
+      {
+        titleKey: 'home.stickerAlbum',
+        descKey: 'home.stickerAlbum.desc',
+        href: '/game/sticker-album',
+        available: true,
+        icon: '🗺️',
+        badge: 'NEW',
+      },
+    ],
+  },
 ]
 
 type MenuView = 'categories' | string
@@ -329,8 +354,19 @@ export default function HomePage() {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
-              World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
+            {/* Rabbit mascot */}
+            <motion.img
+              src="/images/rabbit-hero.svg"
+              alt="World Of Carrots mascot"
+              width={160}
+              height={224}
+              className="mx-auto mb-4 drop-shadow-lg"
+              initial={{ y: 10 }}
+              animate={{ y: -5 }}
+              transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse', ease: 'easeInOut' }}
+            />
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-bold text-geo-on-surface uppercase tracking-tight mb-2">
+              World<span className="text-geo-primary">Of</span>Carrots
             </h1>
             <p className="text-geo-on-surface-dim text-base sm:text-lg font-body max-w-md mx-auto mb-8 sm:mb-10">
               {t('testYourKnowledge')}
@@ -360,8 +396,8 @@ export default function HomePage() {
             transition={{ duration: 0.4 }}
             className="text-center mb-4 sm:mb-10 flex-shrink-0"
           >
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] mb-2">
-              World<span className="text-geo-primary text-glow-primary">Of</span>Carrots
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-bold text-geo-on-surface uppercase tracking-tight mb-2">
+              World<span className="text-geo-primary">Of</span>Carrots
             </h1>
             <p className="text-geo-on-surface-dim text-base sm:text-lg font-body max-w-md mx-auto">
               {t('testYourKnowledge')}
@@ -380,6 +416,39 @@ export default function HomePage() {
                   transition={{ duration: 0.25 }}
                   className="w-full space-y-6"
                 >
+                  {/* Multiplayer button */}
+                  <motion.button
+                    onClick={() => {
+                      playClick()
+                      if (isGuest) return
+                      router.push(prefixPath('/game/multiplayer'))
+                    }}
+                    onMouseEnter={() => playHover()}
+                    disabled={isGuest}
+                    initial={{ opacity: 0, y: 15 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 }}
+                    className={cn(
+                      'w-full max-w-5xl mx-auto relative flex items-center justify-center gap-3 px-6 py-4 sm:py-5 glass-panel transition-all',
+                      isGuest
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'hover:border-geo-primary hover:shadow-comic-lg cursor-pointer',
+                    )}
+                  >
+                    <span className="text-3xl sm:text-4xl">🎮</span>
+                    <span className="text-xl sm:text-2xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide">
+                      {t('mp.multiplayer')}
+                    </span>
+                    <span className="bg-red-500 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full animate-pulse">
+                      LIVE
+                    </span>
+                    {isGuest && (
+                      <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                        🔒
+                      </span>
+                    )}
+                  </motion.button>
+
                   {/* Daily Challenge + Leaderboard bar */}
                   <div className="flex flex-col sm:flex-row gap-3 max-w-5xl mx-auto">
                     <div className="flex-1">
@@ -393,7 +462,7 @@ export default function HomePage() {
                     </button>
                   </div>
 
-                  <div className="grid gap-4 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+                  <div className="grid gap-3 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
                   {categories.map((cat, i) => {
                     const guestCatLocked = isGuest && cat.id !== 'mapGames'
                     const available = cat.modes.filter((m) => m.available).length
@@ -407,10 +476,10 @@ export default function HomePage() {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 * (i + 1) }}
-                        className={`group relative flex flex-col items-center text-center p-4 sm:p-8 lg:p-10 glass-panel transition-all ${
+                        className={`group relative flex flex-row sm:flex-col items-center sm:items-center text-left sm:text-center p-3 sm:p-8 lg:p-10 glass-panel transition-all gap-3 sm:gap-0 ${
                           guestCatLocked
                             ? 'opacity-50 cursor-not-allowed'
-                            : 'hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] cursor-pointer'
+                            : 'hover:border-geo-primary hover:shadow-comic-lg cursor-pointer'
                         }`}
                       >
                         {guestCatLocked && (
@@ -418,24 +487,26 @@ export default function HomePage() {
                             🔒
                           </span>
                         )}
-                        <div className={`text-3xl sm:text-6xl lg:text-7xl mb-2 sm:mb-5 ${guestCatLocked ? 'grayscale' : ''}`}>{cat.icon}</div>
-                        <h2 className={`text-xl sm:text-2xl font-headline font-extrabold uppercase tracking-wide ${guestCatLocked ? 'text-geo-on-surface-dim' : 'text-geo-on-surface group-hover:text-geo-primary transition-colors'}`}>
-                          {t(cat.titleKey)}
-                        </h2>
-                        <p className="text-geo-on-surface-dim mt-2 text-base leading-relaxed">
-                          {t(cat.descKey)}
-                        </p>
-                        <div className="mt-4 flex flex-wrap justify-center gap-3 text-sm">
-                          {available > 0 && (
-                            <span className="bg-geo-primary text-black px-3 py-1 rounded-full font-headline font-bold">
-                              {available} {t('gamesAvailable')}
-                            </span>
-                          )}
-                          {upcoming > 0 && (
-                            <span className="bg-geo-primary text-black px-3 py-1 rounded-full font-headline font-bold">
-                              +{upcoming} {t('moreComingSoon')}
-                            </span>
-                          )}
+                        <div className={`text-3xl sm:text-6xl lg:text-7xl shrink-0 sm:mb-5 ${guestCatLocked ? 'grayscale' : ''}`}>{cat.icon}</div>
+                        <div className="flex flex-col sm:items-center min-w-0">
+                          <h2 className={`text-base sm:text-2xl font-headline font-extrabold uppercase tracking-wide ${guestCatLocked ? 'text-geo-on-surface-dim' : 'text-geo-on-surface group-hover:text-geo-primary transition-colors'}`}>
+                            {t(cat.titleKey)}
+                          </h2>
+                          <p className="text-geo-on-surface-dim mt-0.5 sm:mt-2 text-xs sm:text-base leading-relaxed">
+                            {t(cat.descKey)}
+                          </p>
+                          <div className="mt-1.5 sm:mt-4 flex flex-wrap gap-2 sm:gap-3 sm:justify-center text-xs sm:text-sm">
+                            {available > 0 && (
+                              <span className="bg-geo-primary text-black px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-headline font-bold">
+                                {available} {t('gamesAvailable')}
+                              </span>
+                            )}
+                            {upcoming > 0 && (
+                              <span className="bg-geo-primary text-black px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-headline font-bold">
+                                +{upcoming} {t('moreComingSoon')}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </motion.button>
                     )
@@ -560,14 +631,21 @@ export default function HomePage() {
                           }
 
                           // Unlocked — playable
+                          // Direct-navigate modes (no sub-menu needed)
+                          const directNav = mode.href === '/game/carrot-bonus' || mode.href === '/game/sticker-album'
+
                           return (
                             <button
                               onMouseEnter={() => playHover()}
                               onClick={() => {
                                 playClick()
-                                setExpandedGame(mode)
+                                if (directNav) {
+                                  router.push(prefixPath(mode.href))
+                                } else {
+                                  setExpandedGame(mode)
+                                }
                               }}
-                              className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)] transition-all cursor-pointer"
+                              className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel hover:border-geo-primary hover:shadow-comic-lg transition-all cursor-pointer"
                             >
                               {mode.badge && (
                                 <span className="absolute -top-2 right-2 bg-geo-primary text-geo-on-primary text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full border-b-2 border-geo-on-primary">
@@ -607,7 +685,7 @@ export default function HomePage() {
                         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                         className="absolute inset-0 z-30 flex items-center justify-center"
                       >
-                        <div className="glass-panel border-geo-primary/30 shadow-[0_0_40px_-10px_rgba(107,255,193,0.2)] flex flex-col overflow-hidden" style={{ width: 'min(820px, 95vw)', height: 'min(820px, 80vh)' }}>
+                        <div className="glass-panel border-geo-primary shadow-comic-lg flex flex-col overflow-hidden" style={{ width: 'min(820px, 95vw)', height: 'min(820px, 80vh)' }}>
                           {/* Fixed header: back button + game title */}
                           <div className="flex-shrink-0 px-4 sm:px-6 pt-3 sm:pt-4 pb-2 sm:pb-3">
                             <button
@@ -619,11 +697,11 @@ export default function HomePage() {
                               </svg>
                               {t('back')}
                             </button>
-                            <h2 className="text-2xl sm:text-3xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-[3px_3px_0_rgba(0,0,0,0.8)] text-center">
+                            <h2 className="text-2xl sm:text-3xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-sm text-center">
                               {(() => {
                                 const w = t(expandedGame.titleKey).split(' ')
                                 const last = w.pop()!
-                                return w.length ? <>{w.join(' ')} <span className="text-geo-primary text-glow-primary">{last}</span></> : <span className="text-geo-primary text-glow-primary">{last}</span>
+                                return w.length ? <>{w.join(' ')} <span className="text-geo-primary text-geo-primary">{last}</span></> : <span className="text-geo-primary text-geo-primary">{last}</span>
                               })()}
                             </h2>
                           </div>

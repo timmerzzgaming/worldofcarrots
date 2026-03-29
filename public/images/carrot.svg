@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 120" fill="none">
+  <!-- Carrot body -->
+  <path d="M30 115 Q15 75 12 50 Q10 30 20 18 Q25 12 30 10 Q35 12 40 18 Q50 30 48 50 Q45 75 30 115Z" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2.5"/>
+  <!-- Carrot stripes -->
+  <path d="M20 40 Q30 36 40 40" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M18 55 Q30 50 42 55" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M22 70 Q30 66 38 70" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <path d="M26 85 Q30 82 34 85" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
+  <!-- Shine -->
+  <path d="M24 30 Q26 22 30 18" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <!-- Leaves -->
+  <path d="M30 12 Q25 -5 18 -8 Q22 -2 26 8" fill="#4CAF50" stroke="#2D8C3E" stroke-width="1.5"/>
+  <path d="M30 10 Q30 -8 30 -12 Q32 -4 32 8" fill="#66BB6A" stroke="#2D8C3E" stroke-width="1.5"/>
+  <path d="M30 12 Q35 -5 42 -8 Q38 -2 34 8" fill="#4CAF50" stroke="#2D8C3E" stroke-width="1.5"/>
+</svg>

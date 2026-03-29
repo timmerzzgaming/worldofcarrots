@@ -38,7 +38,7 @@ import FloatingFlags from '@/components/home/FloatingFlags'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playHintUsed, playSkip, playHintEarned, playTick, playClick, startMusic, stopMusic, startMenuMusic, warmUpAudio } from '@/lib/sounds'
-import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor } from '@/lib/theme'
+import { mapBgColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor, continentFillExpression } from '@/lib/theme'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
 import ThemeToggle from '@/components/ThemeToggle'
@@ -340,19 +340,16 @@ export default function FlagGamePage() {
                   ['boolean', ['feature-state', 'wrong'], false], '#fdba74',
                   ['boolean', ['feature-state', 'target'], false], '#3b82f6',
                   ['boolean', ['feature-state', 'solved'], false], '#86efac',
+                  ['boolean', ['feature-state', 'eliminated'], false], '#9CA3AF',
                   ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
-                  ['boolean', ['feature-state', 'eliminated'], false], '#1e293b',
-                  countryFillColor(),
+                  ['match', ['get', 'REGION_UN'],
+                    'Africa', '#FFD93D', 'Americas', '#4ECDC4', 'Asia', '#FF6B6B',
+                    'Europe', '#A855F7', 'Oceania', '#4ADE80', '#FFCC66'],
                 ],
                 'fill-opacity': [
                   'case',
-                  ['boolean', ['feature-state', 'correct'], false], 0.8,
-                  ['boolean', ['feature-state', 'wrong'], false], 0.8,
-                  ['boolean', ['feature-state', 'target'], false], 0.8,
-                  ['boolean', ['feature-state', 'solved'], false], 0.6,
-                  ['boolean', ['feature-state', 'hover'], false], 0.9,
-                  ['boolean', ['feature-state', 'eliminated'], false], 0.25,
-                  0.95,
+                  ['boolean', ['feature-state', 'eliminated'], false], 0.3,
+                  0.85,
                 ],
               },
             })

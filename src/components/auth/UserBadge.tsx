@@ -25,7 +25,7 @@ export default function UserBadge() {
       <>
         <button
           onClick={() => { playClick(); setShowAuth(true) }}
-          className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 hover:border-geo-primary/30 transition-all"
+          className="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-white border-[3px] border-geo-on-surface shadow-comic-sm hover:shadow-comic transition-all"
         >
           <span className="text-lg">🌍</span>
           <span className="text-xs sm:text-sm font-headline font-bold text-geo-on-surface">{t('auth.signIn' as keyof Translations)}</span>
@@ -46,7 +46,7 @@ export default function UserBadge() {
           <motion.button
             key="collapsed"
             onClick={() => { playClick(); setShowMenu(true) }}
-            className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-3 rounded-xl bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 hover:border-geo-primary/30"
+            className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-3 rounded-xl bg-white border-[3px] border-geo-on-surface shadow-comic-sm hover:shadow-comic"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -80,7 +80,7 @@ export default function UserBadge() {
             transition={{ duration: 0.25, ease: 'easeOut' }}
           >
             <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-            <div className="glass-panel p-4 min-w-[220px] z-50 relative">
+            <div className="bg-white border-[3px] border-geo-on-surface rounded-2xl shadow-comic p-4 min-w-[220px] z-50 relative">
               {/* Profile summary */}
               <div className="flex items-center gap-3 mb-3 pb-3 border-b border-geo-outline-dim/20">
                 <span className="text-3xl">{user!.avatar}</span>
@@ -97,19 +97,19 @@ export default function UserBadge() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.25, delay: 0.1 }}
               >
-                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/30">
+                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
                   <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">Coins</p>
                   <p className="text-sm font-headline font-extrabold text-geo-tertiary-bright">💰 {user!.credits.toLocaleString()}</p>
                 </div>
-                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/30">
+                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
                   <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">Carrots</p>
                   <p className="text-sm font-headline font-extrabold text-orange-400">🥕 {user!.carrots}</p>
                 </div>
-                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/30">
+                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
                   <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">XP</p>
                   <p className="text-sm font-headline font-extrabold text-geo-secondary">✨ {user!.xp.toLocaleString()}</p>
                 </div>
-                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/30">
+                <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
                   <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">Games</p>
                   <p className="text-sm font-headline font-extrabold text-geo-primary">{user!.games_completed}</p>
                 </div>

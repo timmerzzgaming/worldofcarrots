@@ -1,0 +1,25 @@
+'use client'
+
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string }
+  reset: () => void
+}) {
+  return (
+    <html lang="en">
+      <body className="min-h-screen flex items-center justify-center bg-geo-bg text-geo-on-surface">
+        <div className="text-center p-8">
+          <h2 className="text-2xl font-headline font-extrabold mb-4">Something went wrong</h2>
+          <button
+            onClick={() => reset()}
+            className="btn-primary px-6 py-3"
+          >
+            Try again
+          </button>
+        </div>
+      </body>
+    </html>
+  )
+}

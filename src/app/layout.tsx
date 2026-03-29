@@ -1,20 +1,20 @@
 import type { Metadata } from 'next'
-import { Plus_Jakarta_Sans, Be_Vietnam_Pro } from 'next/font/google'
+import { Fredoka, Nunito } from 'next/font/google'
 import Providers from '@/components/Providers'
 import TopBar from '@/components/TopBar'
 import ErrorBoundary from '@/components/ErrorBoundary'
 import './globals.css'
 
-const jakarta = Plus_Jakarta_Sans({
+const fredoka = Fredoka({
   subsets: ['latin'],
-  variable: '--font-jakarta',
-  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-fredoka',
+  weight: ['400', '500', '600', '700'],
 })
 
-const vietnam = Be_Vietnam_Pro({
+const nunito = Nunito({
   subsets: ['latin'],
-  variable: '--font-vietnam',
-  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-nunito',
+  weight: ['400', '500', '600', '700', '800'],
 })
 
 export const metadata: Metadata = {
@@ -29,11 +29,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${jakarta.variable} ${vietnam.variable} font-body bg-geo-bg text-geo-on-surface antialiased`}>
+      <body className={`${fredoka.variable} ${nunito.variable} font-body bg-geo-bg text-geo-on-surface antialiased`}>
         <Providers>
           <ErrorBoundary>
-            <div className="fixed top-0 left-0 right-0 z-[100] bg-geo-tertiary/90 text-geo-bg text-center text-[10px] sm:text-xs font-headline font-bold py-0.5 sm:py-1 backdrop-blur-sm">
-              Game under development — you may encounter bugs
+            <div className="fixed top-0 left-0 right-0 z-[100] bg-geo-primary text-white text-center text-[10px] sm:text-xs font-headline font-bold py-0.5 sm:py-1">
+              Game under development — you <span className="line-through">may</span> will encounter bugs!
             </div>
             <div className="pt-5 sm:pt-6">
               <TopBar />

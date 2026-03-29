@@ -25,7 +25,7 @@ import {
   initialViewState,
 } from '@/lib/mapConfig'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
-import { mapBgColor, countryFillColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor } from '@/lib/theme'
+import { mapBgColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor, continentFillExpression } from '@/lib/theme'
 import StarRating from '@/components/credits/StarRating'
 import LevelBadge from '@/components/xp/LevelBadge'
 import { cn } from '@/lib/cn'
@@ -143,24 +143,8 @@ export default function DailyChallengePage() {
           map.addLayer({
             id: COUNTRIES_FILL_LAYER, type: 'fill', source: COUNTRIES_SOURCE,
             paint: {
-              'fill-color': [
-                'case',
-                ['boolean', ['feature-state', 'correct'], false], '#22c55e',
-                ['boolean', ['feature-state', 'wrong'], false], '#fdba74',
-                ['boolean', ['feature-state', 'target'], false], '#3b82f6',
-                ['boolean', ['feature-state', 'solved'], false], '#86efac',
-                ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
-                countryFillColor(),
-              ],
-              'fill-opacity': [
-                'case',
-                ['boolean', ['feature-state', 'correct'], false], 0.8,
-                ['boolean', ['feature-state', 'wrong'], false], 0.8,
-                ['boolean', ['feature-state', 'target'], false], 0.8,
-                ['boolean', ['feature-state', 'solved'], false], 0.6,
-                ['boolean', ['feature-state', 'hover'], false], 0.9,
-                0.95,
-              ],
+              'fill-color': continentFillExpression(),
+              'fill-opacity': 0.85,
             },
           })
 

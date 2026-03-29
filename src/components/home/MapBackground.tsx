@@ -2,7 +2,9 @@
 
 import { useEffect, useRef } from 'react'
 import 'maplibre-gl/dist/maplibre-gl.css'
-import { getMapStyle, COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER, initialViewState } from '@/lib/mapConfig'
+import { COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER, initialViewState } from '@/lib/mapConfig'
+import { mapBgColor, CONTINENT_COLORS } from '@/lib/theme'
+import type { StyleSpecification } from 'maplibre-gl'
 
 export default function MapBackground() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -20,37 +22,50 @@ export default function MapBackground() {
         const geojson: GeoJSON.FeatureCollection = await res.json()
         if (cancelled || !containerRef.current) return
 
-        const apiKey = process.env.NEXT_PUBLIC_MAPTILER_KEY ?? ''
+        const style: StyleSpecification = {
+          version: 8,
+          name: 'WoC Comic',
+          sources: {},
+          layers: [
+            {
+              id: 'background',
+              type: 'background',
+              paint: { 'background-color': mapBgColor() },
+            },
+          ],
+        }
+
         const map = new maplibregl.Map({
           container: containerRef.current!,
-          style: getMapStyle(apiKey),
+          style,
           center: initialViewState.center,
           zoom: 1.5,
           attributionControl: false,
-          interactive: false, // no pan/zoom — purely decorative
+          interactive: false,
         })
 
         map.on('load', () => {
           try {
-            for (const layer of map.getStyle().layers) {
-              if (layer.type === 'symbol') {
-                map.setLayoutProperty(layer.id, 'visibility', 'none')
-              }
-            }
-
             map.addSource(COUNTRIES_SOURCE, {
               type: 'geojson',
               data: geojson,
               generateId: true,
             })
 
+            // Continent-based coloring using REGION_UN property
+            const continentMatch: (string | string[])[] = ['match', ['get', 'REGION_UN']]
+            for (const [continent, color] of Object.entries(CONTINENT_COLORS)) {
+              continentMatch.push(continent, color)
+            }
+            continentMatch.push('#FFE4B5') // fallback
+
             map.addLayer({
               id: COUNTRIES_FILL_LAYER,
               type: 'fill',
               source: COUNTRIES_SOURCE,
               paint: {
-                'fill-color': '#60a5fa',
-                'fill-opacity': 0.45,
+                'fill-color': continentMatch as unknown as string,
+                'fill-opacity': 0.7,
               },
             })
 
@@ -59,9 +74,9 @@ export default function MapBackground() {
               type: 'line',
               source: COUNTRIES_SOURCE,
               paint: {
-                'line-color': '#6ee7b7',
-                'line-width': 0.8,
-                'line-opacity': 0.65,
+                'line-color': '#2D2D2D',
+                'line-width': 1.5,
+                'line-opacity': 0.4,
               },
             })
 
@@ -98,8 +113,8 @@ export default function MapBackground() {
   return (
     <div className="fixed inset-0 -z-10">
       <div ref={containerRef} className="absolute inset-0 w-full h-full" />
-      {/* Gradient overlay to keep text readable */}
-      <div className="absolute inset-0 bg-gradient-to-b from-slate-950/60 via-slate-950/30 to-slate-950/65" />
+      {/* Light gradient overlay to keep text readable on bright background */}
+      <div className="absolute inset-0 bg-gradient-to-b from-geo-bg/40 via-transparent to-geo-bg/60" />
     </div>
   )
 }

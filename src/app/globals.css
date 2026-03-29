@@ -18,65 +18,90 @@
 }
 
 @layer components {
+  /* Comic panel — bold border, white background, thick shadow */
   .glass-panel {
-    @apply bg-geo-surface/60 backdrop-blur-xl border-2 border-geo-outline-dim/20 rounded-3xl;
+    @apply bg-white border-[3px] border-geo-on-surface rounded-2xl;
+    box-shadow: 4px 4px 0 #2D2D2D;
   }
 
   .btn-tactile {
-    @apply font-headline font-extrabold uppercase tracking-wider rounded-2xl
-           transition-all duration-100 ease-in-out
-           hover:scale-[1.03] active:scale-95 active:translate-y-1;
+    @apply font-headline font-bold uppercase tracking-wider rounded-2xl
+           transition-all duration-100 ease-in-out;
+    box-shadow: 4px 4px 0 #2D2D2D;
   }
 
+  .btn-tactile:hover {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0 #2D2D2D;
+  }
+
+  .btn-tactile:active {
+    transform: translate(3px, 3px);
+    box-shadow: none;
+  }
+
+  /* Primary button — carrot orange */
   .btn-primary {
-    @apply btn-tactile bg-geo-primary text-geo-on-primary
-           border-b-4 border-geo-on-primary
-           shadow-[0_0_20px_-5px_rgba(107,255,193,0.3)]
-           hover:shadow-[0_0_30px_-5px_rgba(107,255,193,0.5)]
-           active:border-b-0;
+    @apply btn-tactile bg-geo-primary text-white border-[3px] border-geo-on-surface;
   }
 
+  .btn-primary:hover {
+    @apply bg-geo-primary-dim;
+  }
+
+  /* Secondary button — teal */
   .btn-secondary {
-    @apply btn-tactile bg-geo-secondary text-white
-           border-b-4 border-geo-secondary-dim
-           active:border-b-0;
+    @apply btn-tactile bg-geo-secondary text-white border-[3px] border-geo-on-surface;
   }
 
+  .btn-secondary:hover {
+    @apply bg-geo-secondary-dim;
+  }
+
+  /* Ghost button — white background */
   .btn-ghost {
-    @apply btn-tactile bg-geo-on-surface text-geo-bg
-           border-b-4 border-geo-on-surface-dim
-           hover:bg-[#e8ecff]
-           active:border-b-0;
+    @apply btn-tactile bg-white text-geo-on-surface border-[3px] border-geo-on-surface;
   }
 
+  .btn-ghost:hover {
+    @apply bg-geo-surface-high;
+  }
+
+  /* Text emphasis — bold colors */
   .text-glow-primary {
-    text-shadow: 0 0 20px rgba(107, 255, 193, 0.3);
+    color: #FF6B35;
   }
 
   .text-glow-secondary {
-    text-shadow: 0 0 20px rgba(100, 168, 254, 0.3);
+    color: #4ECDC4;
   }
 
   .text-glow-tertiary {
-    text-shadow: 0 0 20px rgba(255, 224, 131, 0.3);
+    color: #FFD93D;
   }
 
   .text-glow-error {
-    text-shadow: 0 0 20px rgba(255, 113, 108, 0.3);
+    color: #FF6B6B;
+  }
+}
+
+/* Hide TopBar on mobile during gameplay — toggled by game pages adding .game-active to body */
+@media (max-width: 639px) {
+  body.game-active .topbar-section {
+    display: none;
   }
 }
 
 /* MapLibre popup styling for distance mode */
 .distance-popup .maplibregl-popup-content {
-  background: rgba(6, 14, 32, 0.92);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(64, 72, 93, 0.4);
+  background: white;
+  border: 3px solid #2D2D2D;
   border-radius: 12px;
   padding: 8px 12px;
-  color: #dee5ff;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  color: #2D2D2D;
+  box-shadow: 3px 3px 0 #2D2D2D;
 }
 
 .distance-popup .maplibregl-popup-tip {
-  border-top-color: rgba(6, 14, 32, 0.92);
+  border-top-color: #2D2D2D;
 }

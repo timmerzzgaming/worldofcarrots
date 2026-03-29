@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 280" fill="none">
+  <!-- Shadow -->
+  <ellipse cx="100" cy="270" rx="50" ry="8" fill="#00000020"/>
+  <!-- Body -->
+  <ellipse cx="100" cy="200" rx="55" ry="65" fill="#F5F0E8" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Belly -->
+  <ellipse cx="100" cy="210" rx="35" ry="40" fill="#FFFFFF"/>
+  <!-- Left ear -->
+  <path d="M70 140 Q60 60 75 40 Q85 30 90 50 Q95 80 85 140" fill="#F5F0E8" stroke="#2D2D2D" stroke-width="3"/>
+  <path d="M75 130 Q68 70 78 48 Q84 42 87 55 Q90 80 83 130" fill="#FFB4B4"/>
+  <!-- Right ear -->
+  <path d="M130 140 Q140 60 125 40 Q115 30 110 50 Q105 80 115 140" fill="#F5F0E8" stroke="#2D2D2D" stroke-width="3"/>
+  <path d="M125 130 Q132 70 122 48 Q116 42 113 55 Q110 80 117 130" fill="#FFB4B4"/>
+  <!-- Head -->
+  <circle cx="100" cy="145" r="42" fill="#F5F0E8" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Cheeks -->
+  <circle cx="72" cy="155" r="10" fill="#FFB4B4" opacity="0.6"/>
+  <circle cx="128" cy="155" r="10" fill="#FFB4B4" opacity="0.6"/>
+  <!-- Left eye -->
+  <ellipse cx="85" cy="140" rx="8" ry="10" fill="#2D2D2D"/>
+  <ellipse cx="83" cy="137" rx="3" ry="4" fill="white"/>
+  <!-- Right eye -->
+  <ellipse cx="115" cy="140" rx="8" ry="10" fill="#2D2D2D"/>
+  <ellipse cx="113" cy="137" rx="3" ry="4" fill="white"/>
+  <!-- Nose -->
+  <ellipse cx="100" cy="152" rx="5" ry="3.5" fill="#FF8FAA"/>
+  <!-- Mouth -->
+  <path d="M93 158 Q100 166 107 158" stroke="#2D2D2D" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Teeth -->
+  <rect x="96" y="158" width="8" height="7" rx="2" fill="white" stroke="#2D2D2D" stroke-width="1.5"/>
+  <line x1="100" y1="158" x2="100" y2="165" stroke="#2D2D2D" stroke-width="1"/>
+  <!-- Left arm holding carrot -->
+  <path d="M55 190 Q30 200 25 215" stroke="#F5F0E8" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M55 190 Q30 200 25 215" stroke="#2D2D2D" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Carrot in hand -->
+  <path d="M15 215 Q20 195 30 185 L35 190 Q25 200 22 218Z" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2"/>
+  <path d="M30 183 Q28 175 32 170" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+  <path d="M33 185 Q35 176 38 172" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+  <path d="M28 186 Q24 178 26 173" stroke="#4CAF50" stroke-width="3" stroke-linecap="round"/>
+  <!-- Right arm waving -->
+  <path d="M145 190 Q170 180 178 165" stroke="#F5F0E8" stroke-width="12" stroke-linecap="round" fill="none"/>
+  <path d="M145 190 Q170 180 178 165" stroke="#2D2D2D" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <!-- Left foot -->
+  <ellipse cx="78" cy="258" rx="22" ry="10" fill="#F5F0E8" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Right foot -->
+  <ellipse cx="122" cy="258" rx="22" ry="10" fill="#F5F0E8" stroke="#2D2D2D" stroke-width="3"/>
+</svg>

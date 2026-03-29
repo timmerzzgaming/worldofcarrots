@@ -22,7 +22,7 @@ import {
   playCorrect, playWrong, playGameStart, playGameOver,
   playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic,
 } from '@/lib/sounds'
-import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryLineColor, countryHoverLineColor, type Theme } from '@/lib/theme'
+import { mapBgColor, countryFillColor, countryHoverColor, countryLineColor, countryHoverLineColor } from '@/lib/theme'
 import { centroid, createFeatureStateSetter, shuffle } from '@/lib/mapHelpers'
 import { useMapThemeListener } from '@/hooks/useMapThemeListener'
 import { useGameRewards } from '@/hooks/useGameRewards'
@@ -319,16 +319,16 @@ export default function USStatesPage() {
   }, [])
 
   const usThemeUpdates = useMemo(() => [
-    { layer: 'background', property: 'background-color', value: (t: Theme) => mapBgColor(t) },
+    { layer: 'background', property: 'background-color', value: () => mapBgColor() },
     {
       layer: 'states-line', property: 'line-color',
-      value: (t: Theme) => [
+      value: () => [
         'case',
         ['boolean', ['feature-state', 'correct'], false], '#16a34a',
         ['boolean', ['feature-state', 'wrong'], false], '#ea580c',
         ['boolean', ['feature-state', 'target'], false], '#2563eb',
         ['boolean', ['feature-state', 'solved'], false], '#334155',
-        countryLineColor(t),
+        countryLineColor(),
       ],
     },
   ], [])

@@ -6,6 +6,7 @@
 import { supabase } from '@/lib/supabase'
 import { logCreditTransaction } from './credits-transaction'
 import { earnCarrots } from './carrots'
+import { getCollectedSet, pickRandomStickers, grantStickers, STICKERS_PER_CHEST, checkAndClaimContinentBonus, COUNTRY_TO_CONTINENT } from './stickers'
 
 export type ChestTier = 'bronze' | 'silver' | 'gold'
 
@@ -22,6 +23,10 @@ export interface Chest {
 export interface ChestContents {
   coins: number
   carrots: number
+  /** Country sticker names earned from this chest */
+  stickers: string[]
+  /** Continent completion bonus (if triggered) */
+  continentBonus?: { continent: string; coins: number }
 }
 
 const MAX_CHEST_SLOTS = 4
@@ -45,13 +50,13 @@ function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min
 }
 
-/** Roll random contents for a chest tier. */
+/** Roll random contents for a chest tier (stickers are added later by openChest). */
 export function rollContents(tier: ChestTier): ChestContents {
   const config = CHEST_CONFIG[tier]
   const coins = randomInt(config.coinRange[0], config.coinRange[1])
   const hasCarrots = Math.random() < config.carrotChance
   const carrots = hasCarrots ? randomInt(config.carrotRange[0], config.carrotRange[1]) : 0
-  return { coins, carrots }
+  return { coins, carrots, stickers: [] }
 }
 
 /** Get all chests for a user (max 4). */
@@ -124,6 +129,12 @@ export async function openChest(
   // Roll contents
   const contents = rollContents(chest.tier as ChestTier)
 
+  // Pick stickers based on chest tier
+  const stickerCount = STICKERS_PER_CHEST[chest.tier] ?? 1
+  const collected = await getCollectedSet(userId)
+  const stickerPicks = pickRandomStickers(collected, stickerCount)
+  contents.stickers = stickerPicks
+
   // Mark as opened
   await supabase
     .from('chests')
@@ -138,6 +149,20 @@ export async function openChest(
   // Award carrots
   if (contents.carrots > 0) {
     await earnCarrots(userId, contents.carrots, `chest_open:${chest.tier}`, { chestId })
+  }
+
+  // Award stickers
+  if (stickerPicks.length > 0) {
+    await grantStickers(userId, stickerPicks, `chest:${chest.tier}`)
+
+    // Check continent completion for each new sticker's continent
+    const continentsToCheck = Array.from(new Set(stickerPicks.map((c) => COUNTRY_TO_CONTINENT[c]).filter(Boolean)))
+    for (const continent of continentsToCheck) {
+      const bonus = await checkAndClaimContinentBonus(userId, continent)
+      if (bonus > 0) {
+        contents.continentBonus = { continent, coins: bonus }
+      }
+    }
   }
 
   return contents

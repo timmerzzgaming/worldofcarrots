@@ -4,16 +4,16 @@ export function getMapStyle(apiKey: string): string | StyleSpecification {
   if (apiKey && apiKey !== 'your_maptiler_api_key') {
     return `https://api.maptiler.com/maps/dataviz/style.json?key=${apiKey}`
   }
-  // Minimal inline style — loads instantly, no external dependencies
+  // Comic style — bright sky blue ocean
   return {
     version: 8,
-    name: 'WoC Dark',
+    name: 'WoC Comic',
     sources: {},
     layers: [
       {
         id: 'background',
         type: 'background',
-        paint: { 'background-color': '#0f172a' },
+        paint: { 'background-color': '#87CEEB' },
       },
     ],
   }
@@ -22,13 +22,13 @@ export function getMapStyle(apiKey: string): string | StyleSpecification {
 export function getWhiteMapStyle(): StyleSpecification {
   return {
     version: 8,
-    name: 'WoC Light',
+    name: 'WoC Comic',
     sources: {},
     layers: [
       {
         id: 'background',
         type: 'background',
-        paint: { 'background-color': '#a8d4f0' },
+        paint: { 'background-color': '#87CEEB' },
       },
     ],
   }
