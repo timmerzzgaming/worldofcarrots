@@ -22,7 +22,7 @@ import MapBackground from '@/components/home/MapBackground'
 import FloatingFlags from '@/components/home/FloatingFlags'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
-import { playCorrect, playWrong, playGameStart, playGameOver, playClick, startMusic, stopMusic, startMenuMusic, playHighScore } from '@/lib/sounds'
+import { playCorrect, playWrong, playGameStart, playGameOver, playClick, startMusic, stopMusic, startMenuMusic, playHighScore, warmUpAudio } from '@/lib/sounds'
 import { getTheme, mapBgColor, countryLineColor, type Theme } from '@/lib/theme'
 import { useMapThemeListener } from '@/hooks/useMapThemeListener'
 import { useGameRewards } from '@/hooks/useGameRewards'
@@ -108,6 +108,14 @@ export default function DistanceGamePage() {
 
   const [phase, setPhase] = useState<Phase>('idle')
   const phaseRef = useRef<Phase>('idle')
+
+  // Toggle body class for hiding TopBar on mobile during gameplay
+  useEffect(() => {
+    const active = phase === 'playing' || phase === 'feedback'
+    document.body.classList.toggle('game-active', active)
+    return () => { document.body.classList.remove('game-active') }
+  }, [phase])
+
   const autoStartRef = useRef(false)
   const [mapReady, setMapReady] = useState(false)
   const questionsRef = useRef<Capital[]>([])
@@ -563,6 +571,7 @@ export default function DistanceGamePage() {
   const pendingStartRef = useRef<(() => void) | null>(null)
 
   function launchWithCountdown(startFn: () => void) {
+    warmUpAudio()
     pendingStartRef.current = startFn
     setShowCountdown(true)
   }
@@ -592,9 +601,9 @@ export default function DistanceGamePage() {
         style={{ visibility: phase === 'idle' && !showCountdown ? 'hidden' : 'visible' }}
       />
 
-      {/* Quit/Restart */}
-      {(phase === 'playing' || phase === 'feedback' || phase === 'review') && (
-        <div className="absolute top-4 left-4 z-10 flex gap-2">
+      {/* Desktop: Quit/Restart (hidden on mobile) */}
+      {(phase === 'playing' || phase === 'feedback' || phase === 'review') && !showCountdown && (
+        <div className="hidden sm:flex fixed top-4 left-4 z-10 gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
             className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
@@ -608,6 +617,61 @@ export default function DistanceGamePage() {
             {t('restart')}
           </button>
           <ThemeToggle />
+        </div>
+      )}
+
+      {/* Mobile: Compact unified game HUD */}
+      {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
+        <div className="sm:hidden fixed top-0 left-0 right-0 z-10 px-2 pt-2">
+          <div className="glass-panel px-2 py-1.5 flex items-center gap-1.5">
+            {/* Quit & Restart icon buttons */}
+            <div className="flex gap-1 shrink-0">
+              <button
+                onClick={() => { playClick(); setShowQuitConfirm(true) }}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-error transition-colors"
+                aria-label={t('quit')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+              <button
+                onClick={() => { playClick(); setShowRestartConfirm(true) }}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-primary transition-colors"
+                aria-label={t('restart')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                  <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H4.598a.75.75 0 00-.75.75v3.634a.75.75 0 001.5 0v-2.033l.312.311a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm-10.625-3.85a5.5 5.5 0 019.201-2.465l.312.31H11.767a.75.75 0 000 1.5h3.634a.75.75 0 00.75-.75V2.535a.75.75 0 00-1.5 0v2.033l-.312-.31A7 7 0 002.627 7.394a.75.75 0 001.449.39z" clipRule="evenodd" />
+                </svg>
+              </button>
+              <ThemeToggle />
+            </div>
+
+            {/* Center: City/Country question */}
+            {phase === 'playing' && q && (
+              <div className="flex-1 min-w-0 text-center truncate">
+                <span className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase">
+                  {currentIndex + 1}/{questions.length}
+                </span>
+                <span className="mx-1 text-geo-outline-dim">·</span>
+                <span className="text-xs font-headline font-extrabold text-geo-primary uppercase">{q.city}</span>
+              </div>
+            )}
+            {phase === 'feedback' && (
+              <div className="flex-1 min-w-0 text-center">
+                <span className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase">
+                  {currentIndex + 1}/{questions.length}
+                </span>
+              </div>
+            )}
+
+            {/* Right: Score */}
+            <div className="shrink-0">
+              <span className="text-sm font-headline font-extrabold text-geo-primary tabular-nums text-glow-primary">
+                {totalScore}
+              </span>
+            </div>
+          </div>
         </div>
       )}
 
@@ -631,9 +695,9 @@ export default function DistanceGamePage() {
         />
       )}
 
-      {/* Question card — top center */}
-      {phase === 'playing' && q && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+      {/* Desktop: Question card — top center (hidden on mobile) */}
+      {phase === 'playing' && q && !showCountdown && (
+        <div className="hidden sm:block fixed top-4 left-1/2 -translate-x-1/2 z-10">
           <CityQuestionCard
             cityName={q.city}
             countryName={q.country}
@@ -646,8 +710,8 @@ export default function DistanceGamePage() {
       )}
 
       {/* Distance feedback */}
-      {phase === 'feedback' && q && lastDistance !== null && (
-        <div className="absolute top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+      {phase === 'feedback' && q && lastDistance !== null && !showCountdown && (
+        <div className="fixed top-[25%] left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
           <DistanceFeedback
             rawDistanceKm={lastRawDistance ?? 0}
             score={lastDistance ?? 0}
@@ -661,9 +725,9 @@ export default function DistanceGamePage() {
         </div>
       )}
 
-      {/* Scoreboard during game */}
-      {(phase === 'playing' || phase === 'feedback') && (
-        <div className="absolute top-4 right-4 z-10">
+      {/* Desktop: Scoreboard during game (hidden on mobile) */}
+      {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
+        <div className="hidden sm:block fixed top-4 right-4 z-10">
           <div className="glass-panel px-3 py-2 sm:px-5 sm:py-3 flex items-center gap-3 sm:gap-5">
             <div>
               <p className="text-geo-on-surface-dim text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest">{t('score')}</p>
@@ -678,6 +742,21 @@ export default function DistanceGamePage() {
               </p>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Mobile: Quit button during review phase */}
+      {phase === 'review' && (
+        <div className="sm:hidden fixed top-2 left-2 z-10">
+          <button
+            onClick={() => { playClick(); setShowQuitConfirm(true) }}
+            className="w-8 h-8 flex items-center justify-center rounded-full glass-panel text-geo-on-surface-dim hover:text-geo-error transition-colors"
+            aria-label={t('quit')}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+              <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+            </svg>
+          </button>
         </div>
       )}
 

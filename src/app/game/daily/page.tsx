@@ -20,12 +20,12 @@ import {
 import { getCountriesFromGeoJSON } from '@/lib/gameEngine'
 import { calculateStars } from '@/lib/stars'
 import {
-  getMapStyle, COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER,
+  COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER,
   SMALL_COUNTRIES_SOURCE, SMALL_COUNTRIES_CIRCLE_LAYER, SMALL_COUNTRIES_RING_LAYER,
   initialViewState,
 } from '@/lib/mapConfig'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
-import { countryFillColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor } from '@/lib/theme'
+import { mapBgColor, countryFillColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor } from '@/lib/theme'
 import StarRating from '@/components/credits/StarRating'
 import LevelBadge from '@/components/xp/LevelBadge'
 import { cn } from '@/lib/cn'
@@ -124,11 +124,10 @@ export default function DailyChallengePage() {
         }))
         setQuestions(qs)
 
-        // Create map — use getMapStyle to match other game pages
-        const apiKey = process.env.NEXT_PUBLIC_MAPTILER_KEY ?? ''
+        // Create map — inline style matching other game pages
         const map = new maplibregl.Map({
           container: containerRef.current!,
-          style: getMapStyle(apiKey),
+          style: { version: 8 as const, name: 'WoC Daily', sources: {}, layers: [{ id: 'background', type: 'background' as const, paint: { 'background-color': mapBgColor() } }] },
           center: initialViewState.center,
           zoom: initialViewState.zoom,
           attributionControl: false,
@@ -440,7 +439,7 @@ export default function DailyChallengePage() {
   return (
     <div className="relative w-full h-screen overflow-hidden bg-geo-bg">
       {/* Map container — always rendered */}
-      <div ref={containerRef} className="absolute inset-0 z-0" />
+      <div ref={containerRef} className="absolute inset-0 w-full h-full" />
 
       {/* Loading overlay */}
       {phase === 'loading' && (

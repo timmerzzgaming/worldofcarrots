@@ -8,6 +8,11 @@ function getCtx(): AudioContext {
   return audioCtx
 }
 
+/** Call from a user-gesture handler to ensure AudioContext is active for upcoming programmatic sounds */
+export function warmUpAudio() {
+  getCtx()
+}
+
 export function isSoundEnabled(): boolean {
   if (typeof window === 'undefined') return true
   return localStorage.getItem(STORAGE_KEY) !== 'off'

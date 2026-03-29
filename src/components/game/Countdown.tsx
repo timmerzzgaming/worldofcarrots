@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { playCountdownTick, playCountdownGo } from '@/lib/sounds'
+import { playCountdownTick, playCountdownGo, warmUpAudio } from '@/lib/sounds'
 
 interface CountdownProps {
   onComplete: () => void
@@ -13,6 +13,9 @@ const STEP_DURATION = 700
 
 export default function Countdown({ onComplete }: CountdownProps) {
   const [step, setStep] = useState(0)
+
+  // Try to resume AudioContext on mount (may work if a user gesture preceded this)
+  useEffect(() => { warmUpAudio() }, [])
 
   useEffect(() => {
     if (step < STEPS.length) {

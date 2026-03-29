@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
 import 'maplibre-gl/dist/maplibre-gl.css'
+import { cn } from '@/lib/cn'
 import { useGameStore } from '@/store/gameStore'
 import { getCountriesFromGeoJSON, GAME_MODES } from '@/lib/gameEngine'
 import { DIFFICULTIES, type Difficulty } from '@/lib/countryDifficulty'
@@ -12,7 +13,7 @@ import { getMapStyle, COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAY
 import type { GameMode } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
-import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic } from '@/lib/sounds'
+import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic, warmUpAudio } from '@/lib/sounds'
 import { getTheme, mapBgColor, countryFillColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor } from '@/lib/theme'
 import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
@@ -61,6 +62,13 @@ export default function ClickCountryPage() {
     feedbackCountry, feedbackCorrect, lifeEarned,
     startGame, nextQuestion, reset,
   } = useGameStore()
+
+  // Toggle body class for hiding TopBar on mobile during gameplay
+  useEffect(() => {
+    const active = phase === 'playing' || phase === 'feedback'
+    document.body.classList.toggle('game-active', active)
+    return () => { document.body.classList.remove('game-active') }
+  }, [phase])
 
   // Calculate rewards when game ends
   const gameResults = useMemo(() => {
@@ -541,6 +549,7 @@ export default function ClickCountryPage() {
   const pendingStartRef = useRef<(() => void) | null>(null)
 
   function launchWithCountdown(startFn: () => void) {
+    warmUpAudio()
     pendingStartRef.current = startFn
     setShowCountdown(true)
   }
@@ -583,9 +592,9 @@ export default function ClickCountryPage() {
         style={{ visibility: (phase === 'idle' || phase === 'results') && !showCountdown ? 'hidden' : 'visible' }}
       />
 
-      {/* Quit button — top left */}
-      {(phase === 'playing' || phase === 'feedback') && (
-        <div className="absolute top-4 left-4 z-10 flex gap-2">
+      {/* Desktop: Quit/Restart — top left (hidden on mobile) */}
+      {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
+        <div className="hidden sm:flex fixed top-4 left-4 z-10 gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
             className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
@@ -599,6 +608,109 @@ export default function ClickCountryPage() {
             {t('restart')}
           </button>
           <ThemeToggle />
+        </div>
+      )}
+
+      {/* Mobile: Compact unified game HUD */}
+      {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
+        <div className="sm:hidden fixed top-0 left-0 right-0 z-10 px-2 pt-2 space-y-1">
+          {/* Row 1: Actions + Question + Score */}
+          <div className="glass-panel px-2 py-1.5 flex items-center gap-1.5">
+            {/* Quit & Restart icon buttons */}
+            <div className="flex gap-1 shrink-0">
+              <button
+                onClick={() => { playClick(); setShowQuitConfirm(true) }}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-error transition-colors"
+                aria-label={t('quit')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+                </svg>
+              </button>
+              <button
+                onClick={() => { playClick(); setShowRestartConfirm(true) }}
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-primary transition-colors"
+                aria-label={t('restart')}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                  <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H4.598a.75.75 0 00-.75.75v3.634a.75.75 0 001.5 0v-2.033l.312.311a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm-10.625-3.85a5.5 5.5 0 019.201-2.465l.312.31H11.767a.75.75 0 000 1.5h3.634a.75.75 0 00.75-.75V2.535a.75.75 0 00-1.5 0v2.033l-.312-.31A7 7 0 002.627 7.394a.75.75 0 001.449.39z" clipRule="evenodd" />
+                </svg>
+              </button>
+              <ThemeToggle />
+            </div>
+
+            {/* Center: Question text or feedback indicator */}
+            <div className="flex-1 min-w-0 text-center">
+              {phase === 'playing' && q && (
+                <div className="truncate">
+                  <span className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase">
+                    {currentIndex + 1}/{questions.length}
+                  </span>
+                  <span className="mx-1 text-geo-outline-dim">·</span>
+                  <span className="text-xs font-body text-geo-on-surface">
+                    {t('find')}{' '}
+                    <span className="font-headline font-extrabold text-geo-primary uppercase">{tc(q.country.name)}</span>
+                  </span>
+                </div>
+              )}
+              {phase === 'feedback' && feedbackCountry && feedbackCorrect !== null && (
+                <div className="truncate">
+                  <span className={cn(
+                    'text-xs font-headline font-extrabold uppercase',
+                    feedbackCorrect ? 'text-geo-primary' : 'text-geo-error'
+                  )}>
+                    {feedbackCorrect ? `✓ ${tc(feedbackCountry)}` : `✗ ${tc(feedbackCountry)}`}
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Right: Compact score + lives */}
+            <div className="shrink-0 flex items-center gap-1.5">
+              {(mode === 'survival' || mode === 'borderless' || mode === 'flag') && (
+                <span className="text-sm font-headline font-extrabold text-geo-error tabular-nums">
+                  {'♥'.repeat(lives)}
+                  <span className="text-geo-outline">{'♡'.repeat(Math.max(0, 3 - lives))}</span>
+                </span>
+              )}
+              <span className="text-sm font-headline font-extrabold text-geo-primary tabular-nums text-glow-primary">
+                {mode === 'timed' ? correctCount : score}
+              </span>
+            </div>
+          </div>
+
+          {/* Row 2: Timer bar (only if timed) */}
+          {maxTime > 0 && (
+            <div className="glass-panel px-2 py-1 flex items-center gap-2">
+              <div className="flex-1 h-2 bg-geo-surface-highest rounded-full overflow-hidden border border-geo-outline-dim/30">
+                <div
+                  className={cn(
+                    'h-full rounded-full transition-all duration-100',
+                    (timeRemaining / maxTime) * 100 < 25
+                      ? 'bg-gradient-to-r from-geo-error-dim to-geo-error'
+                      : 'bg-gradient-to-r from-geo-primary-container to-geo-primary'
+                  )}
+                  style={{ width: `${(timeRemaining / maxTime) * 100}%` }}
+                />
+              </div>
+              <span className={cn(
+                'text-[10px] font-headline font-bold tabular-nums shrink-0',
+                (timeRemaining / maxTime) * 100 < 25 ? 'text-geo-error' : 'text-geo-on-surface-dim'
+              )}>
+                {timeRemaining.toFixed(1)}s
+              </span>
+            </div>
+          )}
+
+          {/* Row 2 alt: Elapsed time for marathon */}
+          {maxTime <= 0 && mode === 'marathon' && (
+            <div className="glass-panel px-2 py-1 flex items-center justify-between">
+              <span className="text-[10px] font-headline font-bold uppercase text-geo-on-surface-dim">{t('progress')}: {currentIndex + 1}/{questions.length}</span>
+              <span className="text-[10px] font-headline font-bold tabular-nums text-geo-on-surface-dim">
+                {Math.floor(elapsed / 60)}:{String(Math.floor(elapsed % 60)).padStart(2, '0')}
+              </span>
+            </div>
+          )}
         </div>
       )}
 
@@ -622,16 +734,16 @@ export default function ClickCountryPage() {
         />
       )}
 
-      {/* Question card — top center */}
-      {phase === 'playing' && q && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+      {/* Desktop: Question card — top center (hidden on mobile, hidden during countdown) */}
+      {phase === 'playing' && q && !showCountdown && (
+        <div className="hidden sm:block fixed top-4 left-1/2 -translate-x-1/2 z-10">
           <QuestionCard countryName={q.country.name} questionNumber={currentIndex + 1} totalQuestions={questions.length} />
         </div>
       )}
 
-      {/* Feedback — top center */}
-      {phase === 'feedback' && feedbackCountry && feedbackCorrect !== null && (
-        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
+      {/* Feedback — top center (pushed down on mobile below compact HUD) */}
+      {phase === 'feedback' && feedbackCountry && feedbackCorrect !== null && !showCountdown && (
+        <div className="fixed top-[72px] sm:top-4 left-1/2 -translate-x-1/2 z-10">
           <FeedbackOverlay
             correct={feedbackCorrect}
             countryName={feedbackCountry}
@@ -655,9 +767,9 @@ export default function ClickCountryPage() {
         </div>
       )}
 
-      {/* Scoreboard — top right */}
-      {(phase === 'playing' || phase === 'feedback') && (
-        <div className="absolute top-4 right-4 z-10">
+      {/* Desktop: Scoreboard — top right (hidden on mobile) */}
+      {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
+        <div className="hidden sm:block fixed top-4 right-4 z-10">
           <ScoreBoard
             mode={mode}
             score={score}
