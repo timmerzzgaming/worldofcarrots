@@ -269,6 +269,13 @@ export interface Translations {
   'auth.guestBannerTitle': string
   'auth.guestBannerDesc': string
   'auth.playingAsGuest': string
+  'auth.forgotPassword': string
+  'auth.forgotTitle': string
+  'auth.forgotDesc': string
+  'auth.recoverySent': string
+  'auth.recoveryNickname': string
+  'auth.resetCheckEmail': string
+  'auth.sendRecovery': string
 
   // Credits
   'credits.earned': string

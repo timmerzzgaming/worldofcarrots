@@ -243,6 +243,13 @@ export const en: Translations = {
   'auth.guestBannerTitle': 'Playing as Guest',
   'auth.guestBannerDesc': 'Sign up to save scores and earn credits!',
   'auth.playingAsGuest': 'Playing as Guest',
+  'auth.forgotPassword': 'Forgot username or password?',
+  'auth.forgotTitle': 'Account Recovery',
+  'auth.forgotDesc': 'Enter your email to recover your username and reset your password.',
+  'auth.recoverySent': 'Recovery Email Sent',
+  'auth.recoveryNickname': 'Your username is:',
+  'auth.resetCheckEmail': 'Check your email for a password reset link.',
+  'auth.sendRecovery': 'Send Recovery Email',
 
   'credits.earned': 'Credits Earned',
   'credits.base': 'Base Reward',

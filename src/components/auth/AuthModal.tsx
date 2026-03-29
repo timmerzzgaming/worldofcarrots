@@ -11,7 +11,7 @@ interface AuthModalProps {
   onClose: () => void
 }
 
-type Mode = 'choice' | 'signup' | 'signin' | 'check-email'
+type Mode = 'choice' | 'signup' | 'signin' | 'check-email' | 'forgot' | 'recovery-sent'
 
 export default function AuthModal({ onClose }: AuthModalProps) {
   const { t } = useTranslation()
@@ -24,6 +24,7 @@ export default function AuthModal({ onClose }: AuthModalProps) {
   const [avatar, setAvatar] = useState('🌍')
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [recoveryNickname, setRecoveryNickname] = useState<string | null>(null)
 
   async function handleSignUp() {
     setError(null)
@@ -91,6 +92,31 @@ export default function AuthModal({ onClose }: AuthModalProps) {
     setLoading(false)
     if (result.error) setError(result.error)
     else onClose()
+  }
+
+  async function handleForgot() {
+    setError(null)
+    if (!email.trim() || !email.includes('@')) {
+      setError(t('auth.invalidEmail' as keyof Translations)); return
+    }
+    setLoading(true)
+    try {
+      const res = await fetch('/api/auth/recover', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() }),
+      })
+      const json = await res.json()
+      if (!res.ok) {
+        setError(json.error?.message ?? 'Recovery failed')
+      } else {
+        setRecoveryNickname(json.data?.nickname ?? null)
+        setMode('recovery-sent')
+      }
+    } catch {
+      setError('Network error')
+    }
+    setLoading(false)
   }
 
   return (
@@ -292,10 +318,100 @@ export default function AuthModal({ onClose }: AuthModalProps) {
             </button>
 
             <button
+              onClick={() => { playClick(); setMode('forgot'); setError(null); setEmail('') }}
+              className="w-full text-center text-geo-on-surface-dim text-xs font-headline mt-3 hover:text-geo-primary transition-colors"
+            >
+              {t('auth.forgotPassword' as keyof Translations)}
+            </button>
+
+            <button
               onClick={() => { playClick(); setMode('choice'); setError(null) }}
-              className="w-full text-center text-geo-on-surface-dim text-sm font-headline mt-4 hover:text-geo-primary transition-colors"
+              className="w-full text-center text-geo-on-surface-dim text-sm font-headline mt-3 hover:text-geo-primary transition-colors"
             >
               ← {t('back')}
+            </button>
+          </div>
+        )}
+
+        {/* ---- Forgot Password ---- */}
+        {mode === 'forgot' && (
+          <div>
+            <p className="text-4xl mb-3 text-center">🔑</p>
+            <p className="text-geo-on-surface font-headline font-extrabold text-xl uppercase mb-2 text-center">
+              {t('auth.forgotTitle' as keyof Translations)}
+            </p>
+            <p className="text-geo-on-surface-dim text-sm font-body mb-6 text-center">
+              {t('auth.forgotDesc' as keyof Translations)}
+            </p>
+
+            <label className="block text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-1.5">
+              {t('auth.email' as keyof Translations)}
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handleForgot()}
+              placeholder="you@example.com"
+              className="w-full px-4 py-2.5 rounded-xl bg-geo-surface border-2 border-geo-outline-dim/30 text-geo-on-surface font-body text-sm focus:border-geo-primary focus:outline-none mb-5"
+            />
+
+            {error && <p className="text-geo-error text-xs font-body mb-4">{error}</p>}
+
+            <button
+              onClick={handleForgot}
+              disabled={loading}
+              className="btn-primary w-full py-3 disabled:opacity-50"
+            >
+              {loading ? '...' : t('auth.sendRecovery' as keyof Translations)}
+            </button>
+
+            <button
+              onClick={() => { playClick(); setMode('signin'); setError(null) }}
+              className="w-full text-center text-geo-on-surface-dim text-sm font-headline mt-4 hover:text-geo-primary transition-colors"
+            >
+              ← {t('auth.signIn' as keyof Translations)}
+            </button>
+          </div>
+        )}
+
+        {/* ---- Recovery Sent ---- */}
+        {mode === 'recovery-sent' && (
+          <div className="text-center">
+            <p className="text-4xl mb-3">📧</p>
+            <p className="text-geo-on-surface font-headline font-extrabold text-xl uppercase mb-2">
+              {t('auth.recoverySent' as keyof Translations)}
+            </p>
+
+            {recoveryNickname && (
+              <div className="mb-4 p-3 rounded-xl bg-geo-surface-high/30 border border-geo-outline-dim/20">
+                <p className="text-geo-on-surface-dim text-xs font-headline mb-1">
+                  {t('auth.recoveryNickname' as keyof Translations)}
+                </p>
+                <p className="text-geo-primary font-headline font-bold text-lg">
+                  {recoveryNickname}
+                </p>
+              </div>
+            )}
+
+            <p className="text-geo-on-surface-dim text-sm font-body mb-2">
+              {t('auth.resetCheckEmail' as keyof Translations)}
+            </p>
+            <p className="text-geo-primary font-headline font-bold text-sm mb-6">
+              {email}
+            </p>
+
+            <button
+              onClick={() => { playClick(); setMode('signin'); setError(null); setPassword('') }}
+              className="btn-primary w-full py-3"
+            >
+              {t('auth.signIn' as keyof Translations)}
+            </button>
+            <button
+              onClick={() => { playClick(); onClose() }}
+              className="w-full text-center text-geo-on-surface-dim text-sm font-headline mt-4 hover:text-geo-primary transition-colors"
+            >
+              Close
             </button>
           </div>
         )}
