@@ -394,6 +394,8 @@ const nl: Translations = {
   'mp.hostLeft': 'De host heeft het spel verlaten',
   'mp.kicked': 'Je bent uit de lobby verwijderd',
   'mp.ping': 'Ping',
+  'mp.deleteLobby': 'Lobby verwijderen',
+  'mp.lobbyCancelled': 'De host heeft deze lobby verwijderd.',
 }
 
 export default nl

@@ -8,7 +8,7 @@ import { cn } from '@/lib/cn'
 import { useTranslation } from '@/lib/i18n'
 import { useAuth } from '@/lib/auth/context'
 import { useBasePath } from '@/lib/basePath'
-import { playClick, playCorrect, playWrong, playGameStart, playGameOver } from '@/lib/sounds'
+import { playClick, playCorrect, playWrong, playGameStart, playGameOver, startMultiplayerMusic, stopMultiplayerMusic, startMenuMusic, playVictoryFanfare } from '@/lib/sounds'
 import {
   getLobby,
   getLobbyPlayers,
@@ -17,6 +17,7 @@ import {
   setReady,
   updateLobbySettings,
   updateLobbyStatus,
+  deleteLobby,
   kickPlayer,
   sendChatMessage,
   getChatMessages,
@@ -79,6 +80,7 @@ export default function MultiplayerLobbyPage() {
   const [phase, setPhase] = useState<GamePhase>('lobby')
   const [copied, setCopied] = useState(false)
   const [chatCollapsed, setChatCollapsed] = useState(false)
+  const [playerPings, setPlayerPings] = useState<Map<string, number>>(new Map())
 
   // Game state
   const [questions, setQuestions] = useState<MultiQuestionT[]>([])
@@ -211,6 +213,7 @@ export default function MultiplayerLobbyPage() {
     switch (event.type) {
       case 'game_start': {
         playGameStart()
+        startMultiplayerMusic()
         setCountryIsoMap(buildCountryIsoMap({ type: 'FeatureCollection', features: [] }))
         // Generate questions from seed
         const qs = generateMultiMixQuestions(event.seed, lobby?.duration_minutes ?? 5)
@@ -272,7 +275,8 @@ export default function MultiplayerLobbyPage() {
         break
       }
       case 'game_end': {
-        playGameOver()
+        stopMultiplayerMusic()
+        playVictoryFanfare()
         setFinalScores(event.finalScores)
         setPhase('results')
         phaseRef.current = 'results'
@@ -296,9 +300,27 @@ export default function MultiplayerLobbyPage() {
         getLobbyPlayers(lobbyId).then(setPlayers)
         break
       }
+      case 'lobby_cancelled': {
+        stopMultiplayerMusic()
+        startMenuMusic()
+        alert(t('mp.lobbyCancelled'))
+        router.push(prefixPath('/game/multiplayer'))
+        break
+      }
       case 'ping': {
         if (event.senderId !== user?.id && channelRef.current) {
           sendPong(channelRef.current, user?.id ?? '', event.timestamp)
+        }
+        break
+      }
+      case 'pong': {
+        if (event.senderId !== user?.id) {
+          const latency = Math.round((Date.now() - event.originalTimestamp) / 2)
+          setPlayerPings((prev) => {
+            const next = new Map(prev)
+            next.set(event.senderId, latency)
+            return next
+          })
         }
         break
       }
@@ -765,6 +787,17 @@ export default function MultiplayerLobbyPage() {
     setLobby((prev) => prev ? { ...prev, is_public: newPublic } : prev)
   }
 
+  async function handleDeleteLobby() {
+    if (!lobby || !isHost) return
+    playClick()
+    if (channelRef.current) {
+      broadcastToLobby(channelRef.current, { type: 'lobby_cancelled' })
+    }
+    await deleteLobby(lobbyId)
+    startMenuMusic()
+    router.push(prefixPath('/game/multiplayer'))
+  }
+
   async function handleSendChat(message: string) {
     if (!user) return
     const msg = await sendChatMessage(lobbyId, user.id, user.nickname, user.avatar ?? '🌍', message)
@@ -786,6 +819,8 @@ export default function MultiplayerLobbyPage() {
 
   async function handleLeave() {
     playClick()
+    stopMultiplayerMusic()
+    startMenuMusic()
     if (user) await leaveLobby(lobbyId, user.id)
     router.push(prefixPath('/game/multiplayer'))
   }
@@ -866,6 +901,7 @@ export default function MultiplayerLobbyPage() {
               currentUserId={user.id}
               hostId={lobby?.host_id ?? ''}
               onKick={isHost ? handleKick : undefined}
+              pings={playerPings}
             />
           </div>
 
@@ -927,6 +963,12 @@ export default function MultiplayerLobbyPage() {
                   Need at least 2 players to start
                 </p>
               )}
+              <button
+                onClick={handleDeleteLobby}
+                className="btn-ghost w-full py-2 text-sm text-geo-error hover:text-red-400"
+              >
+                {t('mp.deleteLobby')}
+              </button>
             </div>
           )}
 

@@ -397,6 +397,8 @@ export const en: Translations = {
   'mp.hostLeft': 'Host has left the game',
   'mp.kicked': 'You were kicked from the lobby',
   'mp.ping': 'Ping',
+  'mp.deleteLobby': 'Delete Lobby',
+  'mp.lobbyCancelled': 'The host has cancelled this lobby.',
 }
 
 const translationCache = new Map<Locale, Translations>()

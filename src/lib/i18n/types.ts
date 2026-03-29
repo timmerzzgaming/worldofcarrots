@@ -430,4 +430,6 @@ export interface Translations {
   'mp.hostLeft': string
   'mp.kicked': string
   'mp.ping': string
+  'mp.deleteLobby': string
+  'mp.lobbyCancelled': string
 }

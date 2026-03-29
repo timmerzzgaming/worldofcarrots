@@ -394,6 +394,8 @@ const es: Translations = {
   'mp.hostLeft': 'El anfitrion abandono la partida',
   'mp.kicked': 'Has sido expulsado de la sala',
   'mp.ping': 'Ping',
+  'mp.deleteLobby': 'Eliminar sala',
+  'mp.lobbyCancelled': 'El anfitrion ha eliminado esta sala.',
 }
 
 export default es

@@ -9,9 +9,10 @@ interface PlayerListProps {
   currentUserId: string
   hostId: string
   onKick?: (userId: string) => void
+  pings?: Map<string, number>
 }
 
-export default function PlayerList({ players, currentUserId, hostId, onKick }: PlayerListProps) {
+export default function PlayerList({ players, currentUserId, hostId, onKick, pings }: PlayerListProps) {
   const { t } = useTranslation()
   const isHost = currentUserId === hostId
 
@@ -55,9 +56,11 @@ export default function PlayerList({ players, currentUserId, hostId, onKick }: P
                   {player.is_ready ? t('mp.ready') : t('mp.notReady')}
                 </span>
               )}
-              {player.ping_ms > 0 && (
-                <span>{t('mp.ping')}: {player.ping_ms}ms</span>
-              )}
+              {(() => {
+                const ping = pings?.get(player.user_id) ?? (player.ping_ms > 0 ? player.ping_ms : null)
+                if (ping === null) return null
+                return <span>{t('mp.ping')}: {ping}ms</span>
+              })()}
             </div>
           </div>
 

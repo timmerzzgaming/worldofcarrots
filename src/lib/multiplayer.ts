@@ -95,6 +95,7 @@ export type BroadcastEvent =
   | { type: 'kick'; userId: string }
   | { type: 'settings_change'; duration_minutes: number }
   | { type: 'ready_change'; userId: string; ready: boolean }
+  | { type: 'lobby_cancelled' }
 
 export interface RoundResult {
   userId: string
@@ -325,6 +326,15 @@ export async function updateLobbyStatus(
   await supabase
     .from('mp_lobbies')
     .update({ status, ...extra })
+    .eq('id', lobbyId)
+}
+
+/** Delete a lobby (host only — marks as finished) */
+export async function deleteLobby(lobbyId: string): Promise<void> {
+  if (!supabase) return
+  await supabase
+    .from('mp_lobbies')
+    .update({ status: 'finished', finished_at: new Date().toISOString() })
     .eq('id', lobbyId)
 }
 

@@ -394,6 +394,8 @@ const zh: Translations = {
   'mp.hostLeft': '\u623f\u4e3b\u5df2\u79bb\u5f00\u6e38\u620f',
   'mp.kicked': '\u4f60\u5df2\u88ab\u8e22\u51fa\u623f\u95f4',
   'mp.ping': '\u5ef6\u8fdf',
+  'mp.deleteLobby': '\u5220\u9664\u623f\u95f4',
+  'mp.lobbyCancelled': '\u623f\u4e3b\u5df2\u53d6\u6d88\u8be5\u623f\u95f4\u3002',
 }
 
 export default zh

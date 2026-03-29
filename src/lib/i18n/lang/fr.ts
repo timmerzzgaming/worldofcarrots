@@ -394,6 +394,8 @@ const fr: Translations = {
   'mp.hostLeft': 'L\'hote a quitte la partie',
   'mp.kicked': 'Vous avez ete expulse du salon',
   'mp.ping': 'Ping',
+  'mp.deleteLobby': 'Supprimer le salon',
+  'mp.lobbyCancelled': 'L\'hote a supprime ce salon.',
 }
 
 export default fr

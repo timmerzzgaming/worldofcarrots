@@ -285,10 +285,12 @@ export function playCountdownGo() {
 const MUSIC_VOLUME = 0.15
 let gameAudio: HTMLAudioElement | null = null
 let menuAudio: HTMLAudioElement | null = null
+let multiplayerAudio: HTMLAudioElement | null = null
+let victoryAudio: HTMLAudioElement | null = null
 
 function fadeOut(audio: HTMLAudioElement, duration = 500) {
   const step = 0.02
-  const interval = duration * step / audio.volume
+  const interval = duration * step / Math.max(audio.volume, 0.01)
   const fade = setInterval(() => {
     if (audio.volume > step) {
       audio.volume = Math.max(0, audio.volume - step)
@@ -323,13 +325,19 @@ function fadeIn(audio: HTMLAudioElement, delay = 0, duration = 1500) {
   }, delay)
 }
 
+/** Stop all music tracks */
+function stopAllMusic() {
+  if (gameAudio && !gameAudio.paused) fadeOut(gameAudio)
+  if (menuAudio && !menuAudio.paused) fadeOut(menuAudio)
+  if (multiplayerAudio && !multiplayerAudio.paused) fadeOut(multiplayerAudio)
+}
+
+/** Start normal game music (forest) — used by all solo game modes */
 export function startMusic() {
   if (!isSoundEnabled()) return
-  if (menuAudio && !menuAudio.paused) {
-    fadeOut(menuAudio)
-  }
+  stopAllMusic()
   if (!gameAudio) {
-    gameAudio = new Audio('/music/background.mp3')
+    gameAudio = new Audio('/music/forest.mp3')
     gameAudio.loop = true
   }
   gameAudio.currentTime = 0
@@ -342,11 +350,10 @@ export function stopMusic() {
   }
 }
 
+/** Start menu music (Lively Meadow) */
 export function startMenuMusic() {
   if (!isSoundEnabled()) return
-  if (gameAudio && !gameAudio.paused) {
-    fadeOut(gameAudio)
-  }
+  stopAllMusic()
   if (!menuAudio) {
     menuAudio = new Audio('/music/menu.mp3')
     menuAudio.loop = true
@@ -362,12 +369,46 @@ export function stopMenuMusic() {
   }
 }
 
+/** Start multiplayer game music (Fight Them Until We Cant) */
+export function startMultiplayerMusic() {
+  if (!isSoundEnabled()) return
+  stopAllMusic()
+  if (!multiplayerAudio) {
+    multiplayerAudio = new Audio('/music/multiplayer.mp3')
+    multiplayerAudio.loop = true
+  }
+  multiplayerAudio.currentTime = 0
+  fadeIn(multiplayerAudio, 1000, 1500)
+}
+
+export function stopMultiplayerMusic() {
+  if (multiplayerAudio && !multiplayerAudio.paused) {
+    fadeOut(multiplayerAudio)
+  }
+}
+
+/** Play the victory fanfare (one-shot, not looped) */
+export function playVictoryFanfare() {
+  if (!isSoundEnabled()) return
+  stopAllMusic()
+  if (!victoryAudio) {
+    victoryAudio = new Audio('/music/victory.mp3')
+    victoryAudio.loop = false
+  }
+  victoryAudio.currentTime = 0
+  victoryAudio.volume = MUSIC_VOLUME * 1.5
+  victoryAudio.play().catch(() => {})
+}
+
 export function syncMusic() {
   if (isSoundEnabled()) {
     if (menuAudio && !menuAudio.paused) menuAudio.volume = MUSIC_VOLUME
     if (gameAudio && !gameAudio.paused) gameAudio.volume = MUSIC_VOLUME
+    if (multiplayerAudio && !multiplayerAudio.paused) multiplayerAudio.volume = MUSIC_VOLUME
   } else {
     if (menuAudio) menuAudio.pause()
     if (gameAudio) gameAudio.pause()
+    if (multiplayerAudio) multiplayerAudio.pause()
+    if (victoryAudio) victoryAudio.pause()
   }
 }
