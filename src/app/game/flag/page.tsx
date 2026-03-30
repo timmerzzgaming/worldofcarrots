@@ -704,7 +704,7 @@ export default function FlagGamePage() {
 
       {/* Quit/Restart buttons — top left on all screen sizes */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="fixed top-12 left-2 sm:top-4 sm:left-4 z-20 flex gap-2">
+        <div className="fixed top-12 left-2 sm:top-4 sm:left-4 z-[60] flex gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
             className="px-3 py-2 sm:px-5 sm:py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
@@ -722,7 +722,7 @@ export default function FlagGamePage() {
 
       {/* Lives + Score — bottom center */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10">
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-[55]">
           <div className="glass-panel px-4 py-2 sm:px-5 flex items-center gap-3">
             <span className="text-sm sm:text-base font-headline font-extrabold text-geo-error tabular-nums">
               {'♥'.repeat(lives)}
@@ -758,7 +758,7 @@ export default function FlagGamePage() {
       {/* Flag question card — top center (pushed down on mobile below compact HUD) */}
       {phase === 'playing' && q && currentFlagUrl && !showCountdown && (
         <>
-          <div className="fixed top-12 sm:top-4 left-1/2 -translate-x-1/2 z-10">
+          <div className="fixed top-12 sm:top-4 left-1/2 -translate-x-1/2 z-[55]">
             <FlagQuestionCard
               flagUrl={currentFlagUrl}
               questionNumber={currentIndex + 1}
@@ -767,7 +767,7 @@ export default function FlagGamePage() {
           </div>
 
           {/* Hint/Skip controls — right edge, vertically centered */}
-          <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-10">
+          <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-[55]">
             <div className="glass-panel px-3 py-2 sm:px-4 sm:py-3 space-y-2 min-w-[140px] sm:min-w-[160px]">
               {/* Continent hint */}
               {hintLevel >= 1 && continentDisplay && (
@@ -814,7 +814,7 @@ export default function FlagGamePage() {
 
       {/* Feedback overlay (pushed down on mobile below compact HUD) */}
       {phase === 'feedback' && feedbackCountry && feedbackCorrect !== null && !showCountdown && (
-        <div className="fixed top-12 sm:top-4 left-1/2 -translate-x-1/2 z-10">
+        <div className="fixed top-12 sm:top-4 left-1/2 -translate-x-1/2 z-[55]">
           <FeedbackOverlay
             correct={feedbackCorrect}
             countryName={feedbackCountry}
@@ -837,7 +837,7 @@ export default function FlagGamePage() {
 
       {/* Desktop: Scoreboard (hidden on mobile) */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="hidden sm:block fixed top-4 right-4 z-10">
+        <div className="hidden sm:block fixed top-4 right-4 z-[55]">
           <ScoreBoard
             mode="flag"
             score={score}
