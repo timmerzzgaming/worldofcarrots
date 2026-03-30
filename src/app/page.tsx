@@ -416,39 +416,6 @@ export default function HomePage() {
                   transition={{ duration: 0.25 }}
                   className="w-full space-y-6"
                 >
-                  {/* Multiplayer button */}
-                  <motion.button
-                    onClick={() => {
-                      playClick()
-                      if (isGuest) return
-                      router.push(prefixPath('/game/multiplayer'))
-                    }}
-                    onMouseEnter={() => playHover()}
-                    disabled={isGuest}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 }}
-                    className={cn(
-                      'w-full max-w-5xl mx-auto relative flex items-center justify-center gap-3 px-6 py-4 sm:py-5 glass-panel transition-all',
-                      isGuest
-                        ? 'opacity-50 cursor-not-allowed'
-                        : 'hover:border-geo-primary hover:shadow-comic-lg cursor-pointer',
-                    )}
-                  >
-                    <span className="text-3xl sm:text-4xl">🎮</span>
-                    <span className="text-xl sm:text-2xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide">
-                      {t('mp.multiplayer')}
-                    </span>
-                    <span className="bg-red-500 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full animate-pulse">
-                      LIVE
-                    </span>
-                    {isGuest && (
-                      <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
-                        🔒
-                      </span>
-                    )}
-                  </motion.button>
-
                   {/* Daily Challenge + Leaderboard bar */}
                   <div className="flex flex-col sm:flex-row gap-3 max-w-5xl mx-auto">
                     <div className="flex-1">
@@ -463,6 +430,26 @@ export default function HomePage() {
                   </div>
 
                   <div className="grid gap-3 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+                  {/* Multiplayer — coming soon */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.05 }}
+                    className="group relative flex flex-row sm:flex-col items-center sm:items-center text-left sm:text-center p-3 sm:p-8 lg:p-10 glass-panel opacity-50 cursor-not-allowed gap-3 sm:gap-0"
+                  >
+                    <span className="absolute -top-2 right-2 bg-geo-primary text-black text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                      {t('comingSoon')}
+                    </span>
+                    <div className="text-3xl sm:text-6xl lg:text-7xl shrink-0 sm:mb-5 grayscale">🎮</div>
+                    <div className="flex flex-col sm:items-center min-w-0">
+                      <h2 className="text-base sm:text-2xl font-headline font-extrabold uppercase tracking-wide text-geo-on-surface-dim">
+                        {t('mp.multiplayer')}
+                      </h2>
+                      <p className="text-geo-on-surface-dim mt-0.5 sm:mt-2 text-xs sm:text-base leading-relaxed">
+                        {t('mp.multiplayer.desc') !== 'mp.multiplayer.desc' ? t('mp.multiplayer.desc') as string : 'Challenge friends in real-time'}
+                      </p>
+                    </div>
+                  </motion.div>
                   {categories.map((cat, i) => {
                     const guestCatLocked = isGuest && cat.id !== 'mapGames'
                     const available = cat.modes.filter((m) => m.available).length

@@ -33,7 +33,7 @@ export default function RootLayout({
         <Providers>
           <ErrorBoundary>
             <div className="fixed top-0 left-0 right-0 z-[100] bg-geo-primary text-white text-center text-[10px] sm:text-xs font-headline font-bold py-0.5 sm:py-1">
-              Game under development — you <span className="line-through">may</span> will encounter bugs!
+              Game under development — you WILL encounter bugs!
             </div>
             <div className="pt-5 sm:pt-6">
               <TopBar />
