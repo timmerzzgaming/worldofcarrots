@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
 
 interface SettingRow {
@@ -16,11 +16,14 @@ const DIFFICULTIES = ['easy', 'medium', 'hard', 'expert']
 
 export default function EconomySettings() {
   const [settings, setSettings] = useState<Record<string, unknown>>({})
+  const [draft, setDraft] = useState<Record<string, unknown>>({})
+  const [dirtyKeys, setDirtyKeys] = useState<Set<string>>(new Set())
   const [loading, setLoading] = useState(true)
-  const [saving, setSaving] = useState<string | null>(null)
-  const [saved, setSaved] = useState<string | null>(null)
+  const [saving, setSaving] = useState(false)
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved' | 'error'>('idle')
   const [tab, setTab] = useState<Tab>('coins')
   const [expanded, setExpanded] = useState(true)
+  const saveTimeoutRef = useRef<ReturnType<typeof setTimeout>>()
 
   const fetchSettings = useCallback(async () => {
     if (!supabase) return
@@ -38,47 +41,65 @@ export default function EconomySettings() {
         map[row.key] = row.value
       }
       setSettings(map)
+      setDraft(map)
     }
     setLoading(false)
   }, [])
 
   useEffect(() => { fetchSettings() }, [fetchSettings])
 
-  async function saveSetting(key: string, value: unknown) {
-    if (!supabase) return
-    setSaving(key)
-    setSaved(null)
-    const session = await supabase.auth.getSession()
-    const token = session.data.session?.access_token
-    if (!token) { setSaving(null); return }
-
-    const res = await fetch('/api/admin/economy-settings', {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify({ key, value }),
-    })
-
-    setSaving(null)
-    if (res.ok) {
-      setSaved(key)
-      setSettings((prev) => ({ ...prev, [key]: value }))
-      setTimeout(() => setSaved(null), 2000)
-    }
+  function updateDraft(key: string, value: unknown) {
+    setDraft((prev) => ({ ...prev, [key]: value }))
+    setDirtyKeys((prev) => new Set(prev).add(key))
+    setSaveStatus('idle')
   }
 
-  function getVal<T>(key: string, fallback: T): T {
-    return (settings[key] as T) ?? fallback
-  }
-
-  function updateNested(settingKey: string, path: string[], value: number) {
-    const current = JSON.parse(JSON.stringify(settings[settingKey] ?? {}))
+  function updateDraftNested(settingKey: string, path: string[], value: number) {
+    const current = JSON.parse(JSON.stringify(draft[settingKey] ?? {}))
     let obj = current
     for (let i = 0; i < path.length - 1; i++) {
       obj = obj[path[i]]
     }
     obj[path[path.length - 1]] = value
-    saveSetting(settingKey, current)
+    updateDraft(settingKey, current)
   }
+
+  async function saveAllChanges() {
+    if (!supabase || dirtyKeys.size === 0) return
+    setSaving(true)
+    setSaveStatus('idle')
+
+    const session = await supabase.auth.getSession()
+    const token = session.data.session?.access_token
+    if (!token) { setSaving(false); return }
+
+    let allOk = true
+    for (const key of Array.from(dirtyKeys)) {
+      const res = await fetch('/api/admin/economy-settings', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ key, value: draft[key] }),
+      })
+      if (!res.ok) allOk = false
+    }
+
+    setSaving(false)
+    if (allOk) {
+      setSettings({ ...draft })
+      setDirtyKeys(new Set())
+      setSaveStatus('saved')
+      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current)
+      saveTimeoutRef.current = setTimeout(() => setSaveStatus('idle'), 3000)
+    } else {
+      setSaveStatus('error')
+    }
+  }
+
+  function getVal<T>(key: string, fallback: T): T {
+    return (draft[key] as T) ?? fallback
+  }
+
+  const hasChanges = dirtyKeys.size > 0
 
   if (!expanded) {
     return (
@@ -102,9 +123,26 @@ export default function EconomySettings() {
         <h2 id="economy-heading" className="text-lg font-headline font-bold text-geo-on-surface">
           Economy Settings
         </h2>
-        <button onClick={() => setExpanded(false)} className="text-geo-on-surface-dim text-sm hover:text-geo-on-surface">
-          ▼ Collapse
-        </button>
+        <div className="flex items-center gap-3">
+          {hasChanges && (
+            <span className="text-[10px] text-geo-tertiary-bright font-headline font-bold uppercase">
+              {dirtyKeys.size} unsaved {dirtyKeys.size === 1 ? 'change' : 'changes'}
+            </span>
+          )}
+          {saveStatus === 'saved' && (
+            <span className="text-[10px] text-green-400 font-headline font-bold uppercase">
+              ✓ Saved
+            </span>
+          )}
+          {saveStatus === 'error' && (
+            <span className="text-[10px] text-geo-error font-headline font-bold uppercase">
+              ✗ Error saving
+            </span>
+          )}
+          <button onClick={() => setExpanded(false)} className="text-geo-on-surface-dim text-sm hover:text-geo-on-surface">
+            ▼ Collapse
+          </button>
+        </div>
       </div>
 
       {loading ? (
@@ -158,7 +196,7 @@ export default function EconomySettings() {
                                   min={0}
                                   max={999}
                                   value={val}
-                                  onChange={(e) => updateNested('game_complete_rewards', [mode, diff], parseInt(e.target.value) || 0)}
+                                  onChange={(e) => updateDraftNested('game_complete_rewards', [mode, diff], parseInt(e.target.value) || 0)}
                                   className="w-14 px-1.5 py-0.5 rounded text-center bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface text-xs"
                                 />
                               </td>
@@ -172,22 +210,20 @@ export default function EconomySettings() {
               </div>
 
               {/* Per-correct multipliers */}
-              <SettingGrid
+              <DraftSettingGrid
                 label="Per-Correct Bonus (coins per correct answer)"
                 settingKey="per_correct_multipliers"
                 fields={DIFFICULTIES}
-                settings={settings}
-                onSave={saveSetting}
-                saving={saving}
-                saved={saved}
+                draft={draft}
+                onUpdate={updateDraft}
               />
 
               {/* Simple number settings */}
               <div className="grid grid-cols-2 gap-3">
-                <NumberSetting label="Star Bonus per Star" settingKey="star_bonus_per_star" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
-                <NumberSetting label="Perfect Score Multiplier" settingKey="perfect_score_multiplier" settings={settings} onSave={saveSetting} saving={saving} saved={saved} step={0.1} />
-                <NumberSetting label="No-Hints Bonus" settingKey="no_hints_bonus" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
-                <NumberSetting label="Hint Cost" settingKey="hint_cost" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
+                <DraftNumberSetting label="Star Bonus per Star" settingKey="star_bonus_per_star" draft={draft} onUpdate={updateDraft} />
+                <DraftNumberSetting label="Perfect Score Multiplier" settingKey="perfect_score_multiplier" draft={draft} onUpdate={updateDraft} step={0.1} />
+                <DraftNumberSetting label="No-Hints Bonus" settingKey="no_hints_bonus" draft={draft} onUpdate={updateDraft} />
+                <DraftNumberSetting label="Hint Cost" settingKey="hint_cost" draft={draft} onUpdate={updateDraft} />
               </div>
 
               {/* Speed bonus */}
@@ -201,7 +237,7 @@ export default function EconomySettings() {
                       value={(getVal<{ threshold: number; bonus: number }>('speed_bonus', { threshold: 20, bonus: 15 })).threshold}
                       onChange={(e) => {
                         const current = getVal<{ threshold: number; bonus: number }>('speed_bonus', { threshold: 20, bonus: 15 })
-                        saveSetting('speed_bonus', { ...current, threshold: parseInt(e.target.value) || 0 })
+                        updateDraft('speed_bonus', { ...current, threshold: parseInt(e.target.value) || 0 })
                       }}
                       className="w-16 px-1.5 py-1 rounded text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
                     />
@@ -213,7 +249,7 @@ export default function EconomySettings() {
                       value={(getVal<{ threshold: number; bonus: number }>('speed_bonus', { threshold: 20, bonus: 15 })).bonus}
                       onChange={(e) => {
                         const current = getVal<{ threshold: number; bonus: number }>('speed_bonus', { threshold: 20, bonus: 15 })
-                        saveSetting('speed_bonus', { ...current, bonus: parseInt(e.target.value) || 0 })
+                        updateDraft('speed_bonus', { ...current, bonus: parseInt(e.target.value) || 0 })
                       }}
                       className="w-16 px-1.5 py-1 rounded text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
                     />
@@ -226,23 +262,19 @@ export default function EconomySettings() {
           {/* XP Tab */}
           {tab === 'xp' && (
             <div className="space-y-4">
-              <SettingGrid
+              <DraftSettingGrid
                 label="Base XP per Mode"
                 settingKey="xp_base_per_mode"
                 fields={MODES}
-                settings={settings}
-                onSave={saveSetting}
-                saving={saving}
-                saved={saved}
+                draft={draft}
+                onUpdate={updateDraft}
               />
-              <SettingGrid
+              <DraftSettingGrid
                 label="XP Difficulty Multipliers"
                 settingKey="xp_difficulty_multipliers"
                 fields={DIFFICULTIES}
-                settings={settings}
-                onSave={saveSetting}
-                saving={saving}
-                saved={saved}
+                draft={draft}
+                onUpdate={updateDraft}
                 step={0.1}
               />
               <div>
@@ -260,7 +292,7 @@ export default function EconomySettings() {
                           onChange={(e) => {
                             const newArr = [...arr]
                             newArr[i] = parseInt(e.target.value) || 0
-                            saveSetting('xp_star_bonus', newArr)
+                            updateDraft('xp_star_bonus', newArr)
                           }}
                           className="w-14 px-1.5 py-1 rounded text-center text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
                         />
@@ -270,8 +302,8 @@ export default function EconomySettings() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <NumberSetting label="Daily Login XP" settingKey="daily_login_xp" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
-                <NumberSetting label="7-Day Streak XP Bonus" settingKey="daily_login_streak_xp_bonus_7" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
+                <DraftNumberSetting label="Daily Login XP" settingKey="daily_login_xp" draft={draft} onUpdate={updateDraft} />
+                <DraftNumberSetting label="7-Day Streak XP Bonus" settingKey="daily_login_streak_xp_bonus_7" draft={draft} onUpdate={updateDraft} />
               </div>
             </div>
           )}
@@ -338,7 +370,7 @@ export default function EconomySettings() {
                           onChange={(e) => {
                             const newArr = [...arr]
                             newArr[i] = parseInt(e.target.value) || 0
-                            saveSetting('daily_login_rewards', newArr)
+                            updateDraft('daily_login_rewards', newArr)
                           }}
                           className="w-14 px-1.5 py-1 rounded text-center text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
                         />
@@ -362,7 +394,7 @@ export default function EconomySettings() {
                           min={0}
                           value={bonuses[key] ?? 0}
                           onChange={(e) => {
-                            saveSetting('daily_login_streak_bonuses', { ...bonuses, [key]: parseInt(e.target.value) || 0 })
+                            updateDraft('daily_login_streak_bonuses', { ...bonuses, [key]: parseInt(e.target.value) || 0 })
                           }}
                           className="w-16 px-1.5 py-1 rounded text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
                         />
@@ -372,11 +404,34 @@ export default function EconomySettings() {
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-3">
-                <NumberSetting label="Daily Login XP" settingKey="daily_login_xp" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
-                <NumberSetting label="7-Day Streak XP Bonus" settingKey="daily_login_streak_xp_bonus_7" settings={settings} onSave={saveSetting} saving={saving} saved={saved} />
+                <DraftNumberSetting label="Daily Login XP" settingKey="daily_login_xp" draft={draft} onUpdate={updateDraft} />
+                <DraftNumberSetting label="7-Day Streak XP Bonus" settingKey="daily_login_streak_xp_bonus_7" draft={draft} onUpdate={updateDraft} />
               </div>
             </div>
           )}
+
+          {/* Save Changes button */}
+          <div className="mt-6 pt-4 border-t border-geo-outline-dim/20 flex items-center justify-end gap-3">
+            {hasChanges && (
+              <button
+                onClick={() => {
+                  setDraft({ ...settings })
+                  setDirtyKeys(new Set())
+                  setSaveStatus('idle')
+                }}
+                className="btn-ghost px-4 py-2 text-xs"
+              >
+                Discard
+              </button>
+            )}
+            <button
+              onClick={saveAllChanges}
+              disabled={!hasChanges || saving}
+              className={`btn-primary px-6 py-2 text-sm ${!hasChanges ? 'opacity-40 cursor-not-allowed' : ''}`}
+            >
+              {saving ? 'Saving...' : hasChanges ? `Save ${dirtyKeys.size} Change${dirtyKeys.size === 1 ? '' : 's'}` : 'All Saved'}
+            </button>
+          </div>
         </>
       )}
     </section>
@@ -384,56 +439,44 @@ export default function EconomySettings() {
 }
 
 // ---------------------------------------------------------------------------
-// Helper components
+// Helper components (draft-based, no auto-save)
 // ---------------------------------------------------------------------------
 
-function NumberSetting({ label, settingKey, settings, onSave, saving, saved, step }: {
+function DraftNumberSetting({ label, settingKey, draft, onUpdate, step }: {
   label: string
   settingKey: string
-  settings: Record<string, unknown>
-  onSave: (key: string, value: unknown) => void
-  saving: string | null
-  saved: string | null
+  draft: Record<string, unknown>
+  onUpdate: (key: string, value: unknown) => void
   step?: number
 }) {
-  const val = (settings[settingKey] as number) ?? 0
+  const val = (draft[settingKey] as number) ?? 0
   return (
     <div>
       <label className="text-[10px] text-geo-on-surface-dim font-headline uppercase tracking-widest">{label}</label>
-      <div className="flex items-center gap-1">
-        <input
-          type="number"
-          min={0}
-          step={step ?? 1}
-          value={val}
-          onChange={(e) => onSave(settingKey, parseFloat(e.target.value) || 0)}
-          className="w-20 px-1.5 py-1 rounded text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
-        />
-        {saving === settingKey && <span className="text-[10px] text-geo-on-surface-dim">Saving...</span>}
-        {saved === settingKey && <span className="text-[10px] text-green-400">Saved</span>}
-      </div>
+      <input
+        type="number"
+        min={0}
+        step={step ?? 1}
+        value={val}
+        onChange={(e) => onUpdate(settingKey, parseFloat(e.target.value) || 0)}
+        className="w-20 px-1.5 py-1 rounded text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
+      />
     </div>
   )
 }
 
-function SettingGrid({ label, settingKey, fields, settings, onSave, saving, saved, step }: {
+function DraftSettingGrid({ label, settingKey, fields, draft, onUpdate, step }: {
   label: string
   settingKey: string
   fields: string[]
-  settings: Record<string, unknown>
-  onSave: (key: string, value: unknown) => void
-  saving: string | null
-  saved: string | null
+  draft: Record<string, unknown>
+  onUpdate: (key: string, value: unknown) => void
   step?: number
 }) {
-  const obj = (settings[settingKey] as Record<string, number>) ?? {}
+  const obj = (draft[settingKey] as Record<string, number>) ?? {}
   return (
     <div>
-      <div className="flex items-center gap-2 mb-2">
-        <h3 className="text-xs font-headline font-bold text-geo-on-surface-dim uppercase tracking-widest">{label}</h3>
-        {saving === settingKey && <span className="text-[10px] text-geo-on-surface-dim">Saving...</span>}
-        {saved === settingKey && <span className="text-[10px] text-green-400">Saved</span>}
-      </div>
+      <h3 className="text-xs font-headline font-bold text-geo-on-surface-dim uppercase tracking-widest mb-2">{label}</h3>
       <div className="flex flex-wrap gap-2">
         {fields.map((field) => (
           <div key={field} className="text-center">
@@ -445,7 +488,7 @@ function SettingGrid({ label, settingKey, fields, settings, onSave, saving, save
               value={obj[field] ?? 0}
               onChange={(e) => {
                 const updated = { ...obj, [field]: parseFloat(e.target.value) || 0 }
-                onSave(settingKey, updated)
+                onUpdate(settingKey, updated)
               }}
               className="w-14 px-1.5 py-1 rounded text-center text-xs bg-geo-surface border border-geo-outline-dim/30 text-geo-on-surface"
             />
