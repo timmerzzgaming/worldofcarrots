@@ -4,7 +4,7 @@ const fr: Translations = {
   subtitle: 'World Of Carrots',
   testYourKnowledge: 'Testez vos connaissances en geographie !',
   comingSoon: 'Bientot',
-  'cat.mapGames': 'Jeux de carte',
+  'cat.mapGames': 'Jeu solo',
   'cat.mapGames.desc': 'Trouvez des pays, drapeaux et capitales sur la carte',
   'cat.trivia': 'Quiz & Trivia',
   'cat.trivia.desc': 'Testez vos connaissances en geographie',
@@ -352,6 +352,10 @@ const fr: Translations = {
   'stickerAlbum.loginRequired': 'Creez un compte pour collectionner des stickers',
   'home.stickerAlbum': 'Album de Stickers',
   'home.stickerAlbum.desc': 'Collectionnez les stickers de pays. Completez les continents pour de gros bonus!',
+
+  // Leaderboard
+  'home.leaderboard': 'Classement',
+  'home.leaderboard.desc': 'Decouvrez qui domine le classement hebdomadaire',
 
   // Multiplayer
   'mp.multiplayer': 'Multijoueur',

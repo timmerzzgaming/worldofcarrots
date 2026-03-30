@@ -4,7 +4,7 @@ export const en: Translations = {
   subtitle: 'World Of Carrots',
   testYourKnowledge: 'Test your geography knowledge!',
   comingSoon: 'Coming Soon',
-  'cat.mapGames': 'Map Games',
+  'cat.mapGames': 'Solo Play',
   'cat.mapGames.desc': 'Find countries, flags, and capitals on the map',
   'cat.trivia': 'Trivia & Quiz',
   'cat.trivia.desc': 'Test your knowledge with geography trivia',
@@ -355,6 +355,10 @@ export const en: Translations = {
   'stickerAlbum.loginRequired': 'Create an account to collect stickers',
   'home.stickerAlbum': 'Sticker Album',
   'home.stickerAlbum.desc': 'Collect country stickers from chests. Complete continents for huge bonuses!',
+
+  // Leaderboard
+  'home.leaderboard': 'Leaderboard',
+  'home.leaderboard.desc': 'See who tops the weekly rankings',
 
   // Multiplayer
   'mp.multiplayer': 'Multiplayer',

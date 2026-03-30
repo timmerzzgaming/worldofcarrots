@@ -389,6 +389,10 @@ export interface Translations {
   'home.stickerAlbum': string
   'home.stickerAlbum.desc': string
 
+  // Leaderboard
+  'home.leaderboard': string
+  'home.leaderboard.desc': string
+
   // Multiplayer
   'mp.multiplayer': string
   'mp.multiplayer.desc': string

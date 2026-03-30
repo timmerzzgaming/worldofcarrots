@@ -416,25 +416,57 @@ export default function HomePage() {
                   transition={{ duration: 0.25 }}
                   className="w-full space-y-6"
                 >
-                  {/* Daily Challenge + Leaderboard bar */}
-                  <div className="flex flex-col sm:flex-row gap-3 max-w-5xl mx-auto">
-                    <div className="flex-1">
-                      <DailyChallengeBanner onPlay={(mode, difficulty, seed) => router.push(prefixPath(`/game/daily?mode=${mode}&difficulty=${difficulty}&seed=${seed}`))} />
-                    </div>
-                    <button
-                      onClick={() => { playClick(); setShowLeaderboard(true) }}
-                      className="btn-ghost px-3 py-2 sm:px-5 sm:py-3 text-xs sm:text-sm flex items-center gap-2 shrink-0"
-                    >
-                      🏆 Leaderboard
-                    </button>
+                  {/* Daily Challenge bar */}
+                  <div className="max-w-5xl mx-auto">
+                    <DailyChallengeBanner onPlay={(mode, difficulty, seed) => router.push(prefixPath(`/game/daily?mode=${mode}&difficulty=${difficulty}&seed=${seed}`))} />
                   </div>
 
                   <div className="grid gap-3 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
-                  {/* Multiplayer — coming soon */}
+                  {/* 1. Solo Play (mapGames) */}
+                  {(() => {
+                    const cat = categories[0]
+                    const available = cat.modes.filter((m) => m.available).length
+                    const upcoming = cat.modes.filter((m) => !m.available).length
+                    return (
+                      <motion.button
+                        key={cat.id}
+                        onMouseEnter={() => playHover()}
+                        onClick={() => handleCategoryClick(cat.id)}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.05 }}
+                        className="group relative flex flex-row sm:flex-col items-center sm:items-center text-left sm:text-center p-3 sm:p-8 lg:p-10 glass-panel transition-all gap-3 sm:gap-0 hover:border-geo-primary hover:shadow-comic-lg cursor-pointer"
+                      >
+                        <div className="text-3xl sm:text-6xl lg:text-7xl shrink-0 sm:mb-5">{cat.icon}</div>
+                        <div className="flex flex-col sm:items-center min-w-0">
+                          <h2 className="text-base sm:text-2xl font-headline font-extrabold uppercase tracking-wide text-geo-on-surface group-hover:text-geo-primary transition-colors">
+                            {t(cat.titleKey)}
+                          </h2>
+                          <p className="text-geo-on-surface-dim mt-0.5 sm:mt-2 text-xs sm:text-base leading-relaxed">
+                            {t(cat.descKey)}
+                          </p>
+                          <div className="mt-1.5 sm:mt-4 flex flex-wrap gap-2 sm:gap-3 sm:justify-center text-xs sm:text-sm">
+                            {available > 0 && (
+                              <span className="bg-geo-primary text-black px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-headline font-bold">
+                                {available} {t('gamesAvailable')}
+                              </span>
+                            )}
+                            {upcoming > 0 && (
+                              <span className="bg-geo-primary text-black px-2 sm:px-3 py-0.5 sm:py-1 rounded-full font-headline font-bold">
+                                +{upcoming} {t('moreComingSoon')}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </motion.button>
+                    )
+                  })()}
+
+                  {/* 2. Multiplayer — coming soon */}
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.05 }}
+                    transition={{ delay: 0.1 }}
                     className="group relative flex flex-row sm:flex-col items-center sm:items-center text-left sm:text-center p-3 sm:p-8 lg:p-10 glass-panel opacity-50 cursor-not-allowed gap-3 sm:gap-0"
                   >
                     <span className="absolute -top-2 right-2 bg-geo-primary text-black text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
@@ -450,7 +482,9 @@ export default function HomePage() {
                       </p>
                     </div>
                   </motion.div>
-                  {categories.map((cat, i) => {
+
+                  {/* 3-5. Remaining categories (trivia, challenge, bonus) */}
+                  {categories.slice(1).map((cat, i) => {
                     const guestCatLocked = isGuest && cat.id !== 'mapGames'
                     const available = cat.modes.filter((m) => m.available).length
                     const upcoming = cat.modes.filter((m) => !m.available).length
@@ -462,7 +496,7 @@ export default function HomePage() {
                         disabled={guestCatLocked}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 * (i + 1) }}
+                        transition={{ delay: 0.1 * (i + 2) }}
                         className={`group relative flex flex-row sm:flex-col items-center sm:items-center text-left sm:text-center p-3 sm:p-8 lg:p-10 glass-panel transition-all gap-3 sm:gap-0 ${
                           guestCatLocked
                             ? 'opacity-50 cursor-not-allowed'
@@ -498,6 +532,26 @@ export default function HomePage() {
                       </motion.button>
                     )
                   })}
+
+                  {/* 6. Leaderboard */}
+                  <motion.button
+                    onMouseEnter={() => playHover()}
+                    onClick={() => { playClick(); setShowLeaderboard(true) }}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="group relative flex flex-row sm:flex-col items-center sm:items-center text-left sm:text-center p-3 sm:p-8 lg:p-10 glass-panel transition-all gap-3 sm:gap-0 hover:border-geo-primary hover:shadow-comic-lg cursor-pointer"
+                  >
+                    <div className="text-3xl sm:text-6xl lg:text-7xl shrink-0 sm:mb-5">🏆</div>
+                    <div className="flex flex-col sm:items-center min-w-0">
+                      <h2 className="text-base sm:text-2xl font-headline font-extrabold uppercase tracking-wide text-geo-on-surface group-hover:text-geo-primary transition-colors">
+                        {t('home.leaderboard')}
+                      </h2>
+                      <p className="text-geo-on-surface-dim mt-0.5 sm:mt-2 text-xs sm:text-base leading-relaxed">
+                        {t('home.leaderboard.desc')}
+                      </p>
+                    </div>
+                  </motion.button>
                   </div>
                   {isGuest && (
                     <p className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide">

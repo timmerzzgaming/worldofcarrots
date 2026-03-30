@@ -4,7 +4,7 @@ const zh: Translations = {
   subtitle: 'World Of Carrots',
   testYourKnowledge: '\u6d4b\u8bd5\u4f60\u7684\u5730\u7406\u77e5\u8bc6\uff01',
   comingSoon: '\u5373\u5c06\u63a8\u51fa',
-  'cat.mapGames': '\u5730\u56fe\u6e38\u620f',
+  'cat.mapGames': '\u5355\u4eba\u6e38\u620f',
   'cat.mapGames.desc': '\u5728\u5730\u56fe\u4e0a\u627e\u5230\u56fd\u5bb6\u3001\u56fd\u65d7\u548c\u9996\u90fd',
   'cat.trivia': '\u77e5\u8bc6\u95ee\u7b54',
   'cat.trivia.desc': '\u6d4b\u8bd5\u4f60\u7684\u5730\u7406\u77e5\u8bc6',
@@ -352,6 +352,10 @@ const zh: Translations = {
   'stickerAlbum.loginRequired': '\u521b\u5efa\u8d26\u6237\u6765\u6536\u96c6\u8d34\u7eb8',
   'home.stickerAlbum': '\u8d34\u7eb8\u76f8\u518c',
   'home.stickerAlbum.desc': '\u4ece\u5b9d\u7bb1\u6536\u96c6\u56fd\u5bb6\u8d34\u7eb8\u3002\u5b8c\u6210\u5927\u6d32\u83b7\u5f97\u5de8\u989d\u5956\u52b1\uff01',
+
+  // Leaderboard
+  'home.leaderboard': '\u6392\u884c\u699c',
+  'home.leaderboard.desc': '\u67e5\u770b\u8c01\u5728\u5468\u699c\u4e0a\u9886\u5148',
 
   // Multiplayer
   'mp.multiplayer': '\u591a\u4eba\u6e38\u620f',

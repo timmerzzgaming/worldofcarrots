@@ -4,7 +4,7 @@ const nl: Translations = {
   subtitle: 'World Of Carrots',
   testYourKnowledge: 'Test je aardrijkskundekennis!',
   comingSoon: 'Binnenkort',
-  'cat.mapGames': 'Kaartspellen',
+  'cat.mapGames': 'Solo spelen',
   'cat.mapGames.desc': 'Vind landen, vlaggen en hoofdsteden op de kaart',
   'cat.trivia': 'Quiz & Trivia',
   'cat.trivia.desc': 'Test je aardrijkskundekennis',
@@ -352,6 +352,10 @@ const nl: Translations = {
   'stickerAlbum.loginRequired': 'Maak een account aan om stickers te verzamelen',
   'home.stickerAlbum': 'Stickeralbum',
   'home.stickerAlbum.desc': 'Verzamel landenstickers uit kisten. Voltooi continenten voor grote bonussen!',
+
+  // Leaderboard
+  'home.leaderboard': 'Ranglijst',
+  'home.leaderboard.desc': 'Bekijk wie bovenaan de weekranglijst staat',
 
   // Multiplayer
   'mp.multiplayer': 'Multiplayer',
