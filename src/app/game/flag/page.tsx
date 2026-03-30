@@ -982,7 +982,7 @@ export default function FlagGamePage() {
           elapsed={elapsed}
           rewards={rewards}
           onPlayAgain={() => { reset(); usedAnyHintsRef.current = false; launchWithCountdown(handleStartGame) }}
-          onHome={() => { reset(); usedAnyHintsRef.current = false; stopMusic(); startMenuMusic() }}
+          onHome={() => { reset(); usedAnyHintsRef.current = false; stopMusic(); router.push(prefixPath('/')) }}
         />
       )}
 

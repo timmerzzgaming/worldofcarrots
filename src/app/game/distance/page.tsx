@@ -1062,7 +1062,7 @@ export default function DistanceGamePage() {
 
             {/* Action buttons */}
             <div className="flex gap-3">
-              <button onClick={() => { phaseRef.current = 'idle'; setPhase('idle'); clearAllOverlays(); stopMusic(); startMenuMusic() }} className="btn-ghost flex-1 py-3 text-sm">
+              <button onClick={() => { phaseRef.current = 'idle'; setPhase('idle'); clearAllOverlays(); stopMusic(); router.push(prefixPath('/')) }} className="btn-ghost flex-1 py-3 text-sm">
                 {t('backToMenu')}
               </button>
               <button onClick={() => { setPhase('idle'); launchWithCountdown(handleStartGame) }} className="btn-primary flex-1 py-3 text-sm">

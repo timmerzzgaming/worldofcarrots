@@ -927,7 +927,7 @@ export default function USStatesPage() {
                 {t('playAgain')}
               </button>
               <button
-                onClick={handleReset}
+                onClick={() => { handleReset(); stopMusic(); router.push(prefixPath('/')) }}
                 className="btn-ghost flex-1 py-3"
               >
                 {t('backToMenu')}

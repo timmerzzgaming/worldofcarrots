@@ -933,7 +933,7 @@ export default function ClickCountryPage() {
           elapsed={elapsed}
           rewards={rewards}
           onPlayAgain={() => launchWithCountdown(() => { reset(); startGame(selectedMode, selectedDifficulty, selectedRegion, selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined) })}
-          onHome={() => { reset(); stopMusic(); startMenuMusic() }}
+          onHome={() => { reset(); stopMusic(); router.push(prefixPath('/')) }}
         />
       )}
 
