@@ -702,69 +702,35 @@ export default function FlagGamePage() {
         style={{ visibility: (phase === 'idle' || phase === 'results') && !showCountdown ? 'hidden' : 'visible' }}
       />
 
-      {/* Desktop: Quit/Restart buttons (hidden on mobile) */}
+      {/* Quit/Restart buttons — top left on all screen sizes */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="hidden sm:flex fixed top-4 right-4 z-10 gap-2">
+        <div className="fixed top-12 left-2 sm:top-4 sm:left-4 z-20 flex gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
-            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+            className="px-3 py-2 sm:px-5 sm:py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
           >
             {t('quit')}
           </button>
           <button
             onClick={() => { playClick(); setShowRestartConfirm(true) }}
-            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-primary hover:border-geo-primary/30 transition-colors"
+            className="px-3 py-2 sm:px-5 sm:py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-primary hover:border-geo-primary/30 transition-colors"
           >
             {t('restart')}
           </button>
-          <ThemeToggle />
         </div>
       )}
 
-      {/* Mobile: Compact unified game HUD */}
+      {/* Lives + Score — bottom center */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="sm:hidden fixed top-0 left-0 right-0 z-10 px-2 pt-2">
-          <div className="glass-panel px-2 py-1.5 flex items-center gap-1.5">
-            {/* Quit & Restart icon buttons */}
-            <div className="flex gap-1 shrink-0">
-              <button
-                onClick={() => { playClick(); setShowQuitConfirm(true) }}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-error transition-colors"
-                aria-label={t('quit')}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-                  <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
-                </svg>
-              </button>
-              <button
-                onClick={() => { playClick(); setShowRestartConfirm(true) }}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-primary transition-colors"
-                aria-label={t('restart')}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-                  <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H4.598a.75.75 0 00-.75.75v3.634a.75.75 0 001.5 0v-2.033l.312.311a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm-10.625-3.85a5.5 5.5 0 019.201-2.465l.312.31H11.767a.75.75 0 000 1.5h3.634a.75.75 0 00.75-.75V2.535a.75.75 0 00-1.5 0v2.033l-.312-.31A7 7 0 002.627 7.394a.75.75 0 001.449.39z" clipRule="evenodd" />
-                </svg>
-              </button>
-              <ThemeToggle />
-            </div>
-
-            {/* Center: Progress */}
-            <div className="flex-1 min-w-0 text-center">
-              <span className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase">
-                {currentIndex + 1}/{questions.length}
-              </span>
-            </div>
-
-            {/* Right: Lives + Score */}
-            <div className="shrink-0 flex items-center gap-1.5">
-              <span className="text-sm font-headline font-extrabold text-geo-error tabular-nums">
-                {'♥'.repeat(lives)}
-                <span className="text-geo-outline">{'♡'.repeat(Math.max(0, 3 - lives))}</span>
-              </span>
-              <span className="text-sm font-headline font-extrabold text-geo-primary tabular-nums text-glow-primary">
-                {score}
-              </span>
-            </div>
+        <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10">
+          <div className="glass-panel px-4 py-2 sm:px-5 flex items-center gap-3">
+            <span className="text-sm sm:text-base font-headline font-extrabold text-geo-error tabular-nums">
+              {'♥'.repeat(lives)}
+              <span className="text-geo-outline">{'♡'.repeat(Math.max(0, 3 - lives))}</span>
+            </span>
+            <span className="text-sm sm:text-base font-headline font-extrabold text-geo-primary tabular-nums text-glow-primary">
+              {score}
+            </span>
           </div>
         </div>
       )}
