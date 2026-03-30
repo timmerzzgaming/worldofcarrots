@@ -71,8 +71,8 @@ export default function FlagQuestionCard({
         </div>
       </motion.div>
 
-      {/* Controls — bottom-left panel */}
-      <div className="fixed bottom-4 left-4 z-10">
+      {/* Controls — right edge, vertically centered */}
+      <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-10">
         <div className="glass-panel px-3 py-2 sm:px-4 sm:py-3 space-y-2 min-w-[160px]">
           {/* Continent hint */}
           <AnimatePresence>
