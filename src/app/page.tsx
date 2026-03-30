@@ -402,6 +402,9 @@ export default function HomePage() {
             <p className="text-geo-on-surface-dim text-base sm:text-lg font-body max-w-md mx-auto">
               {t('testYourKnowledge')}
             </p>
+            <p className="text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-widest mt-2">
+              Early Access — Demo
+            </p>
           </motion.div>
 
           {/* Animated view switching */}

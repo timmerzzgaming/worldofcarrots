@@ -19,10 +19,10 @@ export interface UnlockRequirement {
  */
 export const GAME_UNLOCK_REQUIREMENTS: Record<string, UnlockRequirement> = {
   '/game/click-country': { type: 'free', value: 0 },
-  '/game/flag':          { type: 'level', value: 3 },
-  '/game/distance':      { type: 'level', value: 5 },
-  '/game/us-states':     { type: 'level', value: 2 },
-  '/game/daily':         { type: 'level', value: 2 },
+  '/game/flag':          { type: 'free', value: 0 },
+  '/game/distance':      { type: 'free', value: 0 },
+  '/game/us-states':     { type: 'free', value: 0 },
+  '/game/daily':         { type: 'free', value: 0 },
 }
 
 /**
