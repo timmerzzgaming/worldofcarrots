@@ -394,7 +394,7 @@ export default function HomePage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
-            className="text-center mb-4 sm:mb-10 flex-shrink-0"
+            className="text-center mb-4 sm:mb-10 flex-shrink-0 pointer-events-none"
           >
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-headline font-bold text-geo-on-surface uppercase tracking-tight mb-2">
               World<span className="text-geo-primary">Of</span>Carrots
@@ -570,7 +570,7 @@ export default function HomePage() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ delay: 0.25, duration: 0.3 }}
-                        className="fixed top-7 left-2 sm:top-4 sm:left-4 z-30"
+                        className="fixed top-7 left-2 sm:top-4 sm:left-4 z-40"
                       >
                         <button
                           onClick={handleBack}
