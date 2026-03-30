@@ -391,6 +391,7 @@ export interface Translations {
 
   // Multiplayer
   'mp.multiplayer': string
+  'mp.multiplayer.desc': string
   'mp.multiMix': string
   'mp.createLobby': string
   'mp.joinByCode': string

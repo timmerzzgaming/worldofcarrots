@@ -355,6 +355,7 @@ const de: Translations = {
 
   // Multiplayer
   'mp.multiplayer': 'Mehrspieler',
+  'mp.multiplayer.desc': 'Fordere Freunde in Echtzeit heraus',
   'mp.multiMix': 'Flaggen, Laender und Hauptstaedte — alles gemischt!',
   'mp.createLobby': 'Lobby erstellen',
   'mp.joinByCode': 'Beitreten',

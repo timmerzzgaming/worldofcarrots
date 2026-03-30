@@ -355,6 +355,7 @@ const zh: Translations = {
 
   // Multiplayer
   'mp.multiplayer': '\u591a\u4eba\u6e38\u620f',
+  'mp.multiplayer.desc': '\u5b9e\u65f6\u6311\u6218\u597d\u53cb',
   'mp.multiMix': '\u56fd\u65d7\u3001\u56fd\u5bb6\u548c\u9996\u90fd\u2014\u2014\u5168\u90e8\u6df7\u5408\uff01',
   'mp.createLobby': '\u521b\u5efa\u623f\u95f4',
   'mp.joinByCode': '\u52a0\u5165',

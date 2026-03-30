@@ -446,7 +446,7 @@ export default function HomePage() {
                         {t('mp.multiplayer')}
                       </h2>
                       <p className="text-geo-on-surface-dim mt-0.5 sm:mt-2 text-xs sm:text-base leading-relaxed">
-                        {t('mp.multiplayer.desc') !== 'mp.multiplayer.desc' ? t('mp.multiplayer.desc') as string : 'Challenge friends in real-time'}
+                        {t('mp.multiplayer.desc')}
                       </p>
                     </div>
                   </motion.div>

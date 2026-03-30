@@ -358,6 +358,7 @@ export const en: Translations = {
 
   // Multiplayer
   'mp.multiplayer': 'Multiplayer',
+  'mp.multiplayer.desc': 'Challenge friends in real-time',
   'mp.multiMix': 'Flags, countries, and capitals — all mixed together!',
   'mp.createLobby': 'Create Lobby',
   'mp.joinByCode': 'Join',

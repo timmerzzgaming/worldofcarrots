@@ -355,6 +355,7 @@ const nl: Translations = {
 
   // Multiplayer
   'mp.multiplayer': 'Multiplayer',
+  'mp.multiplayer.desc': 'Daag vrienden uit in real-time',
   'mp.multiMix': 'Vlaggen, landen en hoofdsteden — alles gemixed!',
   'mp.createLobby': 'Lobby maken',
   'mp.joinByCode': 'Deelnemen',

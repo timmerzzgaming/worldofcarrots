@@ -355,6 +355,7 @@ const fr: Translations = {
 
   // Multiplayer
   'mp.multiplayer': 'Multijoueur',
+  'mp.multiplayer.desc': 'Defiez vos amis en temps reel',
   'mp.multiMix': 'Drapeaux, pays et capitales — tout melange!',
   'mp.createLobby': 'Creer un salon',
   'mp.joinByCode': 'Rejoindre',
