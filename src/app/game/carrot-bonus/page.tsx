@@ -229,7 +229,7 @@ export default function CarrotBonusPage() {
   }, [router, prefixPath])
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center px-3 sm:px-4 pt-6 sm:pt-8 pb-12">
+    <main className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-6">
       {/* Background glow */}
       <div className="fixed inset-0 bg-gradient-to-b from-geo-surface-high via-geo-bg to-geo-surface-highest opacity-60 pointer-events-none" />
 
@@ -237,11 +237,11 @@ export default function CarrotBonusPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed top-4 left-4 z-30"
+        className="fixed top-10 left-2 sm:top-4 sm:left-4 z-[60]"
       >
         <button
           onClick={handleBack}
-          className="btn-ghost px-4 py-2 text-sm flex items-center gap-2"
+          className="btn-ghost px-4 py-3 sm:px-4 sm:py-2 text-sm flex items-center gap-2"
           aria-label={t('back')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5" aria-hidden="true">
@@ -251,11 +251,14 @@ export default function CarrotBonusPage() {
         </button>
       </motion.div>
 
+      {/* Content panel */}
+      <div className="relative glass-panel p-5 sm:p-8 w-full max-w-xl z-10">
+
       {/* Title */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative text-center mb-4 sm:mb-6 z-10"
+        className="text-center mb-4 sm:mb-6"
       >
         <h1 className="text-3xl sm:text-5xl font-headline font-bold text-geo-on-surface uppercase tracking-tight">
           {t('carrotBonus.title')}
@@ -269,7 +272,7 @@ export default function CarrotBonusPage() {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="relative glass-panel px-5 py-2.5 mb-5 sm:mb-8 flex items-center gap-3 z-10"
+        className="glass-panel px-5 py-2.5 mb-5 sm:mb-8 flex items-center gap-3 mx-auto"
       >
         <img src="/images/carrot.svg" alt="" className="w-6 h-10" aria-hidden="true" />
         <span className="font-headline font-bold text-xl sm:text-2xl text-geo-on-surface">
@@ -287,7 +290,7 @@ export default function CarrotBonusPage() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="relative glass-panel border-geo-error px-4 py-2 mb-4 z-10"
+            className="glass-panel border-geo-error px-4 py-2 mb-4"
           >
             <p className="text-geo-error font-headline font-bold text-sm">{error}</p>
           </motion.div>
@@ -295,7 +298,7 @@ export default function CarrotBonusPage() {
       </AnimatePresence>
 
       {/* Animal cards */}
-      <div className="relative grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5 w-full max-w-xl z-10">
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5 w-full">
         {ANIMALS.map((animal, i) => {
           const prize = prizes.get(animal.id) ?? MIN_AMOUNT
           const isSelected = selectedAnimal === animal.id
@@ -452,7 +455,7 @@ export default function CarrotBonusPage() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0 }}
             transition={{ delay: 0.3, type: 'spring', stiffness: 300, damping: 20 }}
-            className="relative glass-panel px-6 py-5 sm:px-8 sm:py-6 mt-6 sm:mt-8 text-center z-10 max-w-md w-full"
+            className="glass-panel px-6 py-5 sm:px-8 sm:py-6 mt-6 text-center max-w-md w-full mx-auto"
           >
             {isJackpot && (
               <motion.div
@@ -525,16 +528,12 @@ export default function CarrotBonusPage() {
 
       {/* Guest prompt */}
       {isGuest && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="relative glass-panel px-5 py-3 mt-6 text-center z-10 max-w-md"
-        >
-          <p className="font-headline font-bold text-sm text-geo-secondary uppercase">
-            🔒 {t('carrotBonus.loginRequired')}
-          </p>
-        </motion.div>
+        <p className="font-headline font-bold text-sm text-geo-secondary uppercase text-center mt-4">
+          🔒 {t('carrotBonus.loginRequired')}
+        </p>
       )}
+
+      </div>{/* end content panel */}
     </main>
   )
 }

@@ -6,25 +6,29 @@
   <!-- Belly -->
   <ellipse cx="100" cy="182" rx="32" ry="34" fill="#FFFFFF"/>
   <!-- Head -->
-  <circle cx="100" cy="115" r="36" fill="#F0F0F0" stroke="#2D2D2D" stroke-width="3"/>
+  <circle cx="100" cy="108" r="36" fill="#F0F0F0" stroke="#2D2D2D" stroke-width="3"/>
   <!-- Cheeks -->
-  <circle cx="72" cy="122" r="8" fill="#FFB4B4" opacity="0.4"/>
-  <circle cx="128" cy="122" r="8" fill="#FFB4B4" opacity="0.4"/>
+  <circle cx="72" cy="112" r="8" fill="#FFB4B4" opacity="0.4"/>
+  <circle cx="128" cy="112" r="8" fill="#FFB4B4" opacity="0.4"/>
   <!-- Eyes -->
-  <ellipse cx="84" cy="108" rx="7" ry="8" fill="#2D2D2D"/>
-  <ellipse cx="116" cy="108" rx="7" ry="8" fill="#2D2D2D"/>
-  <circle cx="82" cy="105" r="2.5" fill="white"/>
-  <circle cx="114" cy="105" r="2.5" fill="white"/>
-  <!-- Carrot beak -->
-  <path d="M96 120 L100 148 L104 120 Z" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2" stroke-linejoin="round"/>
-  <!-- Beak stripes -->
-  <line x1="97.5" y1="128" x2="102.5" y2="128" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="98" y1="134" x2="102" y2="134" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
-  <line x1="98.5" y1="140" x2="101.5" y2="140" stroke="#E87830" stroke-width="1" stroke-linecap="round"/>
-  <!-- Beak green leaf tuft on top -->
-  <path d="M96 120 Q92 112 94 108" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-  <path d="M100 118 Q100 110 100 106" stroke="#66BB6A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-  <path d="M104 120 Q108 112 106 108" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="84" cy="100" rx="7" ry="8" fill="#2D2D2D"/>
+  <ellipse cx="116" cy="100" rx="7" ry="8" fill="#2D2D2D"/>
+  <circle cx="82" cy="97" r="2.5" fill="white"/>
+  <circle cx="114" cy="97" r="2.5" fill="white"/>
+  <!-- Big carrot beak — wide at top, pointy at bottom, clearly carrot-shaped -->
+  <path d="M90 114 Q92 112 100 112 Q108 112 110 114 L103 158 Q100 162 97 158 Z" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Beak stripes (horizontal lines like a real carrot) -->
+  <line x1="93" y1="122" x2="107" y2="122" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="94" y1="130" x2="106" y2="130" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="95" y1="138" x2="105" y2="138" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="96.5" y1="146" x2="103.5" y2="146" stroke="#E87830" stroke-width="1.2" stroke-linecap="round"/>
+  <line x1="97.5" y1="153" x2="102.5" y2="153" stroke="#E87830" stroke-width="1" stroke-linecap="round"/>
+  <!-- Green carrot leaves sprouting from top of beak -->
+  <path d="M94 114 Q86 100 90 92" stroke="#4CAF50" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M97 113 Q93 98 96 90" stroke="#66BB6A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M100 112 Q100 96 100 88" stroke="#4CAF50" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M103 113 Q107 98 104 90" stroke="#66BB6A" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M106 114 Q114 100 110 92" stroke="#4CAF50" stroke-width="3" fill="none" stroke-linecap="round"/>
   <!-- Wings -->
   <path d="M52 155 Q30 140 28 165 Q26 185 52 190" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2.5"/>
   <path d="M148 155 Q170 140 172 165 Q174 185 148 190" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2.5"/>

@@ -240,11 +240,11 @@ export default function StickerAlbumPage() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="fixed top-4 left-4 z-30"
+        className="fixed top-10 left-2 sm:top-4 sm:left-4 z-[60]"
       >
         <button
           onClick={handleBack}
-          className="btn-ghost px-4 py-2 text-sm flex items-center gap-2"
+          className="btn-ghost px-4 py-3 sm:px-4 sm:py-2 text-sm flex items-center gap-2"
           aria-label={t('back')}
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5" aria-hidden="true">
