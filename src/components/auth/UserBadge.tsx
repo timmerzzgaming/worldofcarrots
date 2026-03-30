@@ -46,26 +46,26 @@ export default function UserBadge() {
           <motion.button
             key="collapsed"
             onClick={() => { playClick(); setShowMenu(true) }}
-            className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-5 sm:py-3 rounded-xl bg-white border-[3px] border-geo-on-surface shadow-comic-sm hover:shadow-comic"
+            className="flex items-center gap-2 sm:gap-3 px-3 py-2 sm:px-6 sm:py-4 rounded-xl bg-white border-[3px] border-geo-on-surface shadow-comic-sm hover:shadow-comic"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
-            <span className="text-2xl sm:text-3xl">{user!.avatar}</span>
+            <span className="text-2xl sm:text-4xl">{user!.avatar}</span>
             <div className="flex flex-col items-start gap-0.5 sm:gap-1">
               <div className="flex items-center gap-1.5 sm:gap-2">
                 <LevelBadge level={user!.level} size="md" />
-                <span className="text-sm sm:text-base font-headline font-bold text-geo-on-surface">{user!.nickname}</span>
+                <span className="text-sm sm:text-lg font-headline font-bold text-geo-on-surface">{user!.nickname}</span>
               </div>
               <div className="flex items-center gap-2 sm:gap-3">
-                <span className="text-xs sm:text-sm font-headline font-bold text-geo-tertiary-bright">
+                <span className="text-xs sm:text-base font-headline font-bold text-geo-tertiary-bright">
                   💰 {user!.credits.toLocaleString()}
                 </span>
-                <span className="text-xs sm:text-sm font-headline font-bold text-orange-400">
+                <span className="text-xs sm:text-base font-headline font-bold text-orange-400">
                   🥕 {user!.carrots}
                 </span>
-                <span className="text-xs sm:text-sm font-headline font-bold text-geo-secondary">
+                <span className="text-xs sm:text-base font-headline font-bold text-geo-secondary">
                   ✨ {user!.xp.toLocaleString()}
                 </span>
               </div>

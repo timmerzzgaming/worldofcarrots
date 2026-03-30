@@ -24,7 +24,7 @@ import {
   SMALL_COUNTRIES_SOURCE, SMALL_COUNTRIES_CIRCLE_LAYER, SMALL_COUNTRIES_RING_LAYER,
   initialViewState,
 } from '@/lib/mapConfig'
-import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
+import { buildSmallCountryPoints, createFeatureStateSetter, zoomScaledCircleRadius } from '@/lib/mapHelpers'
 import { mapBgColor, countryLineColor, countryHoverColor, countryHoverLineColor, circleStrokeColor, continentFillExpression } from '@/lib/theme'
 import StarRating from '@/components/credits/StarRating'
 import LevelBadge from '@/components/xp/LevelBadge'
@@ -134,6 +134,9 @@ export default function DailyChallengePage() {
           zoom: initialViewState.zoom,
           attributionControl: false,
           renderWorldCopies: true,
+          dragRotate: false,
+          pitchWithRotate: false,
+          touchPitch: false,
         })
 
         map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
@@ -164,11 +167,11 @@ export default function DailyChallengePage() {
               ],
               'line-width': [
                 'case',
-                ['boolean', ['feature-state', 'correct'], false], 3,
-                ['boolean', ['feature-state', 'wrong'], false], 3,
-                ['boolean', ['feature-state', 'target'], false], 3,
-                ['boolean', ['feature-state', 'hover'], false], 2,
-                1.2,
+                ['boolean', ['feature-state', 'correct'], false], 4.5,
+                ['boolean', ['feature-state', 'wrong'], false], 4.5,
+                ['boolean', ['feature-state', 'target'], false], 4.5,
+                ['boolean', ['feature-state', 'hover'], false], 3.5,
+                3,
               ],
             },
           })
@@ -184,12 +187,12 @@ export default function DailyChallengePage() {
           map.addSource(SMALL_COUNTRIES_SOURCE, { type: 'geojson', data: smallPoints })
           map.addLayer({
             id: SMALL_COUNTRIES_CIRCLE_LAYER, type: 'circle', source: SMALL_COUNTRIES_SOURCE,
-            paint: { 'circle-radius': ['get', 'radius'], 'circle-color': circleStrokeColor(), 'circle-opacity': 0.12 },
+            paint: { 'circle-radius': zoomScaledCircleRadius(), 'circle-color': circleStrokeColor(), 'circle-opacity': 0.12 },
           })
           map.addLayer({
             id: SMALL_COUNTRIES_RING_LAYER, type: 'circle', source: SMALL_COUNTRIES_SOURCE,
             paint: {
-              'circle-radius': ['get', 'radius'], 'circle-color': 'transparent',
+              'circle-radius': zoomScaledCircleRadius(), 'circle-color': 'transparent',
               'circle-stroke-width': 2,
               'circle-stroke-color': [
                 'case',
@@ -553,7 +556,7 @@ export default function DailyChallengePage() {
           <div className="hidden sm:flex fixed top-4 right-4 z-10">
             <button
               onClick={() => { playClick(); setShowQuitConfirm(true) }}
-              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
             >
               {t('quit')}
             </button>

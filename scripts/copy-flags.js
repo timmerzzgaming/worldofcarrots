@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// 197 countries: 193 UN members + Vatican City + Palestine + Taiwan + Kosovo
+// 199 countries: 193 UN members + Vatican City + Palestine + Taiwan + Kosovo + Greenland + Western Sahara
 const COUNTRIES = [
   { code: "af", name: "Afghanistan" },
   { code: "al", name: "Albania" },
@@ -70,6 +70,7 @@ const COUNTRIES = [
   { code: "de", name: "Germany" },
   { code: "gh", name: "Ghana" },
   { code: "gr", name: "Greece" },
+  { code: "gl", name: "Greenland" },
   { code: "gd", name: "Grenada" },
   { code: "gt", name: "Guatemala" },
   { code: "gn", name: "Guinea" },
@@ -202,6 +203,9 @@ const COUNTRIES = [
   // Commonly included
   { code: "tw", name: "Taiwan" },
   { code: "xk", name: "Kosovo" },
+  // Territories
+  { code: "gl", name: "Greenland" },
+  { code: "eh", name: "Western Sahara" },
 ];
 
 const SRC_4x3 = path.join(__dirname, "..", "node_modules", "flag-icons", "flags", "4x3");

@@ -359,6 +359,7 @@ const zh: Translations = {
   'animal.donkey': '\u9a74',
   'animal.pig': '\u732a',
   'animal.carrotBird': '\u80e1\u841d\u535c\u9e1f',
+  'animal.hamster': '\u4ed3\u9f20',
 
   // Daily Challenge
   'daily.challenge': '\u6bcf\u65e5\u6311\u6218',

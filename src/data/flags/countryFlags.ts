@@ -1,7 +1,7 @@
 /**
  * Mapping from ISO 3166-1 alpha-2 codes to country flag SVG paths.
  * Flags sourced from flag-icons (MIT license): https://github.com/lipis/flag-icons
- * Covers 197 countries: 193 UN members + Vatican City + Palestine + Taiwan + Kosovo.
+ * Covers 199 countries: 193 UN members + Vatican City + Palestine + Taiwan + Kosovo + Greenland + Western Sahara.
  */
 
 export type FlagRatio = "4x3" | "1x1";
@@ -55,7 +55,7 @@ function resolveIsoA2(
   return NAME_OVERRIDES[name] ?? null;
 }
 
-/** All 197 country ISO alpha-2 codes with names. */
+/** All 199 country ISO alpha-2 codes with names. */
 export const COUNTRY_FLAGS = [
   { code: "af", name: "Afghanistan" },
   { code: "al", name: "Albania" },
@@ -124,6 +124,7 @@ export const COUNTRY_FLAGS = [
   { code: "de", name: "Germany" },
   { code: "gh", name: "Ghana" },
   { code: "gr", name: "Greece" },
+  { code: "gl", name: "Greenland" },
   { code: "gd", name: "Grenada" },
   { code: "gt", name: "Guatemala" },
   { code: "gn", name: "Guinea" },
@@ -254,6 +255,7 @@ export const COUNTRY_FLAGS = [
   { code: "ps", name: "Palestine" },
   { code: "tw", name: "Taiwan" },
   { code: "xk", name: "Kosovo" },
+  { code: "eh", name: "Western Sahara" },
 ] as const;
 
 export type CountryCode = (typeof COUNTRY_FLAGS)[number]["code"];

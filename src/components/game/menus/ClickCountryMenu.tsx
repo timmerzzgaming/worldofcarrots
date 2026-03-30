@@ -25,8 +25,29 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
   const [selectedRegion, setSelectedRegion] = useState('World')
   const [borderlessTimed, setBorderlessTimed] = useState(true)
 
+  const startButton = (
+    <button
+      onClick={() => {
+        onStartGame(
+          selectedMode,
+          selectedDifficulty,
+          selectedRegion,
+          selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined,
+        )
+      }}
+      className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
+    >
+      {t('startGame')}
+    </button>
+  )
+
   return (
     <>
+      {/* Mobile: Start Game at top */}
+      <div className="sm:hidden mb-4">
+        {startButton}
+      </div>
+
       {/* Game modes */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
         {(Object.values(GAME_MODES) as GameModeConfig[]).filter((m) => m.mode !== 'flag' && m.mode !== 'distance').filter((m) => !isGuest || m.mode === 'classic').map((m) => (
@@ -146,20 +167,9 @@ export default function ClickCountryMenu({ onStartGame }: ClickCountryMenuProps)
         </div>
       )}
 
-      <div className="sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
-        <button
-          onClick={() => {
-            onStartGame(
-              selectedMode,
-              selectedDifficulty,
-              selectedRegion,
-              selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined,
-            )
-          }}
-          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
-        >
-          {t('startGame')}
-        </button>
+      {/* Desktop: Start Game at bottom */}
+      <div className="hidden sm:block sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
+        {startButton}
       </div>
     </>
   )

@@ -5,6 +5,18 @@ import { type Difficulty, filterByDifficulty } from '@/lib/countryDifficulty'
 
 const LIVES_PER_LIFE_BACK = 10
 
+/** Territories that should be accepted as their parent country (bidirectional) */
+const TERRITORY_ALIASES: Record<string, string> = {
+  'Greenland': 'Denmark',
+  'Denmark': 'Greenland',
+}
+
+function isCorrectAnswer(selected: string | null, expected: string): boolean {
+  if (selected === expected) return true
+  if (!selected) return false
+  return TERRITORY_ALIASES[selected] === expected
+}
+
 /** Per-question time adjusted by difficulty (for modes that have a timer) */
 const DIFFICULTY_TIME: Record<string, number> = {
   easy: 20,
@@ -118,7 +130,7 @@ export const useGameStore = create<GameStore>((set, get) => ({
   submitAnswer: (selectedCountryName) => {
     const { questions, currentIndex, timeRemaining, modeConfig, answers, score, elapsed, correctCountries, lives, streak, mode } = get()
     const question = questions[currentIndex]
-    const correct = selectedCountryName === question.country.name
+    const correct = isCorrectAnswer(selectedCountryName, question.country.name)
 
     const perQ = modeConfig.perQuestionTime
     const timeUsed = perQ ? perQ - timeRemaining : 0

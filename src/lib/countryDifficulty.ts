@@ -67,7 +67,7 @@ const TIER_3 = new Set([
   'Sierra Leone', 'Liberia', 'Guinea', 'Gambia', 'Guinea-Bissau',
   'Central African Republic', 'Gabon', 'Eritrea', 'Rwanda', 'Burundi',
   'Malawi', 'Namibia', 'Botswana', 'Lesotho', 'Eswatini',
-  'Fiji', 'Bahamas',
+  'Fiji', 'Bahamas', 'Western Sahara',
   'Luxembourg', 'Cyprus', 'Malta', 'Singapore',
   'Barbados', 'Mauritius',
 ])
@@ -108,7 +108,7 @@ export const DIFFICULTIES: { value: Difficulty; label: string; description: stri
   { value: 'easy', label: 'Easy', description: '~47 well-known countries' },
   { value: 'medium', label: 'Medium', description: '~107 countries' },
   { value: 'hard', label: 'Hard', description: '~162 countries' },
-  { value: 'expert', label: 'Expert', description: 'All 197 countries' },
+  { value: 'expert', label: 'Expert', description: 'All 199 countries' },
 ]
 
 const MIN_POOL_SIZE = 10
@@ -129,9 +129,9 @@ export function filterByDifficulty(countryNames: string[], difficulty: Difficult
 
 /** Precomputed country counts per region × difficulty (based on Natural Earth 50m data). */
 export const COUNTRY_COUNTS: Record<string, Record<Difficulty, number>> = {
-  World:    { easy: 46, medium: 125, hard: 152, expert: 197 },
-  Africa:   { easy: 7,  medium: 19,  hard: 43,  expert: 54 },
-  Americas: { easy: 9,  medium: 26,  hard: 26,  expert: 35 },
+  World:    { easy: 47, medium: 126, hard: 154, expert: 199 },
+  Africa:   { easy: 7,  medium: 19,  hard: 44,  expert: 55 },
+  Americas: { easy: 10, medium: 27,  hard: 27,  expert: 36 },
   Asia:     { easy: 13, medium: 41,  hard: 43,  expert: 49 },
   Europe:   { easy: 14, medium: 35,  hard: 36,  expert: 45 },
   Oceania:  { easy: 3,  medium: 4,   hard: 4,   expert: 14 },

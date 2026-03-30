@@ -39,7 +39,7 @@ import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playHintUsed, playSkip, playHintEarned, playTick, playClick, startMusic, stopMusic, startMenuMusic, warmUpAudio } from '@/lib/sounds'
 import { mapBgColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor, continentFillExpression } from '@/lib/theme'
-import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
+import { buildSmallCountryPoints, createFeatureStateSetter, zoomScaledCircleRadius } from '@/lib/mapHelpers'
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
 import ThemeToggle from '@/components/ThemeToggle'
 import ConfirmDialog from '@/components/game/ConfirmDialog'
@@ -79,6 +79,7 @@ export default function FlagGamePage() {
   // Flag game-specific state
   const [hintsRemaining, setHintsRemaining] = useState(INITIAL_HINTS)
   const [hintLevel, setHintLevel] = useState(0) // 0-3 for current question
+  const [showMobileHints, setShowMobileHints] = useState(false)
   const [eliminatedCountries, setEliminatedCountries] = useState<Set<string>>(new Set())
   const [correctStreak, setCorrectStreak] = useState(0) // separate from store streak for hint earning
   const [hintBonusShown, setHintBonusShown] = useState(false)
@@ -313,7 +314,9 @@ export default function FlagGamePage() {
           zoom: initialViewState.zoom,
           attributionControl: false,
           renderWorldCopies: true,
-
+          dragRotate: false,
+          pitchWithRotate: false,
+          touchPitch: false,
         })
 
         map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
@@ -342,9 +345,7 @@ export default function FlagGamePage() {
                   ['boolean', ['feature-state', 'solved'], false], '#86efac',
                   ['boolean', ['feature-state', 'eliminated'], false], '#9CA3AF',
                   ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
-                  ['match', ['get', 'REGION_UN'],
-                    'Africa', '#FFD93D', 'Americas', '#4ECDC4', 'Asia', '#FF6B6B',
-                    'Europe', '#A855F7', 'Oceania', '#4ADE80', '#FFCC66'],
+                  '#FFFFFF',
                 ],
                 'fill-opacity': [
                   'case',
@@ -371,11 +372,11 @@ export default function FlagGamePage() {
                 ],
                 'line-width': [
                   'case',
-                  ['boolean', ['feature-state', 'correct'], false], 3,
-                  ['boolean', ['feature-state', 'wrong'], false], 3,
-                  ['boolean', ['feature-state', 'target'], false], 3,
-                  ['boolean', ['feature-state', 'hover'], false], 2,
-                  1.2,
+                  ['boolean', ['feature-state', 'correct'], false], 4.5,
+                  ['boolean', ['feature-state', 'wrong'], false], 4.5,
+                  ['boolean', ['feature-state', 'target'], false], 4.5,
+                  ['boolean', ['feature-state', 'hover'], false], 3.5,
+                  3,
                 ],
               },
             })
@@ -398,7 +399,7 @@ export default function FlagGamePage() {
               type: 'circle',
               source: SMALL_COUNTRIES_SOURCE,
               paint: {
-                'circle-radius': ['get', 'radius'],
+                'circle-radius': zoomScaledCircleRadius(),
                 'circle-color': circleStrokeColor(),
                 'circle-opacity': 0.12,
               },
@@ -409,7 +410,7 @@ export default function FlagGamePage() {
               type: 'circle',
               source: SMALL_COUNTRIES_SOURCE,
               paint: {
-                'circle-radius': ['get', 'radius'],
+                'circle-radius': zoomScaledCircleRadius(),
                 'circle-color': 'transparent',
                 'circle-stroke-width': [
                   'case',
@@ -704,18 +705,27 @@ export default function FlagGamePage() {
 
       {/* Quit/Restart buttons — top left on all screen sizes */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="fixed top-12 left-2 sm:top-4 sm:left-4 z-[60] flex gap-2">
+        <div className="fixed top-12 left-2 sm:top-4 sm:left-4 z-[60] flex gap-1.5 sm:gap-2">
+          {/* Mobile: small icon buttons */}
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
-            className="px-3 py-2 sm:px-5 sm:py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+            className="w-8 h-8 sm:w-auto sm:h-auto sm:px-5 sm:py-3 flex items-center justify-center rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+            aria-label={t('quit')}
           >
-            {t('quit')}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 sm:hidden" aria-hidden="true">
+              <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+            </svg>
+            <span className="hidden sm:inline">{t('quit')}</span>
           </button>
           <button
             onClick={() => { playClick(); setShowRestartConfirm(true) }}
-            className="px-3 py-2 sm:px-5 sm:py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-primary hover:border-geo-primary/30 transition-colors"
+            className="w-8 h-8 sm:w-auto sm:h-auto sm:px-5 sm:py-3 flex items-center justify-center rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface sm:text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-on-surface hover:border-geo-on-surface/30 transition-colors"
+            aria-label={t('restart')}
           >
-            {t('restart')}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4 sm:hidden" aria-hidden="true">
+              <path fillRule="evenodd" d="M15.312 11.424a5.5 5.5 0 01-9.201 2.466l-.312-.311h2.433a.75.75 0 000-1.5H4.598a.75.75 0 00-.75.75v3.634a.75.75 0 001.5 0v-2.033l.312.311a7 7 0 0011.712-3.138.75.75 0 00-1.449-.39zm-10.624-2.85a5.5 5.5 0 019.201-2.466l.312.311H11.77a.75.75 0 000 1.5h3.634a.75.75 0 00.75-.75V3.535a.75.75 0 00-1.5 0v2.033l-.312-.311A7 7 0 002.63 8.395a.75.75 0 001.45.39l-.001.001z" clipRule="evenodd" />
+            </svg>
+            <span className="hidden sm:inline">{t('restart')}</span>
           </button>
         </div>
       )}
@@ -766,10 +776,9 @@ export default function FlagGamePage() {
             />
           </div>
 
-          {/* Hint/Skip controls — right edge, vertically centered */}
-          <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-[55]">
-            <div className="glass-panel px-3 py-2 sm:px-4 sm:py-3 space-y-2 min-w-[140px] sm:min-w-[160px]">
-              {/* Continent hint */}
+          {/* Desktop: Hint/Skip controls — right edge, vertically centered */}
+          <div className="hidden sm:block fixed right-4 top-1/2 -translate-y-1/2 z-[55]">
+            <div className="glass-panel px-4 py-3 space-y-2 min-w-[160px]">
               {hintLevel >= 1 && continentDisplay && (
                 <div>
                   <span className="inline-block px-3 py-1 rounded-full bg-geo-secondary/20 border-2 border-geo-secondary/40 text-geo-secondary text-xs font-headline font-bold uppercase">
@@ -777,13 +786,11 @@ export default function FlagGamePage() {
                   </span>
                 </div>
               )}
-
-              {/* Hint button + counter */}
               <div className="flex items-center gap-2">
                 {hintsRemaining > 0 && hintLevel < 3 && (
                   <button
                     onClick={handleUseHint}
-                    className="px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider transition-all border-2 bg-geo-tertiary/10 border-geo-tertiary/40 text-geo-on-surface hover:bg-geo-tertiary/20"
+                    className="px-3 py-1.5 rounded-full text-xs font-headline font-bold uppercase tracking-wider transition-all border-2 bg-geo-tertiary/10 border-geo-tertiary/40 text-geo-on-surface hover:bg-geo-tertiary/20"
                   >
                     {t((['hint.revealContinent', 'hint.eliminateLookalikes', 'hint.narrowDown'] as const)[hintLevel])}
                   </button>
@@ -792,12 +799,10 @@ export default function FlagGamePage() {
                   {hintsRemaining} {hintsRemaining !== 1 ? t('hints') : t('hint')}
                 </span>
               </div>
-
-              {/* Skip */}
               <div className="flex items-center gap-2">
                 <button
                   onClick={handleSkip}
-                  className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider border-2 border-geo-outline/30 text-geo-on-surface-dim hover:text-geo-primary hover:border-geo-primary/40 transition-colors"
+                  className="px-3 py-1 rounded-full text-xs font-headline font-bold uppercase tracking-wider border-2 border-geo-outline/30 text-geo-on-surface-dim hover:text-geo-primary hover:border-geo-primary/40 transition-colors"
                 >
                   {t('skip')}
                 </button>
@@ -808,6 +813,45 @@ export default function FlagGamePage() {
                 )}
               </div>
             </div>
+          </div>
+
+          {/* Mobile: Small hint icon button — bottom right */}
+          <div className="sm:hidden fixed right-2 bottom-20 z-[55]">
+            <button
+              onClick={() => setShowMobileHints(!showMobileHints)}
+              className="w-10 h-10 rounded-full glass-panel flex items-center justify-center border-2 border-geo-tertiary/40"
+              aria-label="Hints"
+            >
+              <span className="text-lg">💡</span>
+            </button>
+            {showMobileHints && (
+              <div className="absolute bottom-12 right-0 glass-panel px-3 py-2 space-y-2 min-w-[160px]">
+                {hintLevel >= 1 && continentDisplay && (
+                  <span className="inline-block px-2 py-0.5 rounded-full bg-geo-secondary/20 border border-geo-secondary/40 text-geo-secondary text-[10px] font-headline font-bold uppercase">
+                    {t(`continent.${continentDisplay}` as keyof Translations)}
+                  </span>
+                )}
+                <div className="flex items-center gap-2">
+                  {hintsRemaining > 0 && hintLevel < 3 && (
+                    <button
+                      onClick={() => { handleUseHint(); setShowMobileHints(false) }}
+                      className="px-2 py-1 rounded-full text-[10px] font-headline font-bold uppercase tracking-wider transition-all border-2 bg-geo-tertiary/10 border-geo-tertiary/40 text-geo-on-surface hover:bg-geo-tertiary/20"
+                    >
+                      {t((['hint.revealContinent', 'hint.eliminateLookalikes', 'hint.narrowDown'] as const)[hintLevel])}
+                    </button>
+                  )}
+                  <span className={`text-[10px] font-headline font-bold uppercase ${hintsRemaining > 0 ? 'text-geo-tertiary' : 'text-geo-on-surface-dim'}`}>
+                    {hintsRemaining}
+                  </span>
+                </div>
+                <button
+                  onClick={() => { handleSkip(); setShowMobileHints(false) }}
+                  className="px-2 py-1 rounded-full text-[10px] font-headline font-bold uppercase tracking-wider border-2 border-geo-outline/30 text-geo-on-surface-dim hover:text-geo-primary hover:border-geo-primary/40 transition-colors"
+                >
+                  {t('skip')}
+                </button>
+              </div>
+            )}
           </div>
         </>
       )}

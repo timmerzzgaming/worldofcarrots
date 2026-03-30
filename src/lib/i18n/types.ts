@@ -395,6 +395,7 @@ export interface Translations {
   'animal.donkey': string
   'animal.pig': string
   'animal.carrotBird': string
+  'animal.hamster': string
 
   // Daily Challenge
   'daily.challenge': string

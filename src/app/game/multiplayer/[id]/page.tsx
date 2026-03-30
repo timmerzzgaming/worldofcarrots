@@ -54,7 +54,7 @@ import {
   initialViewState,
 } from '@/lib/mapConfig'
 import { mapBgColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor } from '@/lib/theme'
-import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
+import { buildSmallCountryPoints, createFeatureStateSetter, zoomScaledCircleRadius } from '@/lib/mapHelpers'
 import { haversineDistance } from '@/lib/capitals'
 import { normalizeDistance, distanceToScore } from '@/lib/distanceScoring'
 import PlayerList from '@/components/multiplayer/PlayerList'
@@ -371,6 +371,7 @@ export default function MultiplayerLobbyPage() {
         center: initialViewState.center,
         zoom: initialViewState.zoom,
         attributionControl: false,
+        renderWorldCopies: true,
         dragRotate: false,
         touchPitch: false,
         pitchWithRotate: false,
@@ -408,7 +409,7 @@ export default function MultiplayerLobbyPage() {
           source: COUNTRIES_SOURCE,
           paint: {
             'line-color': countryLineColor(),
-            'line-width': 0.8,
+            'line-width': 3,
           },
         })
 
@@ -425,7 +426,7 @@ export default function MultiplayerLobbyPage() {
           type: 'circle',
           source: SMALL_COUNTRIES_SOURCE,
           paint: {
-            'circle-radius': ['get', 'radius'],
+            'circle-radius': zoomScaledCircleRadius(),
             'circle-color': [
               'case',
               ['boolean', ['feature-state', 'correct'], false], '#22c55e',
@@ -441,7 +442,7 @@ export default function MultiplayerLobbyPage() {
           type: 'circle',
           source: SMALL_COUNTRIES_SOURCE,
           paint: {
-            'circle-radius': ['get', 'radius'],
+            'circle-radius': zoomScaledCircleRadius(),
             'circle-color': 'transparent',
             'circle-stroke-color': circleStrokeColor(),
             'circle-stroke-width': 1.5,

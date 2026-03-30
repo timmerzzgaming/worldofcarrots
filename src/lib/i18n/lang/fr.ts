@@ -359,6 +359,7 @@ const fr: Translations = {
   'animal.donkey': 'Ane',
   'animal.pig': 'Cochon',
   'animal.carrotBird': 'Oiseau-carotte',
+  'animal.hamster': 'Hamster',
 
   // Daily Challenge
   'daily.challenge': 'Defi Quotidien',

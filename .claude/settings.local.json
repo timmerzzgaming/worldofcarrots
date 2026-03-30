@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(grep -E \"style=|width:|height:|font-size:\" /c/gamedev/worldofcarrots/src/app/game/*.tsx /c/gamedev/worldofcarrots/src/components/**/*.tsx)",
+      "Bash(npm run:*)"
     ]
   }
 }

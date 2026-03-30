@@ -11,6 +11,7 @@ const ANIMAL_IMAGES: Record<string, string> = {
   donkey: '/images/animals/donkey-small.svg',
   pig: '/images/animals/pig-small.svg',
   'carrot-bird': '/images/animals/carrot-bird-small.svg',
+  hamster: '/images/animals/hamster-small.svg',
 }
 
 const ITEMS = [
@@ -26,6 +27,7 @@ const ITEMS = [
   { type: 'pig', x: 30, y: 15, rotate: 0 },
   { type: 'carrot', x: 92, y: 88, rotate: 40 },
   { type: 'carrot', x: 15, y: 35, rotate: -15 },
+  { type: 'hamster', x: 50, y: 50, rotate: 0 },
 ]
 
 export default function FloatingFlags() {

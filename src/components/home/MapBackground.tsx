@@ -42,6 +42,7 @@ export default function MapBackground() {
           zoom: 1.5,
           attributionControl: false,
           interactive: false,
+          renderWorldCopies: false,
         })
 
         map.on('load', () => {
@@ -75,16 +76,19 @@ export default function MapBackground() {
               source: COUNTRIES_SOURCE,
               paint: {
                 'line-color': '#2D2D2D',
-                'line-width': 1.5,
+                'line-width': 3,
                 'line-opacity': 0.4,
               },
             })
 
-            // Slow continuous drift
+            // Slow oscillating drift (bounded, no world copies)
             let lng = initialViewState.center[0]
+            let direction = 1
             const drift = () => {
               if (cancelled) return
-              lng += 0.015
+              lng += 0.015 * direction
+              if (lng > 60) direction = -1
+              if (lng < -40) direction = 1
               map.setCenter([lng, initialViewState.center[1]])
               requestAnimationFrame(drift)
             }

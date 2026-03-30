@@ -32,8 +32,10 @@ export default function RootLayout({
       <body className={`${fredoka.variable} ${nunito.variable} font-body bg-geo-bg text-geo-on-surface antialiased`}>
         <Providers>
           <ErrorBoundary>
-            <div className="fixed top-0 left-0 right-0 z-[100] bg-geo-primary text-white text-center text-[10px] sm:text-xs font-headline font-bold py-0.5 sm:py-1">
-              Game under development — you WILL encounter bugs!
+            <div className="fixed top-0 left-0 right-0 z-[100] flex justify-center pointer-events-none">
+              <div className="bg-geo-primary text-white text-center text-[10px] sm:text-xs font-headline font-bold py-0.5 sm:py-1 px-4 sm:px-6 rounded-b-lg pointer-events-auto">
+                Game under development — you WILL encounter bugs!
+              </div>
             </div>
             <div className="pt-5 sm:pt-6">
               <TopBar />

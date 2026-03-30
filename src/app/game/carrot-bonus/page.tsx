@@ -23,7 +23,7 @@ import {
   stopCasinoMusic,
 } from '@/lib/casinoSounds'
 
-type Animal = 'rabbit' | 'horse' | 'donkey' | 'pig' | 'carrot-bird'
+type Animal = 'rabbit' | 'horse' | 'donkey' | 'pig' | 'carrot-bird' | 'hamster'
 type Phase = 'pick' | 'feeding' | 'reveal' | 'result'
 
 interface AnimalData {
@@ -42,6 +42,7 @@ const ANIMALS: AnimalData[] = [
   { id: 'donkey', nameKey: 'animal.donkey', emoji: '🫏', img: '/images/animals/donkey.svg', color: '#9E9E9E', bgColor: 'bg-gray-50', borderColor: 'border-gray-400' },
   { id: 'pig', nameKey: 'animal.pig', emoji: '🐷', img: '/images/animals/pig.svg', color: '#FFB6C1', bgColor: 'bg-pink-50', borderColor: 'border-pink-300' },
   { id: 'carrot-bird', nameKey: 'animal.carrotBird', emoji: '🐦', img: '/images/animals/carrot-bird.svg', color: '#F0F0F0', bgColor: 'bg-sky-50', borderColor: 'border-sky-300' },
+  { id: 'hamster', nameKey: 'animal.hamster', emoji: '🐹', img: '/images/animals/hamster.svg', color: '#D4A574', bgColor: 'bg-amber-50', borderColor: 'border-amber-400' },
 ]
 
 const JACKPOT_AMOUNT = 500
@@ -262,7 +263,7 @@ export default function CarrotBonusPage() {
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-4 sm:mb-6"
       >
-        <h1 className="text-3xl sm:text-5xl font-headline font-bold text-geo-on-surface uppercase tracking-tight">
+        <h1 className="text-3xl sm:text-5xl font-headline font-bold text-orange-500 uppercase tracking-tight">
           {t('carrotBonus.title')}
         </h1>
         <p className="text-geo-on-surface-dim text-sm sm:text-base font-body mt-1">
@@ -432,16 +433,16 @@ export default function CarrotBonusPage() {
         <AnimatePresence>
           {phase === 'result' && (
             <>
-              {Array.from({ length: isJackpot ? 20 : 8 }).map((_, i) => (
-                <CoinParticle key={`coin-${i}`} delay={i * 0.08} x={(Math.random() - 0.5) * 200} />
+              {Array.from({ length: isJackpot ? 50 : 20 }).map((_, i) => (
+                <CoinParticle key={`coin-${i}`} delay={i * 0.05} x={(Math.random() - 0.5) * 300} />
               ))}
               {isJackpot &&
-                Array.from({ length: 12 }).map((_, i) => (
+                Array.from({ length: 25 }).map((_, i) => (
                   <Sparkle
                     key={`sparkle-${i}`}
-                    delay={i * 0.1}
-                    x={(Math.random() - 0.5) * 300}
-                    y={(Math.random() - 0.5) * 200}
+                    delay={i * 0.08}
+                    x={(Math.random() - 0.5) * 400}
+                    y={(Math.random() - 0.5) * 300}
                   />
                 ))}
             </>

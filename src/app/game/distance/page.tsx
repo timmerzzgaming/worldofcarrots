@@ -292,7 +292,9 @@ export default function DistanceGamePage() {
           zoom: initialViewState.zoom,
           attributionControl: false,
           renderWorldCopies: true,
-
+          dragRotate: false,
+          pitchWithRotate: false,
+          touchPitch: false,
         })
 
         map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
@@ -311,9 +313,7 @@ export default function DistanceGamePage() {
             type: 'fill',
             source: COUNTRIES_SOURCE,
             paint: {
-              'fill-color': ['match', ['get', 'REGION_UN'],
-                'Africa', '#FFD93D', 'Americas', '#4ECDC4', 'Asia', '#FF6B6B',
-                'Europe', '#A855F7', 'Oceania', '#4ADE80', '#FFCC66'],
+              'fill-color': '#FFFFFF',
               'fill-opacity': 0.85,
             },
           })
@@ -324,7 +324,7 @@ export default function DistanceGamePage() {
             source: COUNTRIES_SOURCE,
             paint: {
               'line-color': countryLineColor(),
-              'line-width': 1.2,
+              'line-width': 3,
             },
           })
 
@@ -608,13 +608,13 @@ export default function DistanceGamePage() {
         <div className="hidden sm:flex fixed top-4 right-4 z-10 gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
-            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
           >
             {t('quit')}
           </button>
           <button
             onClick={() => { playClick(); setShowRestartConfirm(true) }}
-            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-primary hover:border-geo-primary/30 transition-colors"
+            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-on-surface hover:border-geo-on-surface/30 transition-colors"
           >
             {t('restart')}
           </button>
@@ -721,7 +721,7 @@ export default function DistanceGamePage() {
             cityName={q.city}
             countryName={q.country}
             multiplier={lastMultiplier}
-            delay={1000}
+            delay={1500}
             onContinue={handleNextQuestion}
           />
         </div>

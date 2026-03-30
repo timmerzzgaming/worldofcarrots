@@ -43,34 +43,30 @@ export default function DailyChallengeBanner({ onPlay }: DailyChallengeBannerPro
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="glass-panel p-3 sm:p-4 border-2 border-geo-tertiary/30"
+      className="glass-panel p-4 sm:p-5 border-2 border-geo-tertiary/30 max-w-sm mx-auto"
     >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
-        <div>
-          <p className="text-xs font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest">
-            {t('daily.challenge')}
-          </p>
-          <p className="text-sm font-body text-geo-on-surface mt-0.5">
-            {t('daily.challenge.desc')}
-          </p>
-          <p className="text-[10px] text-geo-on-surface-dim font-body">
-            🏆 +{challenge.coin_reward} coins — Perfect: +🥕 — Resets in {hoursLeft}h
-          </p>
-        </div>
-        <div>
-          {completed ? (
-            <span className="px-4 py-2 rounded-xl text-xs font-headline font-bold text-green-400 bg-green-400/10 border border-green-400/30">
-              ✓ {t('daily.alreadyPlayed')}
-            </span>
-          ) : (
-            <button
-              onClick={() => onPlay(challenge.mode, challenge.difficulty, challenge.seed)}
-              className="btn-primary px-5 py-2 text-sm"
-            >
-              {t('startGame')}
-            </button>
-          )}
-        </div>
+      <div className="flex flex-col items-center text-center gap-2">
+        <p className="text-xs font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest">
+          {t('daily.challenge')}
+        </p>
+        <p className="text-sm font-body text-geo-on-surface">
+          {t('daily.challenge.desc')}
+        </p>
+        <p className="text-[10px] text-geo-on-surface-dim font-body">
+          +{challenge.coin_reward} coins — Perfect: +🥕 — Resets in {hoursLeft}h
+        </p>
+        {completed ? (
+          <span className="px-4 py-2 rounded-xl text-xs font-headline font-bold text-green-400 bg-green-400/10 border border-green-400/30">
+            ✓ {t('daily.alreadyPlayed')}
+          </span>
+        ) : (
+          <button
+            onClick={() => onPlay(challenge.mode, challenge.difficulty, challenge.seed)}
+            className="btn-primary px-5 py-2 text-sm"
+          >
+            {t('startGame')}
+          </button>
+        )}
       </div>
     </motion.div>
   )

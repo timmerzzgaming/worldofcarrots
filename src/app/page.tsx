@@ -7,8 +7,6 @@ import { cn } from '@/lib/cn'
 import MapBackground from '@/components/home/MapBackground'
 import FloatingFlags from '@/components/home/FloatingFlags'
 import LoadingScreen from '@/components/home/LoadingScreen'
-import LanguageSelector from '@/components/LanguageSelector'
-import SoundToggle from '@/components/SoundToggle'
 import { playClick, playHover, playEnter, startMenuMusic } from '@/lib/sounds'
 import { useTranslation } from '@/lib/i18n'
 import { useBasePath } from '@/lib/basePath'
@@ -332,6 +330,14 @@ export default function HomePage() {
     if (loaded && entered) startMenuMusic()
   }, [loaded, entered])
 
+  // Auto-start music on first user interaction (handles browser autoplay policy)
+  useEffect(() => {
+    if (!loaded) return
+    const handler = () => { startMenuMusic() }
+    document.addEventListener('pointerdown', handler, { once: true })
+    return () => document.removeEventListener('pointerdown', handler)
+  }, [loaded])
+
   const activeCategory = categories.find((c) => c.id === view)
 
   return (
@@ -402,7 +408,7 @@ export default function HomePage() {
             <p className="text-geo-on-surface-dim text-base sm:text-lg font-body max-w-md mx-auto">
               {t('testYourKnowledge')}
             </p>
-            <p className="text-geo-primary text-xs sm:text-sm font-headline font-bold uppercase tracking-widest mt-2">
+            <p className="text-geo-primary text-sm sm:text-lg font-headline font-bold uppercase tracking-widest mt-2">
               Early Access — Demo
             </p>
           </motion.div>
@@ -424,7 +430,7 @@ export default function HomePage() {
                     <DailyChallengeBanner onPlay={(mode, difficulty, seed) => router.push(prefixPath(`/game/daily?mode=${mode}&difficulty=${difficulty}&seed=${seed}`))} />
                   </div>
 
-                  <div className="grid gap-3 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full">
+                  <div className="grid gap-3 sm:gap-6 lg:gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full max-w-[65%] sm:max-w-none mx-auto">
                   {/* 1. Solo Play (mapGames) */}
                   {(() => {
                     const cat = categories[0]
@@ -610,174 +616,156 @@ export default function HomePage() {
                     </h2>
                   </motion.div>
 
-                  {/* Game mode grid */}
-                  <motion.div
-                    className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6"
-                    animate={{ opacity: expandedGame ? 0 : 1, scale: expandedGame ? 0.9 : 1 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    {activeCategory.modes.map((mode, i) => (
+                  <AnimatePresence mode="wait">
+                    {!expandedGame ? (
                       <motion.div
-                        key={mode.titleKey}
-                        initial={{ opacity: 0, y: 15 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.05 * (i + 1) }}
+                        key="grid"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
+                        transition={{ duration: 0.25 }}
                       >
-                        {(() => {
-                          if (!mode.available) {
-                            // Coming soon — not built yet
-                            return (
-                              <div className="relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-70 cursor-not-allowed">
-                                <span className="absolute -top-2 right-2 bg-geo-primary text-black text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
-                                  {t('comingSoon')}
-                                </span>
-                                <div className="text-2xl sm:text-5xl lg:text-6xl mb-1 sm:mb-3">{mode.icon}</div>
-                                <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-white uppercase tracking-wide px-2 leading-tight">
-                                  {t(mode.titleKey)}
-                                </h3>
-                              </div>
-                            )
-                          }
-
-                          // Guest restriction: only click-country is available
-                          const guestLocked = isGuest && mode.href !== '/game/click-country'
-
-                          if (guestLocked) {
-                            return (
-                              <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
-                                <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
-                                  🔒
-                                </span>
-                                <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3 grayscale opacity-50">{mode.icon}</div>
-                                <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
-                                  {t(mode.titleKey)}
-                                </h3>
-                              </div>
-                            )
-                          }
-
-                          const unlockReq = GAME_UNLOCK_REQUIREMENTS[mode.href]
-                          const unlocked = !user || isGameUnlocked(mode.href, user.level, unlockedSet)
-
-                          if (!unlocked) {
-                            // Locked — show requirement
-                            return (
-                              <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
-                                <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
-                                  🔒 {unlockReq ? getUnlockLabel(unlockReq) : ''}
-                                </span>
-                                <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3 grayscale opacity-50">{mode.icon}</div>
-                                <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
-                                  {t(mode.titleKey)}
-                                </h3>
-                              </div>
-                            )
-                          }
-
-                          // Unlocked — playable
-                          // Direct-navigate modes (no sub-menu needed)
-                          const directNav = mode.href === '/game/carrot-bonus' || mode.href === '/game/sticker-album'
-
-                          return (
-                            <button
-                              onMouseEnter={() => playHover()}
-                              onClick={() => {
-                                playClick()
-                                if (directNav) {
-                                  router.push(prefixPath(mode.href))
-                                } else {
-                                  setExpandedGame(mode)
-                                }
-                              }}
-                              className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel hover:border-geo-primary hover:shadow-comic-lg transition-all cursor-pointer"
+                        {/* Game mode grid */}
+                        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 lg:gap-6 max-w-[75%] sm:max-w-none mx-auto">
+                          {activeCategory.modes.map((mode, i) => (
+                            <motion.div
+                              key={mode.titleKey}
+                              initial={{ opacity: 0, y: 15 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: 0.05 * (i + 1) }}
                             >
-                              {mode.badge && (
-                                <span className="absolute -top-2 right-2 bg-geo-primary text-geo-on-primary text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full border-b-2 border-geo-on-primary">
-                                  {mode.badge}
-                                </span>
-                              )}
-                              <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3">{mode.icon}</div>
-                              <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors px-2 leading-tight">
-                                {t(mode.titleKey)}
-                              </h3>
-                            </button>
-                          )
-                        })()}
-                      </motion.div>
-                    ))}
-                  </motion.div>
-
-                  {/* Guest unlock prompt */}
-                  {isGuest && (
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide"
-                    >
-                      🔒 {t('guest.unlockMessage')}
-                    </motion.p>
-                  )}
-
-                  {/* Zoom panel — selected game grows to replace the grid, shows actual menu */}
-                  <AnimatePresence>
-                    {expandedGame && (
-                      <motion.div
-                        key="expanded"
-                        initial={{ scale: 0.3, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute inset-0 z-30 flex items-center justify-center"
-                      >
-                        <div className="glass-panel border-geo-primary shadow-comic-lg flex flex-col overflow-hidden" style={{ width: 'min(820px, 95vw)', height: 'min(820px, 80vh)' }}>
-                          {/* Fixed header: back button + game title */}
-                          <div className="flex-shrink-0 px-4 sm:px-6 pt-3 sm:pt-4 pb-2 sm:pb-3">
-                            <button
-                              onClick={() => { playClick(); setExpandedGame(null) }}
-                              className="btn-ghost px-4 py-2 text-sm flex items-center gap-2 mb-2"
-                            >
-                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
-                                <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
-                              </svg>
-                              {t('back')}
-                            </button>
-                            <h2 className="text-2xl sm:text-3xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-sm text-center">
                               {(() => {
-                                const w = t(expandedGame.titleKey).split(' ')
-                                const last = w.pop()!
-                                return w.length ? <>{w.join(' ')} <span className="text-geo-primary text-geo-primary">{last}</span></> : <span className="text-geo-primary text-geo-primary">{last}</span>
+                                if (!mode.available) {
+                                  return (
+                                    <div className="relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-70 cursor-not-allowed">
+                                      <span className="absolute -top-2 right-2 bg-geo-primary text-black text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                                        {t('comingSoon')}
+                                      </span>
+                                      <div className="text-2xl sm:text-5xl lg:text-6xl mb-1 sm:mb-3">{mode.icon}</div>
+                                      <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-white uppercase tracking-wide px-2 leading-tight">
+                                        {t(mode.titleKey)}
+                                      </h3>
+                                    </div>
+                                  )
+                                }
+
+                                const guestLocked = isGuest && mode.href !== '/game/click-country'
+                                if (guestLocked) {
+                                  return (
+                                    <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
+                                      <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                                        🔒
+                                      </span>
+                                      <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3 grayscale opacity-50">{mode.icon}</div>
+                                      <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
+                                        {t(mode.titleKey)}
+                                      </h3>
+                                    </div>
+                                  )
+                                }
+
+                                const unlockReq = GAME_UNLOCK_REQUIREMENTS[mode.href]
+                                const unlocked = !user || isGameUnlocked(mode.href, user.level, unlockedSet)
+                                if (!unlocked) {
+                                  return (
+                                    <div className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel opacity-60 cursor-not-allowed border-geo-outline-dim/30">
+                                      <span className="absolute -top-2 right-2 bg-geo-secondary/80 text-white text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full">
+                                        🔒 {unlockReq ? getUnlockLabel(unlockReq) : ''}
+                                      </span>
+                                      <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3 grayscale opacity-50">{mode.icon}</div>
+                                      <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface-dim uppercase tracking-wide px-2 leading-tight">
+                                        {t(mode.titleKey)}
+                                      </h3>
+                                    </div>
+                                  )
+                                }
+
+                                const directNav = mode.href === '/game/carrot-bonus' || mode.href === '/game/sticker-album'
+                                return (
+                                  <button
+                                    onMouseEnter={() => playHover()}
+                                    onClick={() => {
+                                      playClick()
+                                      if (directNav) {
+                                        router.push(prefixPath(mode.href))
+                                      } else {
+                                        setExpandedGame(mode)
+                                      }
+                                    }}
+                                    className="group relative flex flex-col items-center justify-center text-center w-full aspect-[4/3] sm:aspect-square glass-panel hover:border-geo-primary hover:shadow-comic-lg transition-all cursor-pointer"
+                                  >
+                                    {mode.badge && (
+                                      <span className="absolute -top-2 right-2 bg-geo-primary text-geo-on-primary text-[10px] sm:text-xs font-headline font-extrabold uppercase px-2 sm:px-3 py-0.5 rounded-full border-b-2 border-geo-on-primary">
+                                        {mode.badge}
+                                      </span>
+                                    )}
+                                    <div className="text-4xl sm:text-5xl lg:text-6xl mb-2 sm:mb-3">{mode.icon}</div>
+                                    <h3 className="text-sm sm:text-base lg:text-lg font-headline font-extrabold text-geo-on-surface uppercase tracking-wide group-hover:text-geo-primary transition-colors px-2 leading-tight">
+                                      {t(mode.titleKey)}
+                                    </h3>
+                                  </button>
+                                )
                               })()}
-                            </h2>
-                          </div>
-                          {/* Scrollable menu content (no title — it's in the fixed header above) */}
-                          <motion.div
+                            </motion.div>
+                          ))}
+                        </div>
+
+                        {isGuest && (
+                          <motion.p
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
-                            transition={{ delay: 0.3, duration: 0.3 }}
-                            className="flex-1 min-h-0 overflow-y-auto scrollbar-hide px-4 sm:px-6 pb-4 sm:pb-6"
+                            transition={{ delay: 0.4 }}
+                            className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide"
                           >
-                            {expandedGame.href === '/game/click-country' && (
-                              <ClickCountryMenu onStartGame={(mode, diff, region, variant) => {
-                                router.push(prefixPath(`/game/click-country?mode=${mode}&difficulty=${diff}&region=${region}${variant ? `&variant=${variant}` : ''}`))
-                              }} />
-                            )}
-                            {expandedGame.href === '/game/flag' && (
-                              <FlagMenu onStartGame={(diff, region) => {
-                                router.push(prefixPath(`/game/flag?difficulty=${diff}&region=${region}`))
-                              }} />
-                            )}
-                            {expandedGame.href === '/game/distance' && (
-                              <DistanceMenu onStartGame={(diff, region, unit) => {
-                                router.push(prefixPath(`/game/distance?difficulty=${diff}&region=${region}&unit=${unit}`))
-                              }} />
-                            )}
-                            {expandedGame.href === '/game/us-states' && (
-                              <USStatesMenu onStartGame={(mode, diff) => {
-                                router.push(prefixPath(`/game/us-states?mode=${mode}&difficulty=${diff}`))
-                              }} />
-                            )}
-                          </motion.div>
-                        </div>
+                            🔒 {t('guest.unlockMessage')}
+                          </motion.p>
+                        )}
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="inline-menu"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.3 }}
+                        className="w-full max-w-2xl mx-auto"
+                      >
+                        <button
+                          onClick={() => { playClick(); setExpandedGame(null) }}
+                          className="btn-ghost px-4 py-2 text-sm flex items-center gap-2 mb-4"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4" aria-hidden="true">
+                            <path fillRule="evenodd" d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" clipRule="evenodd" />
+                          </svg>
+                          {t('back')}
+                        </button>
+                        <h2 className="text-2xl sm:text-3xl font-headline font-extrabold text-geo-on-surface italic uppercase tracking-tighter drop-shadow-sm text-center mb-4">
+                          {(() => {
+                            const w = t(expandedGame.titleKey).split(' ')
+                            const last = w.pop()!
+                            return w.length ? <>{w.join(' ')} <span className="text-geo-primary">{last}</span></> : <span className="text-geo-primary">{last}</span>
+                          })()}
+                        </h2>
+                        {expandedGame.href === '/game/click-country' && (
+                          <ClickCountryMenu onStartGame={(mode, diff, region, variant) => {
+                            router.push(prefixPath(`/game/click-country?mode=${mode}&difficulty=${diff}&region=${region}${variant ? `&variant=${variant}` : ''}`))
+                          }} />
+                        )}
+                        {expandedGame.href === '/game/flag' && (
+                          <FlagMenu onStartGame={(diff, region) => {
+                            router.push(prefixPath(`/game/flag?difficulty=${diff}&region=${region}`))
+                          }} />
+                        )}
+                        {expandedGame.href === '/game/distance' && (
+                          <DistanceMenu onStartGame={(diff, region, unit) => {
+                            router.push(prefixPath(`/game/distance?difficulty=${diff}&region=${region}&unit=${unit}`))
+                          }} />
+                        )}
+                        {expandedGame.href === '/game/us-states' && (
+                          <USStatesMenu onStartGame={(mode, diff) => {
+                            router.push(prefixPath(`/game/us-states?mode=${mode}&difficulty=${diff}`))
+                          }} />
+                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>

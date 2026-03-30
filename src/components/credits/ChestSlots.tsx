@@ -68,7 +68,7 @@ export default function ChestSlots() {
               key={chest.id}
               onClick={() => handleOpen(chest)}
               disabled={!isReady}
-              className={`relative w-11 h-11 sm:w-14 sm:h-14 rounded-xl border-2 flex flex-col items-center justify-center transition-all ${
+              className={`relative w-11 h-11 sm:w-20 sm:h-20 rounded-xl border-2 flex flex-col items-center justify-center transition-all ${
                 TIER_BORDER[chest.tier]
               } ${
                 isReady
@@ -78,7 +78,7 @@ export default function ChestSlots() {
               whileTap={isReady ? { scale: 0.9 } : undefined}
               title={isReady ? `Open ${chest.tier} chest` : `Unlocks in ${formatChestTimer(remaining)}`}
             >
-              <span className="text-xl">{TIER_EMOJI[chest.tier]}</span>
+              <span className="text-xl sm:text-3xl">{TIER_EMOJI[chest.tier]}</span>
               {!isReady && (
                 <span className="text-[8px] font-headline font-bold text-geo-on-surface-dim">
                   {formatChestTimer(remaining)}
@@ -90,14 +90,6 @@ export default function ChestSlots() {
             </motion.button>
           )
         })}
-        {Array.from({ length: emptySlots }).map((_, i) => (
-          <div
-            key={`empty-${i}`}
-            className="w-11 h-11 sm:w-14 sm:h-14 rounded-xl border-2 border-dashed border-geo-outline-dim/20 flex items-center justify-center"
-          >
-            <span className="text-geo-outline-dim/30 text-xs">+</span>
-          </div>
-        ))}
       </div>
 
       {opening && (

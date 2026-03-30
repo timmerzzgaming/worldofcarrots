@@ -14,7 +14,7 @@ const ISO_A3_TO_A2: Record<string, string> = {
   ECU: 'ec', EGY: 'eg', SLV: 'sv', GNQ: 'gq', ERI: 'er',
   EST: 'ee', SWZ: 'sz', ETH: 'et', FJI: 'fj', FIN: 'fi',
   GAB: 'ga', GMB: 'gm', GEO: 'ge', DEU: 'de', GHA: 'gh',
-  GRC: 'gr', GRD: 'gd', GTM: 'gt', GIN: 'gn', GNB: 'gw',
+  GRC: 'gr', GRL: 'gl', GRD: 'gd', GTM: 'gt', GIN: 'gn', GNB: 'gw',
   GUY: 'gy', HTI: 'ht', HND: 'hn', HUN: 'hu', ISL: 'is',
   IND: 'in', IDN: 'id', IRN: 'ir', IRQ: 'iq', IRL: 'ie',
   ISR: 'il', ITA: 'it', JAM: 'jm', JPN: 'jp', JOR: 'jo',
@@ -39,7 +39,7 @@ const ISO_A3_TO_A2: Record<string, string> = {
   TTO: 'tt', TUN: 'tn', TUR: 'tr', TKM: 'tm', TUV: 'tv',
   UGA: 'ug', UKR: 'ua', ARE: 'ae', GBR: 'gb', USA: 'us',
   URY: 'uy', UZB: 'uz', VUT: 'vu', VAT: 'va', VEN: 've',
-  VNM: 'vn', YEM: 'ye', ZMB: 'zm', ZWE: 'zw',
+  VNM: 'vn', YEM: 'ye', ZMB: 'zm', ZWE: 'zw', ESH: 'eh',
 }
 
 // Special cases: countries with ISO_A3 = -99

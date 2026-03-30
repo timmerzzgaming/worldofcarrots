@@ -7,7 +7,7 @@
 export const SMALL_COUNTRIES = new Set([
   // Microstates
   'Vatican City', 'Monaco', 'San Marino', 'Liechtenstein', 'Andorra', 'Malta',
-  'Singapore', 'Bahrain', 'Luxembourg',
+  'Singapore', 'Bahrain',
   // Small islands
   'Maldives', 'Seychelles', 'Mauritius', 'Comoros', 'Cape Verde',
   'São Tomé and Príncipe',
@@ -17,11 +17,9 @@ export const SMALL_COUNTRIES = new Set([
   'Barbados', 'Grenada', 'Saint Lucia', 'Dominica',
   'Saint Kitts and Nevis', 'Antigua and Barbuda',
   'Saint Vincent and the Grenadines', 'Trinidad and Tobago',
-  'Bahamas', 'Jamaica',
+  'Bahamas',
   // Other small
-  'Brunei', 'Timor-Leste', 'Eswatini', 'Lesotho', 'Gambia',
-  'Djibouti', 'Equatorial Guinea', 'Kosovo', 'Montenegro',
-  'Palestine', 'Lebanon', 'Cyprus',
+  'Eswatini', 'Lesotho',
 ])
 
 // Countries that need a larger click target radius
@@ -34,6 +32,17 @@ const CENTROID_OVERRIDES: Record<string, [number, number]> = {
 
 // Default circle radius for small countries
 export const DEFAULT_CIRCLE_RADIUS = 14
+
+/** MapLibre expression that scales circle radius with zoom level. */
+export function zoomScaledCircleRadius(): any { // eslint-disable-line
+  return [
+    'interpolate', ['linear'], ['zoom'],
+    1, ['*', ['get', 'radius'], 0.5],
+    3, ['get', 'radius'],
+    6, ['*', ['get', 'radius'], 2],
+    10, ['*', ['get', 'radius'], 4],
+  ]
+}
 
 /** Compute the centroid of a GeoJSON geometry's coordinates. */
 export function centroid(coords: unknown): [number, number] {

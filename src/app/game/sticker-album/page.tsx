@@ -105,6 +105,10 @@ export default function StickerAlbumPage() {
         minZoom: 1,
         maxZoom: 6,
         attributionControl: false,
+        renderWorldCopies: false,
+        dragRotate: false,
+        pitchWithRotate: false,
+        touchPitch: false,
       })
 
       map.on('load', () => {
@@ -146,7 +150,7 @@ export default function StickerAlbumPage() {
           source: 'countries',
           paint: {
             'line-color': '#FFFFFF',
-            'line-width': 0.8,
+            'line-width': 2,
           },
         })
 
@@ -165,7 +169,7 @@ export default function StickerAlbumPage() {
             'line-width': [
               'case',
               ['boolean', ['feature-state', 'collected'], false],
-              1.5,
+              3,
               0,
             ],
           },

@@ -27,8 +27,19 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
   const [selectedMode, setSelectedMode] = useState<USGameMode>('classic')
   const [selectedDifficulty, setSelectedDifficulty] = useState<USStateDifficulty>('easy')
 
+  const startButton = (
+    <button
+      onClick={() => onStartGame(selectedMode, selectedDifficulty)}
+      className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
+    >
+      {t('startGame')}
+    </button>
+  )
+
   return (
     <>
+      <div className="sm:hidden mb-4">{startButton}</div>
+
       {/* Game modes */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 mb-4 sm:mb-5">
         {MODE_KEYS.map((m) => (
@@ -90,13 +101,8 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
         {t(`us.diff.${selectedDifficulty}.desc` as keyof Translations)}
       </p>
 
-      <div className="sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
-        <button
-          onClick={() => onStartGame(selectedMode, selectedDifficulty)}
-          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
-        >
-          {t('startGame')}
-        </button>
+      <div className="hidden sm:block sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
+        {startButton}
       </div>
     </>
   )

@@ -1,24 +1,25 @@
 'use client'
 
 import UserBadge from '@/components/auth/UserBadge'
-import SoundToggle from '@/components/SoundToggle'
-import LanguageSelector from '@/components/LanguageSelector'
 import ChestSlots from '@/components/credits/ChestSlots'
+import SettingsPanel from '@/components/SettingsPanel'
 
 export default function TopBar() {
   return (
     <>
-      {/* Top-right: User identity + currency + chests
-          Hidden on mobile during gameplay via game-active class set on <body> by game pages */}
-      <div className="fixed top-2 left-2 sm:top-4 sm:left-4 z-50 flex items-center gap-3 sm:gap-4 topbar-section">
-        <ChestSlots />
-        <UserBadge />
+      {/* User identity — bottom center */}
+      <div className="fixed bottom-2 sm:bottom-4 left-0 right-0 z-50 flex flex-col items-center pointer-events-none topbar-section">
+        <div className="flex items-end gap-2 sm:gap-3 pointer-events-auto">
+          <ChestSlots />
+        </div>
+        <div className="pointer-events-auto mt-1">
+          <UserBadge />
+        </div>
       </div>
 
-      {/* Bottom-right: Settings controls */}
-      <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 flex items-center gap-1.5 sm:gap-2 topbar-section">
-        <SoundToggle />
-        <LanguageSelector />
+      {/* Settings cogwheel — bottom right */}
+      <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 topbar-section">
+        <SettingsPanel />
       </div>
     </>
   )

@@ -8,14 +8,13 @@ import { cn } from '@/lib/cn'
 import { useGameStore } from '@/store/gameStore'
 import { getCountriesFromGeoJSON, GAME_MODES } from '@/lib/gameEngine'
 import { DIFFICULTIES, type Difficulty } from '@/lib/countryDifficulty'
-import { getHighScores, type HighScoreEntry } from '@/lib/highScores'
 import { getMapStyle, COUNTRIES_SOURCE, COUNTRIES_FILL_LAYER, COUNTRIES_LINE_LAYER, SMALL_COUNTRIES_SOURCE, SMALL_COUNTRIES_CIRCLE_LAYER, SMALL_COUNTRIES_RING_LAYER, initialViewState, REGION_VIEWS } from '@/lib/mapConfig'
 import type { GameMode } from '@/types/game'
 import { useTranslation } from '@/lib/i18n'
 import type { Translations } from '@/lib/i18n'
 import { playCorrect, playWrong, playGameStart, playGameOver, playLifeLost, playTick, playClick, startMusic, stopMusic, startMenuMusic, warmUpAudio } from '@/lib/sounds'
-import { mapBgColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor, continentFillExpression } from '@/lib/theme'
-import { buildSmallCountryPoints, createFeatureStateSetter } from '@/lib/mapHelpers'
+import { mapBgColor, countryHoverColor, countryHoverLineColor, countryLineColor, circleStrokeColor, continentFillExpression, SOLVED_COLORS } from '@/lib/theme'
+import { buildSmallCountryPoints, createFeatureStateSetter, zoomScaledCircleRadius } from '@/lib/mapHelpers'
 import { useMapThemeListener, countryMapThemeUpdates } from '@/hooks/useMapThemeListener'
 import MapBackground from '@/components/home/MapBackground'
 import FloatingFlags from '@/components/home/FloatingFlags'
@@ -45,6 +44,7 @@ export default function ClickCountryPage() {
   const flashedIdsRef = useRef<Set<number>>(new Set())
   const nameToIdRef = useRef<Map<string, number>>(new Map())
   const smallNameToIdRef = useRef<Map<string, number>>(new Map())
+  const solvedColorRef = useRef<Map<string, number>>(new Map())
   const [selectedMode, setSelectedMode] = useState<GameMode>('classic')
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('easy')
   const [selectedRegion, setSelectedRegion] = useState('World')
@@ -55,6 +55,7 @@ export default function ClickCountryPage() {
   const [borderlessTimed, setBorderlessTimed] = useState(true)
   const [showCountdown, setShowCountdown] = useState(false)
   const [showHurryUp, setShowHurryUp] = useState(false)
+  const [transitioning, setTransitioning] = useState(false)
 
   const {
     phase, mode, modeConfig, variant, difficulty: storeDifficulty, questions, currentIndex, answers, score,
@@ -125,7 +126,9 @@ export default function ClickCountryPage() {
           zoom: initialViewState.zoom,
           attributionControl: false,
           renderWorldCopies: true,
-
+          dragRotate: false,
+          pitchWithRotate: false,
+          touchPitch: false,
         })
 
         map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
@@ -160,17 +163,17 @@ export default function ClickCountryPage() {
                   ['boolean', ['feature-state', 'correct'], false], '#16a34a',
                   ['boolean', ['feature-state', 'wrong'], false], '#ea580c',
                   ['boolean', ['feature-state', 'target'], false], '#2563eb',
-                  ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+                  ['>', ['number', ['feature-state', 'solvedIdx'], 0], 0], '#16a34a',
                   ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                   countryLineColor(),
                 ],
                 'line-width': [
                   'case',
-                  ['boolean', ['feature-state', 'correct'], false], 3,
-                  ['boolean', ['feature-state', 'wrong'], false], 3,
-                  ['boolean', ['feature-state', 'target'], false], 3,
-                  ['boolean', ['feature-state', 'hover'], false], 2,
-                  1.2,
+                  ['boolean', ['feature-state', 'correct'], false], 4.5,
+                  ['boolean', ['feature-state', 'wrong'], false], 4.5,
+                  ['boolean', ['feature-state', 'target'], false], 4.5,
+                  ['boolean', ['feature-state', 'hover'], false], 3.5,
+                  3,
                 ],
               },
             })
@@ -193,7 +196,7 @@ export default function ClickCountryPage() {
               type: 'circle',
               source: SMALL_COUNTRIES_SOURCE,
               paint: {
-                'circle-radius': ['get', 'radius'],
+                'circle-radius': zoomScaledCircleRadius(),
                 'circle-color': circleStrokeColor(),
                 'circle-opacity': 0.12,
               },
@@ -204,12 +207,12 @@ export default function ClickCountryPage() {
               type: 'circle',
               source: SMALL_COUNTRIES_SOURCE,
               paint: {
-                'circle-radius': ['get', 'radius'],
+                'circle-radius': zoomScaledCircleRadius(),
                 'circle-color': 'transparent',
                 'circle-stroke-width': [
                   'case',
                   ['boolean', ['feature-state', 'correct'], false], 3,
-                  ['boolean', ['feature-state', 'solved'], false], 3,
+                  ['>', ['number', ['feature-state', 'solvedIdx'], 0], 0], 3,
                   2,
                 ],
                 'circle-stroke-color': [
@@ -217,7 +220,7 @@ export default function ClickCountryPage() {
                   ['boolean', ['feature-state', 'correct'], false], '#22c55e',
                   ['boolean', ['feature-state', 'wrong'], false], '#f97316',
                   ['boolean', ['feature-state', 'target'], false], '#3b82f6',
-                  ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+                  ['>', ['number', ['feature-state', 'solvedIdx'], 0], 0], '#22c55e',
                   ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
                   circleStrokeColor(),
                 ],
@@ -382,12 +385,13 @@ export default function ClickCountryPage() {
     // On first question (new game): clear ALL solved states from previous game
     if (currentIndex === 0) {
       lookup.forEach((id) => {
-        sfState(id, { solved: false, correct: false, wrong: false, target: false })
+        sfState(id, { solvedIdx: 0, correct: false, wrong: false, target: false })
       })
       smallNameToIdRef.current.forEach((id) => {
-        sfSmallState(id, { solved: false, correct: false, wrong: false, target: false })
+        sfSmallState(id, { solvedIdx: 0, correct: false, wrong: false, target: false })
       })
       flashedIdsRef.current.clear()
+      solvedColorRef.current.clear()
       return
     }
 
@@ -401,15 +405,19 @@ export default function ClickCountryPage() {
       sfSmallState(id, { correct: false, wrong: false, target: false })
     })
 
-    // Keep solved countries highlighted (marathon/survival/practice)
+    // Keep solved countries highlighted with random bright colors
     correctCountries.forEach((name) => {
+      if (!solvedColorRef.current.has(name)) {
+        solvedColorRef.current.set(name, Math.floor(Math.random() * SOLVED_COLORS.length) + 1)
+      }
+      const colorIdx = solvedColorRef.current.get(name)!
       const id = lookup.get(name)
       if (id !== undefined) {
-        sfState(id, { solved: true })
+        sfState(id, { solvedIdx: colorIdx })
       }
       const sId = smallNameToIdRef.current.get(name)
       if (sId !== undefined) {
-        sfSmallState(sId, { solved: true })
+        sfSmallState(sId, { solvedIdx: colorIdx })
       }
     })
   }, [phase, currentIndex, correctCountries])
@@ -418,11 +426,12 @@ export default function ClickCountryPage() {
   useEffect(() => {
     if (phase === 'idle') {
       nameToIdRef.current.forEach((id) => {
-        sfState(id, { solved: false, correct: false, wrong: false, target: false })
+        sfState(id, { solvedIdx: 0, correct: false, wrong: false, target: false })
       })
       smallNameToIdRef.current.forEach((id) => {
-        sfSmallState(id, { solved: false, correct: false, wrong: false, target: false })
+        sfSmallState(id, { solvedIdx: 0, correct: false, wrong: false, target: false })
       })
+      solvedColorRef.current.clear()
       const map = mapRef.current as { flyTo?: (opts: { center: [number, number]; zoom: number; duration: number }) => void; setLayoutProperty?: (layer: string, prop: string, value: string) => void } | null
       map?.flyTo?.({ center: initialViewState.center, zoom: initialViewState.zoom, duration: 1000 })
       // Restore borders
@@ -457,7 +466,7 @@ export default function ClickCountryPage() {
         ['boolean', ['feature-state', 'correct'], false], '#22c55e',
         ['boolean', ['feature-state', 'wrong'], false], '#fdba74',
         ['boolean', ['feature-state', 'target'], false], '#3b82f6',
-        ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+        ['>', ['number', ['feature-state', 'solvedIdx'], 0], 0], '#22c55e',
         '#1e3a5f',
       ])
       map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-opacity', [
@@ -465,7 +474,7 @@ export default function ClickCountryPage() {
         ['boolean', ['feature-state', 'correct'], false], 1,
         ['boolean', ['feature-state', 'wrong'], false], 1,
         ['boolean', ['feature-state', 'target'], false], 1,
-        ['boolean', ['feature-state', 'solved'], false], 1,
+        ['>', ['number', ['feature-state', 'solvedIdx'], 0], 0], 1,
         1,
       ])
       // Also set the line layer to match landmass color so any anti-alias artifacts blend in
@@ -482,17 +491,17 @@ export default function ClickCountryPage() {
         ['boolean', ['feature-state', 'correct'], false], '#16a34a',
         ['boolean', ['feature-state', 'wrong'], false], '#ea580c',
         ['boolean', ['feature-state', 'target'], false], '#2563eb',
-        ['boolean', ['feature-state', 'solved'], false], '#22c55e',
+        ['>', ['number', ['feature-state', 'solvedIdx'], 0], 0], '#16a34a',
         ['boolean', ['feature-state', 'hover'], false], countryHoverLineColor(),
         countryLineColor(),
       ])
       map.setPaintProperty?.(COUNTRIES_LINE_LAYER, 'line-width', [
         'case',
-        ['boolean', ['feature-state', 'correct'], false], 3,
-        ['boolean', ['feature-state', 'wrong'], false], 3,
-        ['boolean', ['feature-state', 'target'], false], 3,
-        ['boolean', ['feature-state', 'hover'], false], 2,
-        1.2,
+        ['boolean', ['feature-state', 'correct'], false], 4.5,
+        ['boolean', ['feature-state', 'wrong'], false], 4.5,
+        ['boolean', ['feature-state', 'target'], false], 4.5,
+        ['boolean', ['feature-state', 'hover'], false], 3.5,
+        3,
       ])
       // Restore normal interactive fill
       map.setPaintProperty?.(COUNTRIES_FILL_LAYER, 'fill-color', continentFillExpression())
@@ -518,11 +527,15 @@ export default function ClickCountryPage() {
   function launchWithCountdown(startFn: () => void) {
     warmUpAudio()
     pendingStartRef.current = startFn
-    setShowCountdown(true)
+    setTransitioning(true)
+    setTimeout(() => {
+      setShowCountdown(true)
+    }, 400)
   }
 
   function onCountdownComplete() {
     setShowCountdown(false)
+    setTransitioning(false)
     if (pendingStartRef.current) {
       pendingStartRef.current()
       pendingStartRef.current = null
@@ -545,32 +558,38 @@ export default function ClickCountryPage() {
   return (
     <div className="relative w-screen h-screen overflow-hidden">
       {/* Decorative background for mode selection — same as home page */}
-      {(phase === 'idle' || phase === 'results') && !showCountdown && (
-        <>
+      {(phase === 'idle' || phase === 'results') && (
+        <div
+          className="absolute inset-0 z-[1] transition-opacity duration-500"
+          style={{ opacity: transitioning ? 0 : 1, pointerEvents: transitioning ? 'none' : 'auto' }}
+        >
           <MapBackground />
           <FloatingFlags />
-        </>
+        </div>
       )}
 
-      {/* Gameplay map — hidden during idle/results, visible during play */}
+      {/* Gameplay map — always rendered, fades in when game starts */}
       <div
         ref={containerRef}
-        className="absolute inset-0 w-full h-full"
-        style={{ visibility: (phase === 'idle' || phase === 'results') && !showCountdown ? 'hidden' : 'visible' }}
+        className="absolute inset-0 w-full h-full transition-opacity duration-500"
+        style={{
+          opacity: (phase === 'idle' || phase === 'results') && !transitioning && !showCountdown ? 0 : 1,
+          pointerEvents: (phase === 'idle' || phase === 'results') && !transitioning && !showCountdown ? 'none' : 'auto',
+        }}
       />
 
-      {/* Desktop: Quit/Restart — top right (hidden on mobile) */}
+      {/* Desktop: Quit/Restart — top left (hidden on mobile) */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="hidden sm:flex fixed top-4 right-4 z-10 gap-2">
+        <div className="hidden sm:flex fixed top-4 left-4 z-10 gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
-            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
           >
             {t('quit')}
           </button>
           <button
             onClick={() => { playClick(); setShowRestartConfirm(true) }}
-            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-primary hover:border-geo-primary/30 transition-colors"
+            className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-on-surface hover:border-geo-on-surface/30 transition-colors"
           >
             {t('restart')}
           </button>
@@ -580,7 +599,7 @@ export default function ClickCountryPage() {
 
       {/* Mobile: Compact unified game HUD */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="sm:hidden fixed top-0 left-0 right-0 z-10 px-2 pt-2 space-y-1">
+        <div className="sm:hidden fixed top-0 left-0 right-0 z-10 px-2 pt-7 space-y-1 max-w-[90%] mx-auto">
           {/* Row 1: Actions + Question + Score */}
           <div className="glass-panel px-2 py-1.5 flex items-center gap-1.5">
             {/* Quit & Restart icon buttons */}
@@ -897,18 +916,10 @@ export default function ClickCountryPage() {
               </div>
             )}
 
-            {/* High scores */}
-            <div className="mb-4">
-              <HighScorePreview
-                mode={previewMode ?? selectedMode}
-                difficulty={selectedMode === 'marathon' ? 'expert' : (previewDifficulty ?? selectedDifficulty)}
-                variant={selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined}
-              />
-            </div>
-
             <button
               onClick={() => launchWithCountdown(() => { playGameStart(); startMusic(); startGame(selectedMode, selectedDifficulty, selectedRegion, selectedMode === 'borderless' && !borderlessTimed ? 'untimed' : undefined) })}
-              className="btn-primary w-full py-4 text-lg mb-4"
+              className="btn-primary w-full py-4 text-lg mb-24 shadow-none hover:shadow-none"
+              style={{ boxShadow: 'none' }}
             >
               {t('startGame')}
             </button>
@@ -943,38 +954,3 @@ export default function ClickCountryPage() {
   )
 }
 
-function HighScorePreview({ mode, difficulty, variant }: { mode: GameMode; difficulty: Difficulty; variant?: string }) {
-  const { t } = useTranslation()
-  const scores = getHighScores(mode, difficulty, variant)
-  const modeLabel = t(`mode.${mode}` as keyof Translations)
-  const diffLabel = DIFFICULTIES.find((d) => d.value === difficulty)?.label ?? difficulty
-  const variantLabel = variant === 'untimed' ? ' (No Timer)' : ''
-
-  return (
-    <div className="glass-panel p-4 min-h-[110px]">
-      <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest mb-2.5">
-        {t('highScores')} — {modeLabel} / {diffLabel}{variantLabel}
-      </p>
-      {scores.length === 0 ? (
-        <p className="text-geo-outline text-sm font-body">{t('noScoresYet')}</p>
-      ) : (
-        <div className="space-y-1.5">
-          {scores.slice(0, 5).map((entry, i) => (
-            <div
-              key={`${entry.date}-${i}`}
-              className="flex items-center gap-2 text-sm"
-            >
-              <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-headline font-extrabold ${
-                i === 0 ? 'bg-geo-tertiary-bright/20 text-geo-tertiary-bright border border-geo-tertiary-bright/40' : 'bg-geo-surface-highest text-geo-on-surface-dim border border-geo-outline-dim/30'
-              }`}>{i + 1}</span>
-              <span className="flex-1 truncate text-geo-on-surface font-body font-medium">{entry.name}</span>
-              <span className={`font-headline font-extrabold text-xs ${i === 0 ? 'text-geo-primary' : 'text-geo-on-surface-dim'}`}>
-                {mode === 'timed' ? `${entry.correctCount} ${t('found.suffix')}` : entry.score.toLocaleString()}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}

@@ -51,10 +51,10 @@ export default function CityQuestionCard({
       <p className="text-geo-on-surface text-[10px] sm:text-xs font-headline font-bold uppercase tracking-widest mb-1 sm:mb-2">
         {questionNumber} {t('of')} {totalQuestions}
       </p>
-      <p className="text-white text-base sm:text-xl lg:text-2xl 2xl:text-3xl font-body">
+      <p className="text-geo-on-surface text-base sm:text-xl lg:text-2xl 2xl:text-3xl font-body">
         {t('whereIs')} <span className="font-headline font-extrabold text-geo-primary text-glow-primary">{cityName}</span>
         {showCountry && <span className="text-geo-on-surface text-sm sm:text-lg lg:text-xl">, {tc(countryName)}</span>}
-        <span className="text-white">?</span>
+        <span className="text-geo-on-surface">?</span>
       </p>
       <p className="text-geo-on-surface-dim text-xs sm:text-base font-body mt-1 sm:mt-3">
         {t('pinOnMap')}

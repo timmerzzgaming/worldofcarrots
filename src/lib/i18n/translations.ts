@@ -93,7 +93,7 @@ export const en: Translations = {
   cancel: 'Cancel',
   quitGame: 'Quit Game?',
   progressLost: 'Your progress will be lost.',
-  allCountries: 'All 197 countries',
+  allCountries: 'All 199 countries',
   timer20s: '20s Timer',
   noTimer: 'No Timer',
 
@@ -104,7 +104,7 @@ export const en: Translations = {
   'diff.easy.desc': '~47 well-known countries',
   'diff.medium.desc': '~107 countries',
   'diff.hard.desc': '~162 countries',
-  'diff.expert.desc': 'All 197 countries',
+  'diff.expert.desc': 'All 199 countries',
 
   'region.World': 'World',
   'region.Africa': 'Africa',
@@ -293,7 +293,7 @@ export const en: Translations = {
   'ach.perfectClassic': 'Perfect Classic',
   'ach.perfectClassic.desc': '10/10 in Classic mode',
   'ach.perfectMarathon': 'Perfect Marathon',
-  'ach.perfectMarathon.desc': '197/197 in Marathon mode',
+  'ach.perfectMarathon.desc': '199/199 in Marathon mode',
   'ach.stars10': 'Star Collector',
   'ach.stars10.desc': 'Earn 10 total stars',
   'ach.stars50': 'Star Hunter',
@@ -362,6 +362,7 @@ export const en: Translations = {
   'animal.donkey': 'Donkey',
   'animal.pig': 'Pig',
   'animal.carrotBird': 'Carrot Bird',
+  'animal.hamster': 'Hamster',
 
   // Daily Challenge
   'daily.challenge': 'Daily Challenge',

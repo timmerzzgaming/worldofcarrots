@@ -6,7 +6,7 @@
  */
 
 // ---------------------------------------------------------------------------
-// Country areas (km²) — real-world approximate values for all 197 countries
+// Country areas (km²) — real-world approximate values for all 199 countries
 // Keys are ADMIN names from the GeoJSON dataset.
 // ---------------------------------------------------------------------------
 
@@ -77,6 +77,7 @@ export const COUNTRY_AREA: Record<string, number> = {
   'Germany': 357022,
   'Ghana': 238533,
   'Greece': 131957,
+  'Greenland': 2166086,
   'Grenada': 344,
   'Guatemala': 108889,
   'Guinea': 245857,
@@ -205,6 +206,7 @@ export const COUNTRY_AREA: Record<string, number> = {
   'Vatican City': 0.44,
   'Venezuela': 916445,
   'Vietnam': 331212,
+  'Western Sahara': 266000,
   'Yemen': 527968,
   'Zambia': 752618,
   'Zimbabwe': 390757,
@@ -285,6 +287,7 @@ export const CAPITAL_TIER: Record<string, 1 | 2 | 3 | 4> = {
   'Estonia': 2,
   'Ethiopia': 2,
   'Ghana': 2,
+  'Greenland': 2,
   'Guatemala': 2,
   'Haiti': 2,
   'Honduras': 2,
@@ -420,6 +423,7 @@ export const CAPITAL_TIER: Record<string, 1 | 2 | 3 | 4> = {
   'Tuvalu': 4,
   'Vanuatu': 4,
   'Vatican City': 4,
+  'Western Sahara': 4,
 };
 
 // ---------------------------------------------------------------------------

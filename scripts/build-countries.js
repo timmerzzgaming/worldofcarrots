@@ -1,7 +1,7 @@
 const fs = require('fs');
 const geo = JSON.parse(fs.readFileSync('ne_50m_raw.geojson', 'utf8'));
 
-// The 197 countries Sporcle uses (NE names)
+// The 199 countries (NE names)
 const INCLUDE = new Set([
   // Africa
   'Algeria', 'Angola', 'Benin', 'Botswana', 'Burkina Faso', 'Burundi',
@@ -49,6 +49,8 @@ const INCLUDE = new Set([
   'Vanuatu',
   // Non-UN but commonly included
   'Kosovo', 'Palestine', 'Taiwan',
+  // Territories commonly included in geography games
+  'Greenland', 'Western Sahara',
 ]);
 
 // Rename to common English names
@@ -113,7 +115,72 @@ for (const f of kept) {
   f.geometry = { type: 'MultiPolygon', coordinates: coords };
 }
 
-// Step 3: build clean output
+// Step 3: Douglas-Peucker simplification
+// Tolerance in degrees — 0.03 ≈ ~3km, removes fine coastline detail while keeping country shapes
+const TOLERANCE = 0.03;
+
+function sqDist(p, a, b) {
+  let dx = b[0] - a[0], dy = b[1] - a[1];
+  if (dx !== 0 || dy !== 0) {
+    const t = ((p[0] - a[0]) * dx + (p[1] - a[1]) * dy) / (dx * dx + dy * dy);
+    if (t > 1) { a = b; }
+    else if (t > 0) { a = [a[0] + dx * t, a[1] + dy * t]; }
+  }
+  dx = p[0] - a[0]; dy = p[1] - a[1];
+  return dx * dx + dy * dy;
+}
+
+function simplifyRing(coords, tolerance) {
+  if (coords.length <= 4) return coords; // minimum for a valid ring
+  const sqTol = tolerance * tolerance;
+  const len = coords.length;
+  const keep = new Uint8Array(len);
+  keep[0] = 1; keep[len - 1] = 1;
+  const stack = [[0, len - 1]];
+  while (stack.length) {
+    const [first, last] = stack.pop();
+    let maxSqDist = 0, index = 0;
+    for (let i = first + 1; i < last; i++) {
+      const d = sqDist(coords[i], coords[first], coords[last]);
+      if (d > maxSqDist) { maxSqDist = d; index = i; }
+    }
+    if (maxSqDist > sqTol) {
+      keep[index] = 1;
+      if (index - first > 1) stack.push([first, index]);
+      if (last - index > 1) stack.push([index, last]);
+    }
+  }
+  const result = [];
+  for (let i = 0; i < len; i++) {
+    if (keep[i]) result.push(coords[i]);
+  }
+  // Ensure ring is closed
+  if (result.length >= 3) {
+    const f = result[0], l = result[result.length - 1];
+    if (f[0] !== l[0] || f[1] !== l[1]) result.push([...f]);
+  }
+  return result.length >= 4 ? result : coords;
+}
+
+function simplifyGeometry(geom, tolerance) {
+  if (geom.type === 'Polygon') {
+    return {
+      type: 'Polygon',
+      coordinates: geom.coordinates.map(ring => simplifyRing(ring, tolerance)),
+    };
+  }
+  if (geom.type === 'MultiPolygon') {
+    return {
+      type: 'MultiPolygon',
+      coordinates: geom.coordinates.map(polygon =>
+        polygon.map(ring => simplifyRing(ring, tolerance))
+      ),
+    };
+  }
+  return geom;
+}
+
+// Step 4: build clean output with simplified geometry
 const result = {
   type: 'FeatureCollection',
   features: kept.map(f => {
@@ -121,7 +188,7 @@ const result = {
     const displayName = RENAME[neName] || neName;
     return {
       type: 'Feature',
-      geometry: f.geometry,
+      geometry: simplifyGeometry(f.geometry, TOLERANCE),
       properties: {
         ADMIN: displayName,
         NAME: displayName,
@@ -142,7 +209,7 @@ console.log('Total countries:', result.features.length);
 console.log('File size:', (out.length / 1024).toFixed(0), 'KB');
 console.log('');
 
-// Verify against target 197
+// Verify against target 199
 const TARGET = [
   'Afghanistan','Albania','Algeria','Andorra','Angola','Antigua and Barbuda','Argentina','Armenia','Australia','Austria','Azerbaijan',
   'Bahamas','Bahrain','Bangladesh','Barbados','Belarus','Belgium','Belize','Benin','Bhutan','Bolivia','Bosnia and Herzegovina','Botswana','Brazil','Brunei','Bulgaria','Burkina Faso','Burundi',
@@ -172,6 +239,7 @@ const TARGET = [
   'Yemen',
   'Zambia','Zimbabwe',
   'Taiwan','Palestine',
+  'Greenland','Western Sahara',
 ];
 
 const targetSet = new Set(TARGET);

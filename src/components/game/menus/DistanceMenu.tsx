@@ -42,8 +42,19 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
     playClick()
   }
 
+  const startButton = (
+    <button
+      onClick={() => onStartGame(difficulty, selectedRegion, unit)}
+      className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
+    >
+      {t('startGame')}
+    </button>
+  )
+
   return (
     <>
+      <div className="sm:hidden mb-4">{startButton}</div>
+
       {/* Region */}
       <p className="text-geo-on-surface-dim text-xs font-headline font-bold uppercase tracking-widest mb-2 text-center">{t('selectRegion')}</p>
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 mb-3 sm:mb-4">
@@ -54,12 +65,12 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
             onClick={() => { playClick(); setSelectedRegion(r) }}
             className={`glass-panel p-2 sm:p-3 flex items-center justify-center text-center transition-all cursor-pointer ${
               selectedRegion === r
-                ? 'border-geo-secondary/50 bg-geo-secondary/10 shadow-[0_0_15px_-5px_rgba(100,168,254,0.2)]'
-                : 'hover:border-geo-secondary/40 hover:shadow-[0_0_20px_-5px_rgba(100,168,254,0.15)]'
+                ? '!bg-geo-secondary/30'
+                : 'hover:bg-geo-surface-high/50'
             }`}
           >
             <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-              selectedRegion === r ? 'text-geo-secondary' : 'text-geo-on-surface-dim'
+              selectedRegion === r ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
             }`}>{t(`region.${r}` as keyof Translations)}</p>
           </button>
         ))}
@@ -75,13 +86,13 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
               onClick={() => { playClick(); setDifficulty(d) }}
               className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
                 difficulty === d
-                  ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_15px_-5px_rgba(107,255,193,0.2)]'
-                  : 'hover:border-geo-primary/40 hover:shadow-[0_0_20px_-5px_rgba(107,255,193,0.15)]'
+                  ? '!bg-geo-primary/25'
+                  : 'hover:bg-geo-surface-high/50'
               }`}
             >
               <div className="text-xl mb-1">{DIFFICULTY_ICONS[d]}</div>
               <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-                difficulty === d ? 'text-geo-primary' : 'text-geo-on-surface-dim'
+                difficulty === d ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
               }`}>{t(`diff.${d}` as keyof Translations)}</p>
             </button>
         ))}
@@ -94,37 +105,32 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
           onClick={handleUnitToggle}
           className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
             unit === 'km'
-              ? 'border-geo-secondary/50 bg-geo-secondary/10 shadow-[0_0_15px_-5px_rgba(100,168,254,0.2)]'
-              : 'hover:border-geo-secondary/40 hover:shadow-[0_0_20px_-5px_rgba(100,168,254,0.15)]'
+              ? '!bg-geo-secondary/30'
+              : 'hover:bg-geo-surface-high/50'
           }`}
         >
           <div className="text-xl mb-1">🌐</div>
           <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-            unit === 'km' ? 'text-geo-secondary' : 'text-geo-on-surface-dim'
+            unit === 'km' ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
           }`}>{t('km')}</p>
         </button>
         <button
           onClick={handleUnitToggle}
           className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
             unit === 'mi'
-              ? 'border-geo-secondary/50 bg-geo-secondary/10 shadow-[0_0_15px_-5px_rgba(100,168,254,0.2)]'
-              : 'hover:border-geo-secondary/40 hover:shadow-[0_0_20px_-5px_rgba(100,168,254,0.15)]'
+              ? '!bg-geo-secondary/30'
+              : 'hover:bg-geo-surface-high/50'
           }`}
         >
           <div className="text-xl mb-1">🇺🇸</div>
           <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-            unit === 'mi' ? 'text-geo-secondary' : 'text-geo-on-surface-dim'
+            unit === 'mi' ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
           }`}>{t('mi')}</p>
         </button>
       </div>
 
-      <div className="sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
-        <button
-          onClick={() => onStartGame(difficulty, selectedRegion, unit)}
-          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
-        >
-          {t('startGame')}
-        </button>
+      <div className="hidden sm:block sticky bottom-0 pt-4 pb-1 -mx-1 px-1">
+        {startButton}
       </div>
     </>
   )

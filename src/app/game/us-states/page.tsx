@@ -181,7 +181,10 @@ export default function USStatesPage() {
           center: [-98, 39],
           zoom: 3.5,
           attributionControl: false,
-          renderWorldCopies: true,
+          renderWorldCopies: false,
+          dragRotate: false,
+          pitchWithRotate: false,
+          touchPitch: false,
         })
 
         map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
@@ -202,7 +205,7 @@ export default function USStatesPage() {
                 ['boolean', ['feature-state', 'target'], false], '#3b82f6',
                 ['boolean', ['feature-state', 'solved'], false], '#86efac',
                 ['boolean', ['feature-state', 'hover'], false], countryHoverColor(),
-                countryFillColor(),
+                '#FFFFFF',
               ],
               'fill-opacity': [
                 'case',
@@ -232,11 +235,11 @@ export default function USStatesPage() {
               ],
               'line-width': [
                 'case',
-                ['boolean', ['feature-state', 'correct'], false], 3,
-                ['boolean', ['feature-state', 'wrong'], false], 3,
-                ['boolean', ['feature-state', 'target'], false], 3,
-                ['boolean', ['feature-state', 'hover'], false], 2,
-                1.2,
+                ['boolean', ['feature-state', 'correct'], false], 4.5,
+                ['boolean', ['feature-state', 'wrong'], false], 4.5,
+                ['boolean', ['feature-state', 'target'], false], 4.5,
+                ['boolean', ['feature-state', 'hover'], false], 3.5,
+                3,
               ],
             },
           })
@@ -692,13 +695,13 @@ export default function USStatesPage() {
           <div className="absolute top-4 right-4 z-10 flex gap-2">
             <button
               onClick={() => { playClick(); setShowQuitConfirm(true) }}
-              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
             >
               {t('quit')}
             </button>
             <button
               onClick={() => { playClick(); setShowRestartConfirm(true) }}
-              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-primary hover:border-geo-primary/30 transition-colors"
+              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-on-surface text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-on-surface hover:border-geo-on-surface/30 transition-colors"
             >
               {t('restart')}
             </button>

@@ -1,4 +1,6 @@
 const STORAGE_KEY = 'woc-sound'
+const MUSIC_VOL_KEY = 'woc-music-volume'
+const SFX_VOL_KEY = 'woc-sfx-volume'
 
 let audioCtx: AudioContext | null = null
 
@@ -22,6 +24,44 @@ export function setSoundEnabled(enabled: boolean) {
   localStorage.setItem(STORAGE_KEY, enabled ? 'on' : 'off')
 }
 
+/** Music volume (0-1). Default 0.5 */
+export function getMusicVolume(): number {
+  if (typeof window === 'undefined') return 0.5
+  const v = localStorage.getItem(MUSIC_VOL_KEY)
+  return v !== null ? parseFloat(v) : 0.5
+}
+
+export function setMusicVolume(vol: number) {
+  localStorage.setItem(MUSIC_VOL_KEY, String(Math.max(0, Math.min(1, vol))))
+  applyMusicVolume()
+}
+
+/** SFX volume (0-1). Default 0.5 */
+export function getSfxVolume(): number {
+  if (typeof window === 'undefined') return 0.5
+  const v = localStorage.getItem(SFX_VOL_KEY)
+  return v !== null ? parseFloat(v) : 0.5
+}
+
+export function setSfxVolume(vol: number) {
+  localStorage.setItem(SFX_VOL_KEY, String(Math.max(0, Math.min(1, vol))))
+}
+
+function effectiveMusic(): number {
+  return getMusicVolume() * 0.3
+}
+
+function effectiveSfx(): number {
+  return getSfxVolume()
+}
+
+function applyMusicVolume() {
+  const vol = effectiveMusic()
+  if (menuAudio && !menuAudio.paused) menuAudio.volume = vol
+  if (gameAudio && !gameAudio.paused) gameAudio.volume = vol
+  if (multiplayerAudio && !multiplayerAudio.paused) multiplayerAudio.volume = vol
+}
+
 function tone(
   freq: number,
   duration: number,
@@ -30,11 +70,12 @@ function tone(
   startTime = 0,
 ) {
   const ctx = getCtx()
+  const vol = volume * effectiveSfx()
   const osc = ctx.createOscillator()
   const gain = ctx.createGain()
   osc.type = type
   osc.frequency.value = freq
-  gain.gain.setValueAtTime(volume, ctx.currentTime + startTime)
+  gain.gain.setValueAtTime(vol, ctx.currentTime + startTime)
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startTime + duration)
   osc.connect(gain)
   gain.connect(ctx.destination)
@@ -44,16 +85,17 @@ function tone(
 
 function noise(duration: number, volume = 0.1, startTime = 0) {
   const ctx = getCtx()
+  const vol = volume * effectiveSfx()
   const bufferSize = ctx.sampleRate * duration
   const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate)
   const data = buffer.getChannelData(0)
   for (let i = 0; i < bufferSize; i++) {
-    data[i] = (Math.random() * 2 - 1) * volume
+    data[i] = (Math.random() * 2 - 1) * vol
   }
   const source = ctx.createBufferSource()
   source.buffer = buffer
   const gain = ctx.createGain()
-  gain.gain.setValueAtTime(volume, ctx.currentTime + startTime)
+  gain.gain.setValueAtTime(vol, ctx.currentTime + startTime)
   gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + startTime + duration)
   source.connect(gain)
   gain.connect(ctx.destination)
@@ -86,6 +128,7 @@ function echoTone(
   startTime = 0,
 ) {
   const ctx = getCtx()
+  const vol = volume * effectiveSfx()
   const t = ctx.currentTime + startTime
 
   // Main oscillator
@@ -95,7 +138,7 @@ function echoTone(
 
   // Dry gain
   const dry = ctx.createGain()
-  dry.gain.setValueAtTime(volume, t)
+  dry.gain.setValueAtTime(vol, t)
   dry.gain.exponentialRampToValueAtTime(0.001, t + duration)
 
   // Delay for echo
@@ -282,7 +325,6 @@ export function playCountdownGo() {
 
 // --- Background music ---
 
-const MUSIC_VOLUME = 0.15
 let gameAudio: HTMLAudioElement | null = null
 let menuAudio: HTMLAudioElement | null = null
 let multiplayerAudio: HTMLAudioElement | null = null
@@ -303,7 +345,7 @@ function fadeOut(audio: HTMLAudioElement, duration = 500) {
 }
 
 function playTrack(audio: HTMLAudioElement) {
-  audio.volume = MUSIC_VOLUME
+  audio.volume = effectiveMusic()
   audio.play().catch(() => {})
 }
 
@@ -311,9 +353,9 @@ function fadeIn(audio: HTMLAudioElement, delay = 0, duration = 1500) {
   audio.volume = 0
   setTimeout(() => {
     audio.play().catch(() => {})
-    const target = MUSIC_VOLUME
+    const target = effectiveMusic()
     const step = 0.01
-    const interval = duration * step / target
+    const interval = duration * step / Math.max(target, 0.01)
     const fade = setInterval(() => {
       if (audio.volume < target - step) {
         audio.volume = Math.min(target, audio.volume + step)
@@ -396,15 +438,13 @@ export function playVictoryFanfare() {
     victoryAudio.loop = false
   }
   victoryAudio.currentTime = 0
-  victoryAudio.volume = MUSIC_VOLUME * 1.5
+  victoryAudio.volume = Math.min(1, effectiveMusic() * 1.5)
   victoryAudio.play().catch(() => {})
 }
 
 export function syncMusic() {
   if (isSoundEnabled()) {
-    if (menuAudio && !menuAudio.paused) menuAudio.volume = MUSIC_VOLUME
-    if (gameAudio && !gameAudio.paused) gameAudio.volume = MUSIC_VOLUME
-    if (multiplayerAudio && !multiplayerAudio.paused) multiplayerAudio.volume = MUSIC_VOLUME
+    applyMusicVolume()
   } else {
     if (menuAudio) menuAudio.pause()
     if (gameAudio) gameAudio.pause()

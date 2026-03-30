@@ -359,6 +359,7 @@ const nl: Translations = {
   'animal.donkey': 'Ezel',
   'animal.pig': 'Varken',
   'animal.carrotBird': 'Peenvogel',
+  'animal.hamster': 'Hamster',
 
   // Daily Challenge
   'daily.challenge': 'Dagelijkse Uitdaging',

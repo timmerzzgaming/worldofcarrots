@@ -17,8 +17,20 @@ export default function FlagMenu({ onStartGame }: FlagMenuProps) {
   const [selectedDifficulty, setSelectedDifficulty] = useState<Difficulty>('easy')
   const [selectedRegion, setSelectedRegion] = useState('World')
 
+  const startButton = (
+    <button
+      onClick={() => onStartGame(selectedDifficulty, selectedRegion)}
+      className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
+    >
+      {t('startGame')}
+    </button>
+  )
+
   return (
     <>
+      {/* Mobile: Start Game at top */}
+      <div className="sm:hidden mb-4">{startButton}</div>
+
       {/* How it works */}
       <div className="glass-panel p-3 sm:p-5 mb-4 sm:mb-5">
         <p className="text-geo-on-surface-dim text-[10px] font-headline font-bold uppercase tracking-widest mb-3">{t('howItWorks')}</p>
@@ -81,13 +93,8 @@ export default function FlagMenu({ onStartGame }: FlagMenuProps) {
         ))}
       </div>
 
-      <div className="sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
-        <button
-          onClick={() => onStartGame(selectedDifficulty, selectedRegion)}
-          className="btn-primary w-full py-3 sm:py-4 text-base sm:text-lg"
-        >
-          {t('startGame')}
-        </button>
+      <div className="hidden sm:block sticky bottom-0 pt-4 pb-1 bg-gradient-to-t from-geo-surface via-geo-surface/95 to-transparent -mx-1 px-1">
+        {startButton}
       </div>
     </>
   )

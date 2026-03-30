@@ -77,13 +77,18 @@ export function playOmNomNom() {
   tone(120, 0.08, 'sine', 0.08, 1.0)
 }
 
-/** Coin shower — rapid ascending chimes */
+/** Coin shower — rapid ascending chimes with metallic clinks */
 export function playCoinShower() {
   if (!isSoundEnabled()) return
-  const notes = [1047, 1175, 1319, 1397, 1568, 1760, 1976, 2093]
+  const notes = [1047, 1175, 1319, 1397, 1568, 1760, 1976, 2093, 2349, 2637, 2793, 3136, 3520, 3951, 4186, 4699]
   notes.forEach((freq, i) => {
-    tone(freq, 0.12, 'sine', 0.15, i * 0.06)
+    tone(freq, 0.1, 'sine', 0.12, i * 0.04)
   })
+  // Metallic coin clink accents
+  for (let i = 0; i < 8; i++) {
+    const clinkFreq = 3000 + Math.random() * 2000
+    tone(clinkFreq, 0.03, 'square', 0.08, i * 0.08 + 0.02)
+  }
 }
 
 /** Jackpot fanfare — triumphant cascading melody */
