@@ -10,6 +10,8 @@ import { useBasePath } from '@/lib/basePath'
 import { spendCarrots } from '@/lib/carrots'
 import { logCreditTransaction } from '@/lib/credits-transaction'
 import { playClick } from '@/lib/sounds'
+import MapBackground from '@/components/home/MapBackground'
+import FloatingFlags from '@/components/home/FloatingFlags'
 import {
   playDrumRoll,
   playOmNomNom,
@@ -230,8 +232,8 @@ export default function CarrotBonusPage() {
 
   return (
     <main className="relative min-h-screen flex flex-col items-center justify-center px-3 sm:px-4 py-6">
-      {/* Background glow */}
-      <div className="fixed inset-0 bg-gradient-to-b from-geo-surface-high via-geo-bg to-geo-surface-highest opacity-60 pointer-events-none" />
+      <MapBackground />
+      <FloatingFlags />
 
       {/* Back button */}
       <motion.div
