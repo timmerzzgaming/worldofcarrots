@@ -389,6 +389,54 @@ export interface Translations {
   'home.stickerAlbum': string
   'home.stickerAlbum.desc': string
 
+  // Animal names (Carrot Bonus game)
+  'animal.rabbit': string
+  'animal.horse': string
+  'animal.donkey': string
+  'animal.pig': string
+  'animal.carrotBird': string
+
+  // Daily Challenge
+  'daily.challenge': string
+  'daily.challenge.desc': string
+  'daily.findCountries': string
+  'daily.complete': string
+  'daily.score': string
+  'daily.correct': string
+  'daily.timeTaken': string
+  'daily.todayLeaderboard': string
+  'daily.alreadyPlayed': string
+  'daily.alreadyPlayedDesc': string
+  'daily.yourScore': string
+  'daily.points': string
+  'daily.point': string
+  'daily.loading': string
+  'daily.noChallenge': string
+
+  // Weekly Leaderboard
+  'leaderboard.weekly': string
+  'leaderboard.noEntries': string
+  'leaderboard.noEntriesDesc': string
+  'leaderboard.loading': string
+
+  // Guest lock
+  'guest.unlockMessage': string
+
+  // Leaderboard modes
+  'leaderboard.global': string
+  'leaderboard.classic': string
+  'leaderboard.timed': string
+  'leaderboard.marathon': string
+  'leaderboard.survival': string
+  'leaderboard.flag': string
+  'leaderboard.distance': string
+
+  // UserBadge stats
+  'stats.coins': string
+  'stats.carrots': string
+  'stats.xp': string
+  'stats.games': string
+
   // Leaderboard
   'home.leaderboard': string
   'home.leaderboard.desc': string

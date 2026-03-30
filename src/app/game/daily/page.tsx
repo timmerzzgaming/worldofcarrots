@@ -430,7 +430,7 @@ export default function DailyChallengePage() {
       {/* Loading overlay */}
       {phase === 'loading' && (
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-geo-bg/80 backdrop-blur-sm">
-          <p className="text-geo-on-surface-dim font-body">Loading daily challenge...</p>
+          <p className="text-geo-on-surface-dim font-body">{t('daily.loading')}</p>
         </div>
       )}
 
@@ -439,9 +439,9 @@ export default function DailyChallengePage() {
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-geo-bg/80 backdrop-blur-sm p-4">
           <div className="glass-panel p-8 max-w-sm text-center">
             <p className="text-4xl mb-3">✅</p>
-            <h2 className="text-xl font-headline font-extrabold text-geo-on-surface uppercase mb-2">Already Completed</h2>
+            <h2 className="text-xl font-headline font-extrabold text-geo-on-surface uppercase mb-2">{t('daily.alreadyPlayed')}</h2>
             <p className="text-geo-on-surface-dim text-sm font-body mb-4">
-              You&apos;ve already finished today&apos;s challenge. Come back tomorrow!
+              {t('daily.alreadyPlayedDesc')}
             </p>
             <button onClick={() => router.push(prefixPath('/'))} className="btn-primary px-8 py-3">{t('backToMenu')}</button>
           </div>
@@ -453,9 +453,9 @@ export default function DailyChallengePage() {
         <div className="absolute inset-0 z-20 flex items-center justify-center bg-geo-bg/60 backdrop-blur-sm p-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-panel p-8 max-w-sm text-center">
             <p className="text-4xl mb-3">🏆</p>
-            <h2 className="text-2xl font-headline font-extrabold text-geo-tertiary-bright uppercase mb-1">Daily Challenge</h2>
+            <h2 className="text-2xl font-headline font-extrabold text-geo-tertiary-bright uppercase mb-1">{t('daily.challenge')}</h2>
             <p className="text-geo-on-surface-dim text-sm font-body mb-1">
-              Find {QUESTION_COUNT} countries in {GAME_TIME} seconds
+              {t('daily.findCountries')}
             </p>
             <p className="text-geo-on-surface-dim text-xs font-body mb-1">
               Each correct answer scores more points than the last
@@ -500,13 +500,13 @@ export default function DailyChallengePage() {
           <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
             <div className="glass-panel px-3 py-2 sm:px-4 2xl:px-6 2xl:py-3 text-center min-w-[200px] sm:min-w-[280px]">
               <p className="text-[10px] font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest mb-1">
-                Daily Challenge — {currentIndex + 1}/{QUESTION_COUNT}
+                {t('daily.challenge')} — {currentIndex + 1}/{QUESTION_COUNT}
               </p>
               <p className="text-xl font-headline font-extrabold text-geo-on-surface">
                 {t('find' as keyof Translations)} <span className="text-geo-primary text-glow-primary">{currentQ.name}</span>
               </p>
               <p className="text-[10px] font-headline text-geo-on-surface-dim mt-0.5">
-                +{currentIndex + 1} {currentIndex + 1 === 1 ? 'point' : 'points'}
+                +{currentIndex + 1} {currentIndex + 1 === 1 ? t('daily.point') : t('daily.points')}
               </p>
             </div>
           </div>
@@ -593,16 +593,16 @@ export default function DailyChallengePage() {
             <StarRating stars={stars as 0 | 1 | 2 | 3} />
 
             <h2 className="text-2xl font-headline font-extrabold text-geo-on-surface uppercase text-center mt-3 mb-4">
-              Daily Challenge Complete
+              {t('daily.complete')}
             </h2>
 
             <div className="grid grid-cols-2 gap-3 mb-4">
               <div className="bg-geo-surface-high/50 rounded-2xl p-3 text-center border border-geo-outline-dim/20">
-                <p className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase tracking-widest">Score</p>
+                <p className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase tracking-widest">{t('daily.score')}</p>
                 <p className="text-2xl font-headline font-extrabold text-geo-primary">{score}</p>
               </div>
               <div className="bg-geo-surface-high/50 rounded-2xl p-3 text-center border border-geo-outline-dim/20">
-                <p className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase tracking-widest">Correct</p>
+                <p className="text-[10px] text-geo-on-surface-dim font-headline font-bold uppercase tracking-widest">{t('daily.correct')}</p>
                 <p className="text-2xl font-headline font-extrabold text-geo-secondary">{correctCount}/{QUESTION_COUNT}</p>
               </div>
             </div>
@@ -617,19 +617,19 @@ export default function DailyChallengePage() {
 
             {rewardResult && (
               <div className="glass-panel p-3 mb-4 space-y-1">
-                <p className="text-[10px] font-headline font-bold text-geo-on-surface-dim uppercase tracking-widest mb-1">Rewards</p>
+                <p className="text-[10px] font-headline font-bold text-geo-on-surface-dim uppercase tracking-widest mb-1">{t('credits.earned')}</p>
                 <div className="flex justify-between text-sm font-body">
-                  <span className="text-geo-on-surface-dim">💰 Coins</span>
+                  <span className="text-geo-on-surface-dim">💰 {t('stats.coins')}</span>
                   <span className="text-geo-tertiary-bright font-bold">+{rewardResult.totalCoins}</span>
                 </div>
                 {rewardResult.carrots > 0 && (
                   <div className="flex justify-between text-sm font-body">
-                    <span className="text-geo-on-surface-dim">🥕 Carrots</span>
+                    <span className="text-geo-on-surface-dim">🥕 {t('stats.carrots')}</span>
                     <span className="text-orange-400 font-bold">+{rewardResult.carrots}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-sm font-body">
-                  <span className="text-geo-on-surface-dim">⚡ XP</span>
+                  <span className="text-geo-on-surface-dim">⚡ {t('stats.xp')}</span>
                   <span className="text-geo-secondary font-bold">+{rewardResult.xpEarned}</span>
                 </div>
               </div>
@@ -637,7 +637,7 @@ export default function DailyChallengePage() {
 
             {leaderboard.length > 0 && (
               <div className="mb-4">
-                <p className="text-[10px] font-headline font-bold text-geo-on-surface-dim uppercase tracking-widest mb-2">Today&apos;s Rankings</p>
+                <p className="text-[10px] font-headline font-bold text-geo-on-surface-dim uppercase tracking-widest mb-2">{t('daily.todayLeaderboard')}</p>
                 <div className="space-y-1 max-h-48 overflow-y-auto">
                   {leaderboard.map((entry, i) => {
                     const isMe = user?.id === entry.user_id

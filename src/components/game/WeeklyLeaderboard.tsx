@@ -3,18 +3,20 @@
 import { useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/lib/auth/context'
+import { useTranslation } from '@/lib/i18n'
+import type { Translations } from '@/lib/i18n'
 import { getWeeklyLeaderboard, type LeaderboardEntry } from '@/lib/leaderboard'
 import LevelBadge from '@/components/xp/LevelBadge'
 import { cn } from '@/lib/cn'
 
-const MODES = [
-  { id: 'global', label: '🌍 Global' },
-  { id: 'classic', label: 'Classic' },
-  { id: 'timed', label: 'Timed' },
-  { id: 'marathon', label: 'Marathon' },
-  { id: 'survival', label: 'Survival' },
-  { id: 'flag', label: 'Flag' },
-  { id: 'distance', label: 'Distance' },
+const MODES: { id: string; labelKey: keyof Translations; emoji?: string }[] = [
+  { id: 'global', labelKey: 'leaderboard.global', emoji: '🌍' },
+  { id: 'classic', labelKey: 'leaderboard.classic' },
+  { id: 'timed', labelKey: 'leaderboard.timed' },
+  { id: 'marathon', labelKey: 'leaderboard.marathon' },
+  { id: 'survival', labelKey: 'leaderboard.survival' },
+  { id: 'flag', labelKey: 'leaderboard.flag' },
+  { id: 'distance', labelKey: 'leaderboard.distance' },
 ]
 
 const RANK_COLORS = ['text-geo-tertiary-bright', 'text-gray-300', 'text-orange-400']
@@ -25,6 +27,7 @@ interface WeeklyLeaderboardProps {
 
 export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [selectedMode, setSelectedMode] = useState('global')
   const [entries, setEntries] = useState<LeaderboardEntry[]>([])
   const [loading, setLoading] = useState(true)
@@ -49,7 +52,7 @@ export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
       >
         <div className="flex items-center justify-between mb-5 sm:mb-6">
           <h2 className="text-2xl sm:text-3xl font-headline font-extrabold text-geo-on-surface uppercase tracking-wide">
-            Weekly Leaderboard
+            {t('leaderboard.weekly')}
           </h2>
           <button onClick={onClose} className="text-geo-on-surface-dim hover:text-geo-on-surface text-xl sm:text-2xl p-1">
             ✕
@@ -58,7 +61,7 @@ export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
 
         {/* Mode tabs */}
         <div className="flex gap-1.5 sm:gap-2 mb-5 sm:mb-6 overflow-x-auto pb-1" role="tablist">
-          {MODES.map(({ id, label }) => (
+          {MODES.map(({ id, labelKey, emoji }) => (
             <button
               key={id}
               role="tab"
@@ -69,7 +72,7 @@ export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
                 selectedMode === id ? 'bg-geo-primary/20 text-geo-primary' : 'text-geo-on-surface-dim hover:text-geo-on-surface',
               )}
             >
-              {label}
+              {emoji ? `${emoji} ` : ''}{t(labelKey)}
             </button>
           ))}
         </div>
@@ -77,12 +80,12 @@ export default function WeeklyLeaderboard({ onClose }: WeeklyLeaderboardProps) {
         {/* Entries */}
         <div className="flex-1 overflow-y-auto space-y-2 sm:space-y-3">
           {loading ? (
-            <p className="text-geo-on-surface-dim text-base sm:text-lg text-center py-16">Loading...</p>
+            <p className="text-geo-on-surface-dim text-base sm:text-lg text-center py-16">{t('leaderboard.loading')}</p>
           ) : entries.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 sm:py-24">
               <span className="text-5xl sm:text-6xl mb-4">🏆</span>
-              <p className="text-geo-on-surface-dim text-lg sm:text-xl font-headline font-bold text-center mb-2">No entries this week yet</p>
-              <p className="text-geo-on-surface-dim text-sm sm:text-base text-center">Play a game to claim the top spot!</p>
+              <p className="text-geo-on-surface-dim text-lg sm:text-xl font-headline font-bold text-center mb-2">{t('leaderboard.noEntries')}</p>
+              <p className="text-geo-on-surface-dim text-sm sm:text-base text-center">{t('leaderboard.noEntriesDesc')}</p>
             </div>
           ) : (
             entries.map((entry, i) => {

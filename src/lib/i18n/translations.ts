@@ -356,6 +356,54 @@ export const en: Translations = {
   'home.stickerAlbum': 'Sticker Album',
   'home.stickerAlbum.desc': 'Collect country stickers from chests. Complete continents for huge bonuses!',
 
+  // Animal names
+  'animal.rabbit': 'Rabbit',
+  'animal.horse': 'Horse',
+  'animal.donkey': 'Donkey',
+  'animal.pig': 'Pig',
+  'animal.carrotBird': 'Carrot Bird',
+
+  // Daily Challenge
+  'daily.challenge': 'Daily Challenge',
+  'daily.challenge.desc': 'Find 15 countries in 60 seconds',
+  'daily.findCountries': 'Find 15 countries in 60 seconds!',
+  'daily.complete': 'Daily Challenge Complete',
+  'daily.score': 'Score',
+  'daily.correct': 'Correct',
+  'daily.timeTaken': 'Time',
+  'daily.todayLeaderboard': 'Today\'s Leaderboard',
+  'daily.alreadyPlayed': 'Already Played',
+  'daily.alreadyPlayedDesc': 'You already completed today\'s challenge',
+  'daily.yourScore': 'Your Score',
+  'daily.points': 'points',
+  'daily.point': 'point',
+  'daily.loading': 'Loading...',
+  'daily.noChallenge': 'No challenge available',
+
+  // Weekly Leaderboard
+  'leaderboard.weekly': 'Weekly Leaderboard',
+  'leaderboard.noEntries': 'No entries this week yet',
+  'leaderboard.noEntriesDesc': 'Play a game to claim the top spot!',
+  'leaderboard.loading': 'Loading...',
+
+  // Guest lock
+  'guest.unlockMessage': 'Create an account to unlock more game modes',
+
+  // Leaderboard modes
+  'leaderboard.global': 'Global',
+  'leaderboard.classic': 'Classic',
+  'leaderboard.timed': 'Timed',
+  'leaderboard.marathon': 'Marathon',
+  'leaderboard.survival': 'Survival',
+  'leaderboard.flag': 'Flag',
+  'leaderboard.distance': 'Distance',
+
+  // UserBadge stats
+  'stats.coins': 'Coins',
+  'stats.carrots': 'Carrots',
+  'stats.xp': 'XP',
+  'stats.games': 'Games',
+
   // Leaderboard
   'home.leaderboard': 'Leaderboard',
   'home.leaderboard.desc': 'See who tops the weekly rankings',

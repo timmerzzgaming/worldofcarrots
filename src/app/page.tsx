@@ -555,7 +555,7 @@ export default function HomePage() {
                   </div>
                   {isGuest && (
                     <p className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide">
-                      🔒 Create an account to unlock more game modes
+                      🔒 {t('guest.unlockMessage')}
                     </p>
                   )}
                 </motion.div>
@@ -712,7 +712,7 @@ export default function HomePage() {
                       transition={{ delay: 0.4 }}
                       className="text-center mt-6 text-geo-secondary font-headline font-bold text-sm sm:text-base uppercase tracking-wide"
                     >
-                      🔒 Create an account to unlock more game modes
+                      🔒 {t('guest.unlockMessage')}
                     </motion.p>
                   )}
 

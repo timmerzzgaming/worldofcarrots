@@ -98,19 +98,19 @@ export default function UserBadge() {
                 transition={{ duration: 0.25, delay: 0.1 }}
               >
                 <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
-                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">Coins</p>
+                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">{t('stats.coins')}</p>
                   <p className="text-sm font-headline font-extrabold text-geo-tertiary-bright">💰 {user!.credits.toLocaleString()}</p>
                 </div>
                 <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
-                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">Carrots</p>
+                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">{t('stats.carrots')}</p>
                   <p className="text-sm font-headline font-extrabold text-orange-400">🥕 {user!.carrots}</p>
                 </div>
                 <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
-                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">XP</p>
+                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">{t('stats.xp')}</p>
                   <p className="text-sm font-headline font-extrabold text-geo-secondary">✨ {user!.xp.toLocaleString()}</p>
                 </div>
                 <div className="text-center p-1.5 rounded-lg bg-geo-surface-high/50">
-                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">Games</p>
+                  <p className="text-[10px] font-headline font-bold uppercase tracking-widest text-geo-on-surface-dim">{t('stats.games')}</p>
                   <p className="text-sm font-headline font-extrabold text-geo-primary">{user!.games_completed}</p>
                 </div>
               </motion.div>

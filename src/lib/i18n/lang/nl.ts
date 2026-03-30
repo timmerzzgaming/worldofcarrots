@@ -353,6 +353,54 @@ const nl: Translations = {
   'home.stickerAlbum': 'Stickeralbum',
   'home.stickerAlbum.desc': 'Verzamel landenstickers uit kisten. Voltooi continenten voor grote bonussen!',
 
+  // Animal names
+  'animal.rabbit': 'Konijn',
+  'animal.horse': 'Paard',
+  'animal.donkey': 'Ezel',
+  'animal.pig': 'Varken',
+  'animal.carrotBird': 'Peenvogel',
+
+  // Daily Challenge
+  'daily.challenge': 'Dagelijkse Uitdaging',
+  'daily.challenge.desc': 'Vind 15 landen in 60 seconden',
+  'daily.findCountries': 'Vind 15 landen in 60 seconden!',
+  'daily.complete': 'Dagelijkse Uitdaging Voltooid',
+  'daily.score': 'Score',
+  'daily.correct': 'Correct',
+  'daily.timeTaken': 'Tijd',
+  'daily.todayLeaderboard': 'Ranglijst van vandaag',
+  'daily.alreadyPlayed': 'Al Gespeeld',
+  'daily.alreadyPlayedDesc': 'Je hebt de uitdaging van vandaag al voltooid',
+  'daily.yourScore': 'Jouw Score',
+  'daily.points': 'punten',
+  'daily.point': 'punt',
+  'daily.loading': 'Laden...',
+  'daily.noChallenge': 'Geen uitdaging beschikbaar',
+
+  // Weekly Leaderboard
+  'leaderboard.weekly': 'Wekelijkse Ranglijst',
+  'leaderboard.noEntries': 'Nog geen scores deze week',
+  'leaderboard.noEntriesDesc': 'Speel een spel om de eerste plek te claimen!',
+  'leaderboard.loading': 'Laden...',
+
+  // Guest lock
+  'guest.unlockMessage': 'Maak een account aan om meer spelmodi te ontgrendelen',
+
+  // Leaderboard modes
+  'leaderboard.global': 'Globaal',
+  'leaderboard.classic': 'Klassiek',
+  'leaderboard.timed': 'Op Tijd',
+  'leaderboard.marathon': 'Marathon',
+  'leaderboard.survival': 'Overleven',
+  'leaderboard.flag': 'Vlag',
+  'leaderboard.distance': 'Afstand',
+
+  // UserBadge stats
+  'stats.coins': 'Munten',
+  'stats.carrots': 'Wortels',
+  'stats.xp': 'XP',
+  'stats.games': 'Spellen',
+
   // Leaderboard
   'home.leaderboard': 'Ranglijst',
   'home.leaderboard.desc': 'Bekijk wie bovenaan de weekranglijst staat',

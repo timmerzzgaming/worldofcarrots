@@ -353,6 +353,54 @@ const zh: Translations = {
   'home.stickerAlbum': '\u8d34\u7eb8\u76f8\u518c',
   'home.stickerAlbum.desc': '\u4ece\u5b9d\u7bb1\u6536\u96c6\u56fd\u5bb6\u8d34\u7eb8\u3002\u5b8c\u6210\u5927\u6d32\u83b7\u5f97\u5de8\u989d\u5956\u52b1\uff01',
 
+  // Animal names
+  'animal.rabbit': '\u5154\u5b50',
+  'animal.horse': '\u9a6c',
+  'animal.donkey': '\u9a74',
+  'animal.pig': '\u732a',
+  'animal.carrotBird': '\u80e1\u841d\u535c\u9e1f',
+
+  // Daily Challenge
+  'daily.challenge': '\u6bcf\u65e5\u6311\u6218',
+  'daily.challenge.desc': '\u572860\u79d2\u5185\u627e\u523015\u4e2a\u56fd\u5bb6',
+  'daily.findCountries': '\u572860\u79d2\u5185\u627e\u523015\u4e2a\u56fd\u5bb6\uff01',
+  'daily.complete': '\u6bcf\u65e5\u6311\u6218\u5b8c\u6210',
+  'daily.score': '\u5f97\u5206',
+  'daily.correct': '\u6b63\u786e',
+  'daily.timeTaken': '\u7528\u65f6',
+  'daily.todayLeaderboard': '\u4eca\u65e5\u6392\u884c\u699c',
+  'daily.alreadyPlayed': '\u5df2\u5b8c\u6210',
+  'daily.alreadyPlayedDesc': '\u4f60\u5df2\u7ecf\u5b8c\u6210\u4e86\u4eca\u5929\u7684\u6311\u6218',
+  'daily.yourScore': '\u4f60\u7684\u5206\u6570',
+  'daily.points': '\u5206',
+  'daily.point': '\u5206',
+  'daily.loading': '\u52a0\u8f7d\u4e2d...',
+  'daily.noChallenge': '\u6682\u65e0\u6311\u6218',
+
+  // Weekly Leaderboard
+  'leaderboard.weekly': '\u6bcf\u5468\u6392\u884c\u699c',
+  'leaderboard.noEntries': '\u672c\u5468\u8fd8\u6ca1\u6709\u8bb0\u5f55',
+  'leaderboard.noEntriesDesc': '\u73a9\u4e00\u5c40\u6e38\u620f\u6765\u5360\u636e\u699c\u9996\uff01',
+  'leaderboard.loading': '\u52a0\u8f7d\u4e2d...',
+
+  // Guest lock
+  'guest.unlockMessage': '\u521b\u5efa\u8d26\u53f7\u4ee5\u89e3\u9501\u66f4\u591a\u6e38\u620f\u6a21\u5f0f',
+
+  // Leaderboard modes
+  'leaderboard.global': '\u5168\u7403',
+  'leaderboard.classic': '\u7ecf\u5178',
+  'leaderboard.timed': '\u8ba1\u65f6',
+  'leaderboard.marathon': '\u9a6c\u62c9\u677e',
+  'leaderboard.survival': '\u751f\u5b58',
+  'leaderboard.flag': '\u56fd\u65d7',
+  'leaderboard.distance': '\u8ddd\u79bb',
+
+  // UserBadge stats
+  'stats.coins': '\u91d1\u5e01',
+  'stats.carrots': '\u80e1\u841d\u535c',
+  'stats.xp': '\u7ecf\u9a8c',
+  'stats.games': '\u6e38\u620f',
+
   // Leaderboard
   'home.leaderboard': '\u6392\u884c\u699c',
   'home.leaderboard.desc': '\u67e5\u770b\u8c01\u5728\u5468\u699c\u4e0a\u9886\u5148',

@@ -353,6 +353,54 @@ const de: Translations = {
   'home.stickerAlbum': 'Sticker-Album',
   'home.stickerAlbum.desc': 'Sammle Laender-Sticker aus Kisten. Vervollstaendige Kontinente fuer riesige Boni!',
 
+  // Animal names
+  'animal.rabbit': 'Hase',
+  'animal.horse': 'Pferd',
+  'animal.donkey': 'Esel',
+  'animal.pig': 'Schwein',
+  'animal.carrotBird': 'Karotten-Vogel',
+
+  // Daily Challenge
+  'daily.challenge': 'Tagliche Herausforderung',
+  'daily.challenge.desc': 'Finde 15 Laender in 60 Sekunden',
+  'daily.findCountries': 'Finde 15 Laender in 60 Sekunden!',
+  'daily.complete': 'Tagliche Herausforderung Abgeschlossen',
+  'daily.score': 'Punktzahl',
+  'daily.correct': 'Richtig',
+  'daily.timeTaken': 'Zeit',
+  'daily.todayLeaderboard': 'Heutige Bestenliste',
+  'daily.alreadyPlayed': 'Bereits Gespielt',
+  'daily.alreadyPlayedDesc': 'Du hast die heutige Herausforderung bereits abgeschlossen',
+  'daily.yourScore': 'Deine Punktzahl',
+  'daily.points': 'Punkte',
+  'daily.point': 'Punkt',
+  'daily.loading': 'Laden...',
+  'daily.noChallenge': 'Keine Herausforderung verfuegbar',
+
+  // Weekly Leaderboard
+  'leaderboard.weekly': 'Woechentliche Rangliste',
+  'leaderboard.noEntries': 'Noch keine Eintraege diese Woche',
+  'leaderboard.noEntriesDesc': 'Spiele ein Spiel, um den ersten Platz zu beanspruchen!',
+  'leaderboard.loading': 'Laden...',
+
+  // Guest lock
+  'guest.unlockMessage': 'Erstelle ein Konto, um mehr Spielmodi freizuschalten',
+
+  // Leaderboard modes
+  'leaderboard.global': 'Global',
+  'leaderboard.classic': 'Klassisch',
+  'leaderboard.timed': 'Auf Zeit',
+  'leaderboard.marathon': 'Marathon',
+  'leaderboard.survival': 'Ueberleben',
+  'leaderboard.flag': 'Flagge',
+  'leaderboard.distance': 'Entfernung',
+
+  // UserBadge stats
+  'stats.coins': 'Muenzen',
+  'stats.carrots': 'Karotten',
+  'stats.xp': 'XP',
+  'stats.games': 'Spiele',
+
   // Leaderboard
   'home.leaderboard': 'Rangliste',
   'home.leaderboard.desc': 'Sieh wer die Wochenrangliste anfuehrt',

@@ -353,6 +353,54 @@ const es: Translations = {
   'home.stickerAlbum': 'Album de Stickers',
   'home.stickerAlbum.desc': 'Colecciona stickers de paises. Completa continentes para grandes bonos!',
 
+  // Animal names
+  'animal.rabbit': 'Conejo',
+  'animal.horse': 'Caballo',
+  'animal.donkey': 'Burro',
+  'animal.pig': 'Cerdo',
+  'animal.carrotBird': 'Pajaro-zanahoria',
+
+  // Daily Challenge
+  'daily.challenge': 'Desafio Diario',
+  'daily.challenge.desc': 'Encuentra 15 paises en 60 segundos',
+  'daily.findCountries': 'Encuentra 15 paises en 60 segundos!',
+  'daily.complete': 'Desafio Diario Completado',
+  'daily.score': 'Puntuacion',
+  'daily.correct': 'Correcto',
+  'daily.timeTaken': 'Tiempo',
+  'daily.todayLeaderboard': 'Clasificacion de hoy',
+  'daily.alreadyPlayed': 'Ya Jugado',
+  'daily.alreadyPlayedDesc': 'Ya completaste el desafio de hoy',
+  'daily.yourScore': 'Tu Puntuacion',
+  'daily.points': 'puntos',
+  'daily.point': 'punto',
+  'daily.loading': 'Cargando...',
+  'daily.noChallenge': 'No hay desafio disponible',
+
+  // Weekly Leaderboard
+  'leaderboard.weekly': 'Clasificacion Semanal',
+  'leaderboard.noEntries': 'Sin entradas esta semana',
+  'leaderboard.noEntriesDesc': 'Juega para reclamar el primer puesto!',
+  'leaderboard.loading': 'Cargando...',
+
+  // Guest lock
+  'guest.unlockMessage': 'Crea una cuenta para desbloquear mas modos de juego',
+
+  // Leaderboard modes
+  'leaderboard.global': 'Global',
+  'leaderboard.classic': 'Clasico',
+  'leaderboard.timed': 'Contrarreloj',
+  'leaderboard.marathon': 'Maraton',
+  'leaderboard.survival': 'Supervivencia',
+  'leaderboard.flag': 'Bandera',
+  'leaderboard.distance': 'Distancia',
+
+  // UserBadge stats
+  'stats.coins': 'Monedas',
+  'stats.carrots': 'Zanahorias',
+  'stats.xp': 'XP',
+  'stats.games': 'Partidas',
+
   // Leaderboard
   'home.leaderboard': 'Clasificacion',
   'home.leaderboard.desc': 'Mira quien lidera el ranking semanal',

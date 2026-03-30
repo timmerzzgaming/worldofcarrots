@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/lib/auth/context'
+import { useTranslation } from '@/lib/i18n'
 import { getTodaysChallenge, hasCompletedToday, type DailyChallenge } from '@/lib/daily-challenge'
 
 interface DailyChallengeBannerProps {
@@ -11,6 +12,7 @@ interface DailyChallengeBannerProps {
 
 export default function DailyChallengeBanner({ onPlay }: DailyChallengeBannerProps) {
   const { user, isGuest } = useAuth()
+  const { t } = useTranslation()
   const [challenge, setChallenge] = useState<DailyChallenge | null>(null)
   const [completed, setCompleted] = useState(false)
   const [hoursLeft, setHoursLeft] = useState(0)
@@ -46,10 +48,10 @@ export default function DailyChallengeBanner({ onPlay }: DailyChallengeBannerPro
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0">
         <div>
           <p className="text-xs font-headline font-bold text-geo-tertiary-bright uppercase tracking-widest">
-            Daily Challenge
+            {t('daily.challenge')}
           </p>
           <p className="text-sm font-body text-geo-on-surface mt-0.5">
-            15 countries in 60 seconds
+            {t('daily.challenge.desc')}
           </p>
           <p className="text-[10px] text-geo-on-surface-dim font-body">
             🏆 +{challenge.coin_reward} coins — Perfect: +🥕 — Resets in {hoursLeft}h
@@ -58,14 +60,14 @@ export default function DailyChallengeBanner({ onPlay }: DailyChallengeBannerPro
         <div>
           {completed ? (
             <span className="px-4 py-2 rounded-xl text-xs font-headline font-bold text-green-400 bg-green-400/10 border border-green-400/30">
-              ✓ Done
+              ✓ {t('daily.alreadyPlayed')}
             </span>
           ) : (
             <button
               onClick={() => onPlay(challenge.mode, challenge.difficulty, challenge.seed)}
               className="btn-primary px-5 py-2 text-sm"
             >
-              Play
+              {t('startGame')}
             </button>
           )}
         </div>

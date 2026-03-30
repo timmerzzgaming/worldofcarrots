@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/lib/auth/context'
 import { useTranslation } from '@/lib/i18n'
+import type { Translations } from '@/lib/i18n'
 import { useBasePath } from '@/lib/basePath'
 import { spendCarrots } from '@/lib/carrots'
 import { logCreditTransaction } from '@/lib/credits-transaction'
@@ -25,7 +26,7 @@ type Phase = 'pick' | 'feeding' | 'reveal' | 'result'
 
 interface AnimalData {
   id: Animal
-  name: string
+  nameKey: keyof Translations
   emoji: string
   img: string
   color: string
@@ -34,11 +35,11 @@ interface AnimalData {
 }
 
 const ANIMALS: AnimalData[] = [
-  { id: 'rabbit', name: 'Rabbit', emoji: '🐰', img: '/images/animals/rabbit.svg', color: '#F5F0E8', bgColor: 'bg-orange-50', borderColor: 'border-orange-300' },
-  { id: 'horse', name: 'Horse', emoji: '🐴', img: '/images/animals/horse.svg', color: '#C4956A', bgColor: 'bg-amber-50', borderColor: 'border-amber-400' },
-  { id: 'donkey', name: 'Donkey', emoji: '🫏', img: '/images/animals/donkey.svg', color: '#9E9E9E', bgColor: 'bg-gray-50', borderColor: 'border-gray-400' },
-  { id: 'pig', name: 'Pig', emoji: '🐷', img: '/images/animals/pig.svg', color: '#FFB6C1', bgColor: 'bg-pink-50', borderColor: 'border-pink-300' },
-  { id: 'carrot-bird', name: 'Carrot Bird', emoji: '🐦', img: '/images/animals/carrot-bird.svg', color: '#F0F0F0', bgColor: 'bg-sky-50', borderColor: 'border-sky-300' },
+  { id: 'rabbit', nameKey: 'animal.rabbit', emoji: '🐰', img: '/images/animals/rabbit.svg', color: '#F5F0E8', bgColor: 'bg-orange-50', borderColor: 'border-orange-300' },
+  { id: 'horse', nameKey: 'animal.horse', emoji: '🐴', img: '/images/animals/horse.svg', color: '#C4956A', bgColor: 'bg-amber-50', borderColor: 'border-amber-400' },
+  { id: 'donkey', nameKey: 'animal.donkey', emoji: '🫏', img: '/images/animals/donkey.svg', color: '#9E9E9E', bgColor: 'bg-gray-50', borderColor: 'border-gray-400' },
+  { id: 'pig', nameKey: 'animal.pig', emoji: '🐷', img: '/images/animals/pig.svg', color: '#FFB6C1', bgColor: 'bg-pink-50', borderColor: 'border-pink-300' },
+  { id: 'carrot-bird', nameKey: 'animal.carrotBird', emoji: '🐦', img: '/images/animals/carrot-bird.svg', color: '#F0F0F0', bgColor: 'bg-sky-50', borderColor: 'border-sky-300' },
 ]
 
 const JACKPOT_AMOUNT = 500
@@ -318,12 +319,12 @@ export default function CarrotBonusPage() {
                     ? 'hover:border-geo-primary hover:shadow-comic-lg cursor-pointer active:translate-y-[2px] active:shadow-comic-sm'
                     : 'cursor-default'
                 } ${isSelected && phase !== 'pick' ? 'border-geo-primary shadow-comic-lg' : ''}`}
-                aria-label={`${t('carrotBonus.feed')} ${animal.name}`}
+                aria-label={`${t('carrotBonus.feed')} ${t(animal.nameKey)}`}
               >
                 {/* Animal image */}
                 <motion.img
                   src={animal.img}
-                  alt={animal.name}
+                  alt={t(animal.nameKey)}
                   className="w-20 h-20 sm:w-28 sm:h-28 object-contain"
                   animate={
                     isSelected && phase === 'feeding'
@@ -344,7 +345,7 @@ export default function CarrotBonusPage() {
 
                 {/* Animal name */}
                 <span className="font-headline font-bold text-sm sm:text-base text-geo-on-surface mt-1 sm:mt-2 uppercase tracking-wide">
-                  {animal.name}
+                  {t(animal.nameKey)}
                 </span>
 
                 {/* Feeding animation — carrot going to animal */}
@@ -382,7 +383,7 @@ export default function CarrotBonusPage() {
                       >
                         <img
                           src={animal.img}
-                          alt={animal.name}
+                          alt={t(animal.nameKey)}
                           className="w-12 h-12 sm:w-16 sm:h-16 object-contain"
                         />
                       </motion.div>
