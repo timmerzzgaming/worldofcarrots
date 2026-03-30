@@ -791,19 +791,59 @@ export default function FlagGamePage() {
 
       {/* Flag question card — top center (pushed down on mobile below compact HUD) */}
       {phase === 'playing' && q && currentFlagUrl && !showCountdown && (
-        <div className="fixed top-12 sm:top-4 left-1/2 -translate-x-1/2 z-10">
-          <FlagQuestionCard
-            flagUrl={currentFlagUrl}
-            questionNumber={currentIndex + 1}
-            totalQuestions={questions.length}
-            hintsRemaining={hintsRemaining}
-            hintLevel={hintLevel}
-            continentName={hintLevel >= 1 && continentDisplay ? t(`continent.${continentDisplay}` as keyof Translations) : null}
-            skippedCount={skippedCount}
-            onUseHint={handleUseHint}
-            onSkip={handleSkip}
-          />
-        </div>
+        <>
+          <div className="fixed top-12 sm:top-4 left-1/2 -translate-x-1/2 z-10">
+            <FlagQuestionCard
+              flagUrl={currentFlagUrl}
+              questionNumber={currentIndex + 1}
+              totalQuestions={questions.length}
+            />
+          </div>
+
+          {/* Hint/Skip controls — right edge, vertically centered */}
+          <div className="fixed right-3 sm:right-4 top-1/2 -translate-y-1/2 z-10">
+            <div className="glass-panel px-3 py-2 sm:px-4 sm:py-3 space-y-2 min-w-[140px] sm:min-w-[160px]">
+              {/* Continent hint */}
+              {hintLevel >= 1 && continentDisplay && (
+                <div>
+                  <span className="inline-block px-3 py-1 rounded-full bg-geo-secondary/20 border-2 border-geo-secondary/40 text-geo-secondary text-xs font-headline font-bold uppercase">
+                    {t(`continent.${continentDisplay}` as keyof Translations)}
+                  </span>
+                </div>
+              )}
+
+              {/* Hint button + counter */}
+              <div className="flex items-center gap-2">
+                {hintsRemaining > 0 && hintLevel < 3 && (
+                  <button
+                    onClick={handleUseHint}
+                    className="px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider transition-all border-2 bg-geo-tertiary/10 border-geo-tertiary/40 text-geo-on-surface hover:bg-geo-tertiary/20"
+                  >
+                    {t((['hint.revealContinent', 'hint.eliminateLookalikes', 'hint.narrowDown'] as const)[hintLevel])}
+                  </button>
+                )}
+                <span className={`text-[10px] font-headline font-bold uppercase ${hintsRemaining > 0 ? 'text-geo-tertiary' : 'text-geo-on-surface-dim'}`}>
+                  {hintsRemaining} {hintsRemaining !== 1 ? t('hints') : t('hint')}
+                </span>
+              </div>
+
+              {/* Skip */}
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleSkip}
+                  className="px-3 py-1 rounded-full text-[10px] sm:text-xs font-headline font-bold uppercase tracking-wider border-2 border-geo-outline/30 text-geo-on-surface-dim hover:text-geo-primary hover:border-geo-primary/40 transition-colors"
+                >
+                  {t('skip')}
+                </button>
+                {skippedCount > 0 && (
+                  <span className="text-[10px] font-headline font-bold text-geo-on-surface-dim">
+                    {skippedCount} {t('skipped')}
+                  </span>
+                )}
+              </div>
+            </div>
+          </div>
+        </>
       )}
 
       {/* Feedback overlay (pushed down on mobile below compact HUD) */}
