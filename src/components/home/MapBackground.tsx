@@ -111,7 +111,7 @@ export default function MapBackground() {
   }, [])
 
   return (
-    <div className="fixed inset-0 -z-10">
+    <div className="fixed inset-0 -z-10 pointer-events-none">
       <div ref={containerRef} className="absolute inset-0 w-full h-full" />
       {/* Light gradient overlay to keep text readable on bright background */}
       <div className="absolute inset-0 bg-gradient-to-b from-geo-bg/40 via-transparent to-geo-bg/60" />

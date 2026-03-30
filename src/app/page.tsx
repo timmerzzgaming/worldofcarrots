@@ -570,7 +570,7 @@ export default function HomePage() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ delay: 0.25, duration: 0.3 }}
-                        className="fixed top-4 left-4 z-30"
+                        className="fixed top-7 left-2 sm:top-4 sm:left-4 z-30"
                       >
                         <button
                           onClick={handleBack}
