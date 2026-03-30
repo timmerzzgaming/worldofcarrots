@@ -141,6 +141,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       localStorage.removeItem('woc-pending-signup')
       return { error: authError.message }
     }
+
+    // Notify admin of new signup (fire-and-forget)
+    fetch('/api/auth/notify-signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, nickname, avatar }),
+    }).catch(() => {})
+
     return { error: null }
   }, [])
 
