@@ -4,18 +4,26 @@ import { motion } from 'framer-motion'
 import { useMemo, useState, useEffect } from 'react'
 import Image from 'next/image'
 
-// Floating carrots and small rabbits scattered around the viewport
+// Floating carrots and animals scattered around the viewport
+const ANIMAL_IMAGES: Record<string, string> = {
+  rabbit: '/images/rabbit-small.svg',
+  horse: '/images/animals/horse-small.svg',
+  donkey: '/images/animals/donkey-small.svg',
+  pig: '/images/animals/pig-small.svg',
+  'carrot-bird': '/images/animals/carrot-bird-small.svg',
+}
+
 const ITEMS = [
   { type: 'carrot', x: 8, y: 12, rotate: -20 },
   { type: 'carrot', x: 85, y: 70, rotate: 15 },
   { type: 'rabbit', x: 18, y: 78, rotate: 0 },
   { type: 'carrot', x: 78, y: 18, rotate: -35 },
-  { type: 'carrot', x: 42, y: 85, rotate: 25 },
-  { type: 'rabbit', x: 90, y: 45, rotate: 0 },
+  { type: 'horse', x: 42, y: 85, rotate: 0 },
+  { type: 'carrot-bird', x: 90, y: 45, rotate: 0 },
   { type: 'carrot', x: 6, y: 45, rotate: -10 },
   { type: 'carrot', x: 55, y: 10, rotate: 30 },
-  { type: 'carrot', x: 70, y: 80, rotate: -25 },
-  { type: 'rabbit', x: 30, y: 15, rotate: 0 },
+  { type: 'donkey', x: 70, y: 80, rotate: 0 },
+  { type: 'pig', x: 30, y: 15, rotate: 0 },
   { type: 'carrot', x: 92, y: 88, rotate: 40 },
   { type: 'carrot', x: 15, y: 35, rotate: -15 },
 ]
@@ -34,7 +42,7 @@ export default function FloatingFlags() {
         delay: i * 0.7,
         duration: 4 + (i % 3) * 1.5,
         yDrift: 8 + (i % 4) * 4,
-        size: isMobile ? (item.type === 'rabbit' ? 48 : 32) : (item.type === 'rabbit' ? 72 : 48),
+        size: isMobile ? (item.type === 'carrot' ? 32 : 48) : (item.type === 'carrot' ? 48 : 72),
       })),
     [isMobile]
   )
@@ -61,7 +69,7 @@ export default function FloatingFlags() {
           }}
         >
           <Image
-            src={item.type === 'carrot' ? '/images/carrot.svg' : '/images/rabbit-small.svg'}
+            src={item.type === 'carrot' ? '/images/carrot.svg' : (ANIMAL_IMAGES[item.type] ?? '/images/rabbit-small.svg')}
             alt=""
             width={item.size}
             height={item.size}

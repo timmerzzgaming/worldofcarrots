@@ -20,7 +20,7 @@ import {
   stopCasinoMusic,
 } from '@/lib/casinoSounds'
 
-type Animal = 'rabbit' | 'horse' | 'donkey' | 'pig'
+type Animal = 'rabbit' | 'horse' | 'donkey' | 'pig' | 'carrot-bird'
 type Phase = 'pick' | 'feeding' | 'reveal' | 'result'
 
 interface AnimalData {
@@ -38,6 +38,7 @@ const ANIMALS: AnimalData[] = [
   { id: 'horse', name: 'Horse', emoji: '🐴', img: '/images/animals/horse.svg', color: '#C4956A', bgColor: 'bg-amber-50', borderColor: 'border-amber-400' },
   { id: 'donkey', name: 'Donkey', emoji: '🫏', img: '/images/animals/donkey.svg', color: '#9E9E9E', bgColor: 'bg-gray-50', borderColor: 'border-gray-400' },
   { id: 'pig', name: 'Pig', emoji: '🐷', img: '/images/animals/pig.svg', color: '#FFB6C1', bgColor: 'bg-pink-50', borderColor: 'border-pink-300' },
+  { id: 'carrot-bird', name: 'Carrot Bird', emoji: '🐦', img: '/images/animals/carrot-bird.svg', color: '#F0F0F0', bgColor: 'bg-sky-50', borderColor: 'border-sky-300' },
 ]
 
 const JACKPOT_AMOUNT = 500
@@ -46,7 +47,7 @@ const MAX_NORMAL = 200
 
 function generatePrizes(): Map<Animal, number> {
   const prizes = new Map<Animal, number>()
-  const jackpotIndex = Math.floor(Math.random() * 4)
+  const jackpotIndex = Math.floor(Math.random() * ANIMALS.length)
   ANIMALS.forEach((animal, i) => {
     if (i === jackpotIndex) {
       prizes.set(animal.id, JACKPOT_AMOUNT)
@@ -293,7 +294,7 @@ export default function CarrotBonusPage() {
       </AnimatePresence>
 
       {/* Animal cards */}
-      <div className="relative grid grid-cols-2 gap-3 sm:gap-5 w-full max-w-xl z-10">
+      <div className="relative grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-5 w-full max-w-xl z-10">
         {ANIMALS.map((animal, i) => {
           const prize = prizes.get(animal.id) ?? MIN_AMOUNT
           const isSelected = selectedAnimal === animal.id

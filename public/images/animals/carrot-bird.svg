@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+  <!-- Shadow -->
+  <ellipse cx="100" cy="232" rx="45" ry="7" fill="#00000018"/>
+  <!-- Body -->
+  <ellipse cx="100" cy="172" rx="48" ry="52" fill="#F0F0F0" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Belly -->
+  <ellipse cx="100" cy="182" rx="32" ry="34" fill="#FFFFFF"/>
+  <!-- Head -->
+  <circle cx="100" cy="115" r="36" fill="#F0F0F0" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Cheeks -->
+  <circle cx="72" cy="122" r="8" fill="#FFB4B4" opacity="0.4"/>
+  <circle cx="128" cy="122" r="8" fill="#FFB4B4" opacity="0.4"/>
+  <!-- Eyes -->
+  <ellipse cx="84" cy="108" rx="7" ry="8" fill="#2D2D2D"/>
+  <ellipse cx="116" cy="108" rx="7" ry="8" fill="#2D2D2D"/>
+  <circle cx="82" cy="105" r="2.5" fill="white"/>
+  <circle cx="114" cy="105" r="2.5" fill="white"/>
+  <!-- Carrot beak -->
+  <path d="M96 120 L100 148 L104 120 Z" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2" stroke-linejoin="round"/>
+  <!-- Beak stripes -->
+  <line x1="97.5" y1="128" x2="102.5" y2="128" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="98" y1="134" x2="102" y2="134" stroke="#E87830" stroke-width="1.5" stroke-linecap="round"/>
+  <line x1="98.5" y1="140" x2="101.5" y2="140" stroke="#E87830" stroke-width="1" stroke-linecap="round"/>
+  <!-- Beak green leaf tuft on top -->
+  <path d="M96 120 Q92 112 94 108" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M100 118 Q100 110 100 106" stroke="#66BB6A" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M104 120 Q108 112 106 108" stroke="#4CAF50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <!-- Wings -->
+  <path d="M52 155 Q30 140 28 165 Q26 185 52 190" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2.5"/>
+  <path d="M148 155 Q170 140 172 165 Q174 185 148 190" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2.5"/>
+  <!-- Wing feather lines -->
+  <line x1="38" y1="158" x2="48" y2="170" stroke="#2D2D2D" stroke-width="1.5" opacity="0.3"/>
+  <line x1="34" y1="168" x2="48" y2="178" stroke="#2D2D2D" stroke-width="1.5" opacity="0.3"/>
+  <line x1="152" y1="170" x2="162" y2="158" stroke="#2D2D2D" stroke-width="1.5" opacity="0.3"/>
+  <line x1="152" y1="178" x2="166" y2="168" stroke="#2D2D2D" stroke-width="1.5" opacity="0.3"/>
+  <!-- Tail feathers -->
+  <path d="M90 222 Q80 210 75 224" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2"/>
+  <path d="M100 222 Q100 206 100 224" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2"/>
+  <path d="M110 222 Q120 210 125 224" fill="#E0E0E0" stroke="#2D2D2D" stroke-width="2"/>
+  <!-- Feet -->
+  <path d="M78 226 L68 234 M78 226 L78 236 M78 226 L88 234" stroke="#FF8C42" stroke-width="3" stroke-linecap="round"/>
+  <path d="M122 226 L112 234 M122 226 L122 236 M122 226 L132 234" stroke="#FF8C42" stroke-width="3" stroke-linecap="round"/>
+</svg>
