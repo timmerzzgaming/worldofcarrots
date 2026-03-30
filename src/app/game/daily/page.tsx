@@ -29,7 +29,8 @@ import { mapBgColor, countryLineColor, countryHoverColor, countryHoverLineColor,
 import StarRating from '@/components/credits/StarRating'
 import LevelBadge from '@/components/xp/LevelBadge'
 import { cn } from '@/lib/cn'
-import { playCorrect, playWrong, playGameOver, playGameStart, playCreditEarned, playLevelUp, playTick } from '@/lib/sounds'
+import { playCorrect, playWrong, playGameOver, playGameStart, playCreditEarned, playLevelUp, playTick, playClick } from '@/lib/sounds'
+import ConfirmDialog from '@/components/game/ConfirmDialog'
 
 interface DailyQuestion {
   name: string
@@ -77,6 +78,7 @@ export default function DailyChallengePage() {
   const [countdownNum, setCountdownNum] = useState(3)
   const [leaderboard, setLeaderboard] = useState<DailyChallengeResult[]>([])
   const [rewardResult, setRewardResult] = useState<{ totalCoins: number; carrots: number; xpEarned: number; leveledUp: boolean } | null>(null)
+  const [showQuitConfirm, setShowQuitConfirm] = useState(false)
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const feedbackTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [feedbackCountry, setFeedbackCountry] = useState<string | null>(null)
@@ -134,7 +136,7 @@ export default function DailyChallengePage() {
           renderWorldCopies: true,
         })
 
-        map.addControl(new maplibregl.NavigationControl(), 'top-right')
+        map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
         map.getCanvas().style.cursor = 'crosshair'
 
         map.on('load', () => {
@@ -547,7 +549,41 @@ export default function DailyChallengePage() {
               </motion.div>
             </div>
           )}
+          {/* Desktop: Quit button — top right */}
+          <div className="hidden sm:flex fixed top-4 right-4 z-10">
+            <button
+              onClick={() => { playClick(); setShowQuitConfirm(true) }}
+              className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
+            >
+              {t('quit')}
+            </button>
+          </div>
+
+          {/* Mobile: Quit button in HUD */}
+          <div className="sm:hidden fixed top-4 right-4 z-10">
+            <button
+              onClick={() => { playClick(); setShowQuitConfirm(true) }}
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-geo-surface-high/50 border border-geo-outline-dim/20 text-geo-on-surface-dim hover:text-geo-error transition-colors"
+              aria-label={t('quit')}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-4 h-4">
+                <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
+              </svg>
+            </button>
+          </div>
         </>
+      )}
+
+      {/* Quit confirm dialog */}
+      {showQuitConfirm && (
+        <ConfirmDialog
+          title={t('quitGame')}
+          message={t('progressLost')}
+          confirmLabel={t('quit')}
+          confirmVariant="danger"
+          onCancel={() => setShowQuitConfirm(false)}
+          onConfirm={() => { setShowQuitConfirm(false); router.push(prefixPath('/')) }}
+        />
       )}
 
       {/* Results */}

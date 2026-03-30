@@ -295,7 +295,7 @@ export default function DistanceGamePage() {
 
         })
 
-        map.addControl(new maplibregl.NavigationControl(), 'top-right')
+        map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
         map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right')
         map.getCanvas().style.cursor = 'url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'24\' height=\'36\' viewBox=\'0 0 24 36\'%3E%3Cpath d=\'M12 0C5.4 0 0 5.4 0 12c0 9 12 24 12 24s12-15 12-24C24 5.4 18.6 0 12 0z\' fill=\'%23ef4444\'/%3E%3Ccircle cx=\'12\' cy=\'12\' r=\'5\' fill=\'white\'/%3E%3C/svg%3E") 12 36, crosshair'
 
@@ -605,7 +605,7 @@ export default function DistanceGamePage() {
 
       {/* Desktop: Quit/Restart (hidden on mobile) */}
       {(phase === 'playing' || phase === 'feedback' || phase === 'review') && !showCountdown && (
-        <div className="hidden sm:flex fixed top-4 left-4 z-10 gap-2">
+        <div className="hidden sm:flex fixed top-4 right-4 z-10 gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
             className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"

@@ -128,7 +128,7 @@ export default function ClickCountryPage() {
 
         })
 
-        map.addControl(new maplibregl.NavigationControl(), 'top-right')
+        map.addControl(new maplibregl.NavigationControl(), 'bottom-left')
         map.addControl(new maplibregl.AttributionControl({ compact: true }), 'bottom-right')
         map.getCanvas().style.cursor = 'crosshair'
 
@@ -559,9 +559,9 @@ export default function ClickCountryPage() {
         style={{ visibility: (phase === 'idle' || phase === 'results') && !showCountdown ? 'hidden' : 'visible' }}
       />
 
-      {/* Desktop: Quit/Restart — top left (hidden on mobile) */}
+      {/* Desktop: Quit/Restart — top right (hidden on mobile) */}
       {(phase === 'playing' || phase === 'feedback') && !showCountdown && (
-        <div className="hidden sm:flex fixed top-4 left-4 z-10 gap-2">
+        <div className="hidden sm:flex fixed top-4 right-4 z-10 gap-2">
           <button
             onClick={() => { playClick(); setShowQuitConfirm(true) }}
             className="px-5 py-3 rounded-full glass-panel border-geo-on-surface/30 text-geo-primary text-sm font-headline font-bold uppercase tracking-wider hover:text-geo-error hover:border-geo-error/30 transition-colors"
