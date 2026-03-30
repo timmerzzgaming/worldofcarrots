@@ -10,7 +10,22 @@ import EconomySettings from '@/components/admin/EconomySettings'
 import { clearHighScores } from '@/lib/highScores'
 import { useBasePath } from '@/lib/basePath'
 
-interface UserRow extends Profile {
+interface UserRow {
+  id: string
+  email: string | null
+  nickname: string | null
+  avatar: string | null
+  role: string
+  credits: number
+  xp: number
+  level: number
+  carrots: number
+  games_completed: number
+  is_banned: boolean
+  has_profile: boolean
+  email_confirmed: boolean
+  created_at: string
+  last_sign_in_at: string | null
   _adjustAmount?: string
   _adjustReason?: string
 }
@@ -41,11 +56,16 @@ export default function AdminPage() {
 
   const fetchUsers = useCallback(async () => {
     if (!supabase) return
-    const { data } = await supabase
-      .from('profiles')
-      .select('*')
-      .order('created_at', { ascending: false })
-    if (data) setUsers(data.map((u) => ({ ...u, _adjustAmount: '', _adjustReason: '' })))
+    const session = await supabase.auth.getSession()
+    const token = session.data.session?.access_token
+    if (!token) return
+    const res = await fetch('/api/admin/users', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    if (res.ok) {
+      const json = await res.json()
+      setUsers((json.data as UserRow[]).map((u) => ({ ...u, _adjustAmount: '', _adjustReason: '' })))
+    }
     setLoading(false)
   }, [])
 
@@ -322,10 +342,10 @@ export default function AdminPage() {
               {users.map((u) => (
                 <tr key={u.id} className="border-b border-geo-outline-dim/10 hover:bg-geo-surface/30">
                   <td className="py-3 pr-4">
-                    <span className="text-lg mr-1">{u.avatar}</span>
-                    <span className="text-geo-on-surface font-bold">{u.nickname}</span>
+                    <span className="text-lg mr-1">{u.avatar ?? '❓'}</span>
+                    <span className="text-geo-on-surface font-bold">{u.nickname ?? <span className="text-geo-on-surface-dim italic">no profile</span>}</span>
                   </td>
-                  <td className="py-3 pr-4 text-geo-on-surface-dim">—</td>
+                  <td className="py-3 pr-4 text-geo-on-surface-dim text-xs">{u.email ?? '—'}</td>
                   <td className="py-3 pr-4">
                     <span className={`px-2 py-0.5 rounded-full text-xs font-headline font-bold ${
                       u.role === 'admin' ? 'bg-geo-primary/20 text-geo-primary' : 'bg-geo-surface text-geo-on-surface-dim'
@@ -338,14 +358,26 @@ export default function AdminPage() {
                     {new Date(u.created_at).toLocaleDateString()}
                   </td>
                   <td className="py-3 pr-4 text-geo-on-surface-dim text-xs">
-                    {new Date(u.last_active_at).toLocaleDateString()}
+                    {u.last_sign_in_at ? new Date(u.last_sign_in_at).toLocaleDateString() : '—'}
                   </td>
                   <td className="py-3 pr-4">
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-headline font-bold ${
-                      u.is_banned ? 'bg-geo-error/20 text-geo-error' : 'bg-green-500/20 text-green-400'
-                    }`}>
-                      {u.is_banned ? 'Banned' : 'Active'}
-                    </span>
+                    <div className="flex flex-col gap-1">
+                      <span className={`px-2 py-0.5 rounded-full text-xs font-headline font-bold inline-block w-fit ${
+                        u.is_banned ? 'bg-geo-error/20 text-geo-error' : 'bg-green-500/20 text-green-400'
+                      }`}>
+                        {u.is_banned ? 'Banned' : 'Active'}
+                      </span>
+                      {!u.has_profile && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-headline font-bold bg-geo-tertiary-bright/20 text-geo-tertiary-bright inline-block w-fit">
+                          No profile
+                        </span>
+                      )}
+                      {!u.email_confirmed && (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-headline font-bold bg-orange-400/20 text-orange-400 inline-block w-fit">
+                          Unconfirmed
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="py-3">
                     <div className="flex flex-col gap-2">
@@ -361,14 +393,14 @@ export default function AdminPage() {
                           {u.is_banned ? 'Unban' : 'Ban'}
                         </button>
                         <button
-                          onClick={() => handleResetPassword(u.id, u.nickname)}
+                          onClick={() => handleResetPassword(u.id, u.nickname ?? u.email ?? u.id)}
                           className="px-2 py-1 rounded text-xs font-headline font-bold bg-geo-secondary/20 text-geo-secondary hover:bg-geo-secondary/30"
                         >
                           Reset PW
                         </button>
                         {u.role !== 'admin' && (
                           <button
-                            onClick={() => handleDelete(u.id, u.nickname)}
+                            onClick={() => handleDelete(u.id, u.nickname ?? u.email ?? u.id)}
                             className="px-2 py-1 rounded text-xs font-headline font-bold bg-geo-error/10 text-geo-error hover:bg-geo-error/20"
                           >
                             Delete
