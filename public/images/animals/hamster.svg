@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240" fill="none">
+  <!-- Shadow -->
+  <ellipse cx="100" cy="232" rx="45" ry="7" fill="#00000018"/>
+  <!-- Body -->
+  <ellipse cx="100" cy="178" rx="52" ry="52" fill="#D4A574" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Belly -->
+  <ellipse cx="100" cy="190" rx="36" ry="34" fill="#F5E6D0"/>
+  <!-- Left ear -->
+  <path d="M70 100 Q58 78 64 66 Q70 58 76 66 Q82 76 76 98" fill="#D4A574" stroke="#2D2D2D" stroke-width="3"/>
+  <path d="M72 96 Q64 80 68 70 Q72 64 75 70 Q79 78 75 94" fill="#C4956A"/>
+  <!-- Right ear -->
+  <path d="M130 100 Q142 78 136 66 Q130 58 124 66 Q118 76 124 98" fill="#D4A574" stroke="#2D2D2D" stroke-width="3"/>
+  <path d="M128 96 Q136 80 132 70 Q128 64 125 70 Q121 78 125 94" fill="#C4956A"/>
+  <!-- Head -->
+  <circle cx="100" cy="114" r="38" fill="#D4A574" stroke="#2D2D2D" stroke-width="3"/>
+  <!-- Forehead patch -->
+  <path d="M80 96 Q100 88 120 96 Q112 104 100 106 Q88 104 80 96" fill="#C4956A" opacity="0.6"/>
+  <!-- Cheek pouches (signature hamster feature) -->
+  <ellipse cx="66" cy="124" rx="16" ry="14" fill="#E8C49A" stroke="#2D2D2D" stroke-width="2.5"/>
+  <ellipse cx="134" cy="124" rx="16" ry="14" fill="#E8C49A" stroke="#2D2D2D" stroke-width="2.5"/>
+  <!-- Cheek blush -->
+  <circle cx="66" cy="128" r="7" fill="#E8956A" opacity="0.35"/>
+  <circle cx="134" cy="128" r="7" fill="#E8956A" opacity="0.35"/>
+  <!-- Eyes -->
+  <ellipse cx="86" cy="108" rx="7" ry="8" fill="#2D2D2D"/>
+  <ellipse cx="114" cy="108" rx="7" ry="8" fill="#2D2D2D"/>
+  <circle cx="84" cy="105" r="2.5" fill="white"/>
+  <circle cx="112" cy="105" r="2.5" fill="white"/>
+  <!-- Nose -->
+  <ellipse cx="100" cy="122" rx="5" ry="4" fill="#C4956A"/>
+  <!-- Mouth -->
+  <path d="M95 127 Q100 132 105 127" stroke="#2D2D2D" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Buck teeth -->
+  <rect x="95" y="128" width="4.5" height="5" rx="1.5" fill="white" stroke="#2D2D2D" stroke-width="1"/>
+  <rect x="101" y="128" width="4.5" height="5" rx="1.5" fill="white" stroke="#2D2D2D" stroke-width="1"/>
+  <!-- Whiskers -->
+  <line x1="54" y1="118" x2="76" y2="120" stroke="#2D2D2D" stroke-width="1.5" opacity="0.4"/>
+  <line x1="52" y1="126" x2="76" y2="124" stroke="#2D2D2D" stroke-width="1.5" opacity="0.4"/>
+  <line x1="124" y1="120" x2="146" y2="118" stroke="#2D2D2D" stroke-width="1.5" opacity="0.4"/>
+  <line x1="124" y1="124" x2="148" y2="126" stroke="#2D2D2D" stroke-width="1.5" opacity="0.4"/>
+  <!-- Feet -->
+  <ellipse cx="78" cy="224" rx="14" ry="8" fill="#C4956A" stroke="#2D2D2D" stroke-width="2.5"/>
+  <ellipse cx="122" cy="224" rx="14" ry="8" fill="#C4956A" stroke="#2D2D2D" stroke-width="2.5"/>
+  <!-- Arms/paws -->
+  <ellipse cx="56" cy="174" rx="10" ry="14" fill="#D4A574" stroke="#2D2D2D" stroke-width="2.5" transform="rotate(-15 56 174)"/>
+  <ellipse cx="144" cy="174" rx="10" ry="14" fill="#D4A574" stroke="#2D2D2D" stroke-width="2.5" transform="rotate(15 144 174)"/>
+</svg>
