@@ -65,12 +65,12 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
             onClick={() => { playClick(); setSelectedRegion(r) }}
             className={`glass-panel p-2 sm:p-3 flex items-center justify-center text-center transition-all cursor-pointer ${
               selectedRegion === r
-                ? '!bg-geo-secondary/30'
+                ? 'border-orange-500 bg-orange-500'
                 : 'hover:bg-geo-surface-high/50'
             }`}
           >
             <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-              selectedRegion === r ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
+              selectedRegion === r ? 'text-white' : 'text-geo-on-surface-dim'
             }`}>{t(`region.${r}` as keyof Translations)}</p>
           </button>
         ))}
@@ -86,13 +86,13 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
               onClick={() => { playClick(); setDifficulty(d) }}
               className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
                 difficulty === d
-                  ? '!bg-geo-primary/25'
+                  ? 'border-orange-500 bg-orange-500'
                   : 'hover:bg-geo-surface-high/50'
               }`}
             >
               <div className="text-xl mb-1">{DIFFICULTY_ICONS[d]}</div>
               <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-                difficulty === d ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
+                difficulty === d ? 'text-white' : 'text-geo-on-surface-dim'
               }`}>{t(`diff.${d}` as keyof Translations)}</p>
             </button>
         ))}
@@ -105,26 +105,26 @@ export default function DistanceMenu({ onStartGame }: DistanceMenuProps) {
           onClick={handleUnitToggle}
           className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
             unit === 'km'
-              ? '!bg-geo-secondary/30'
+              ? 'border-orange-500 bg-orange-500'
               : 'hover:bg-geo-surface-high/50'
           }`}
         >
           <div className="text-xl mb-1">🌐</div>
           <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-            unit === 'km' ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
+            unit === 'km' ? 'text-white' : 'text-geo-on-surface-dim'
           }`}>{t('km')}</p>
         </button>
         <button
           onClick={handleUnitToggle}
           className={`glass-panel p-2 sm:p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
             unit === 'mi'
-              ? '!bg-geo-secondary/30'
+              ? 'border-orange-500 bg-orange-500'
               : 'hover:bg-geo-surface-high/50'
           }`}
         >
           <div className="text-xl mb-1">🇺🇸</div>
           <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-            unit === 'mi' ? 'text-geo-on-surface' : 'text-geo-on-surface-dim'
+            unit === 'mi' ? 'text-white' : 'text-geo-on-surface-dim'
           }`}>{t('mi')}</p>
         </button>
       </div>

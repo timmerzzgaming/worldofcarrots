@@ -49,13 +49,13 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
               onClick={() => { playClick(); setSelectedMode(m) }}
               className={`group glass-panel p-2 sm:p-4 flex flex-col items-center text-center transition-all cursor-pointer ${
                 selectedMode === m
-                  ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_20px_-5px_rgba(107,255,193,0.2)]'
+                  ? 'border-orange-500 bg-orange-500 shadow-[0_0_20px_-5px_rgba(249,115,22,0.3)]'
                   : 'hover:border-geo-primary/40 hover:shadow-[0_0_30px_-10px_rgba(107,255,193,0.2)]'
               }`}
             >
               <div className="text-xl sm:text-2xl mb-1 sm:mb-2">{MODE_ICONS[m]}</div>
               <p className={`text-xs sm:text-sm font-headline font-extrabold uppercase tracking-wide ${
-                selectedMode === m ? 'text-geo-primary' : 'text-geo-on-surface group-hover:text-geo-primary transition-colors'
+                selectedMode === m ? 'text-white' : 'text-geo-on-surface group-hover:text-geo-primary transition-colors'
               }`}>{t(`mode.${m}` as keyof Translations)}</p>
               <p className="text-xs mt-1 text-geo-on-surface-dim leading-relaxed">{t(`mode.${m}.desc` as keyof Translations)}</p>
             </button>
@@ -83,13 +83,13 @@ export default function USStatesMenu({ onStartGame }: USStatesMenuProps) {
                 isMarathon
                   ? 'opacity-30 cursor-not-allowed'
                   : selectedDifficulty === d.value
-                    ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_15px_-5px_rgba(107,255,193,0.2)] cursor-pointer'
+                    ? 'border-orange-500 bg-orange-500 shadow-[0_0_15px_-5px_rgba(249,115,22,0.3)] cursor-pointer'
                     : 'hover:border-geo-primary/40 hover:shadow-[0_0_20px_-5px_rgba(107,255,193,0.15)] cursor-pointer'
               }`}
             >
               <div className="text-xl mb-1">{DIFFICULTY_ICONS[d.value]}</div>
               <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-                isMarathon ? 'text-geo-on-surface-dim' : selectedDifficulty === d.value ? 'text-geo-primary' : 'text-geo-on-surface-dim'
+                isMarathon ? 'text-geo-on-surface-dim' : selectedDifficulty === d.value ? 'text-white' : 'text-geo-on-surface-dim'
               }`}>{t(`diff.${d.value}` as keyof Translations)}</p>
             </button>
           )
