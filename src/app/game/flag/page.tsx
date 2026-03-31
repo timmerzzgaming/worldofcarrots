@@ -961,12 +961,12 @@ export default function FlagGamePage() {
                   onClick={() => { playClick(); setSelectedRegion(r) }}
                   className={`glass-panel p-3 flex items-center justify-center text-center transition-all cursor-pointer ${
                     selectedRegion === r
-                      ? 'border-geo-secondary/50 bg-geo-secondary/10 shadow-[0_0_15px_-5px_rgba(100,168,254,0.2)]'
+                      ? 'border-orange-500 bg-orange-500 shadow-[0_0_15px_-5px_rgba(249,115,22,0.3)]'
                       : 'hover:border-geo-secondary/40 hover:shadow-[0_0_20px_-5px_rgba(100,168,254,0.15)]'
                   }`}
                 >
                   <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-                    selectedRegion === r ? 'text-geo-secondary' : 'text-geo-on-surface-dim'
+                    selectedRegion === r ? 'text-white' : 'text-geo-on-surface-dim'
                   }`}>{t(`region.${r}` as keyof Translations)}</p>
                 </button>
               ))}
@@ -983,13 +983,13 @@ export default function FlagGamePage() {
                     onClick={() => { playClick(); setSelectedDifficulty(d.value) }}
                     className={`glass-panel p-3 flex flex-col items-center text-center transition-all cursor-pointer ${
                       selectedDifficulty === d.value
-                        ? 'border-geo-primary/50 bg-geo-primary/10 shadow-[0_0_15px_-5px_rgba(107,255,193,0.2)]'
+                        ? 'border-orange-500 bg-orange-500 shadow-[0_0_15px_-5px_rgba(249,115,22,0.3)]'
                         : 'hover:border-geo-primary/40 hover:shadow-[0_0_20px_-5px_rgba(107,255,193,0.15)]'
                     }`}
                   >
                     <div className="text-xl mb-1">{icons[d.value]}</div>
                     <p className={`text-xs font-headline font-bold uppercase tracking-wide ${
-                      selectedDifficulty === d.value ? 'text-geo-primary' : 'text-geo-on-surface-dim'
+                      selectedDifficulty === d.value ? 'text-white' : 'text-geo-on-surface-dim'
                     }`}>{t(`diff.${d.value}` as keyof Translations)}</p>
                   </button>
                 )
