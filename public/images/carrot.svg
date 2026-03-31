@@ -1,19 +1,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 120" fill="none">
-  <!-- Leaves (taller, more prominent) -->
-  <path d="M30 18 Q20 -10 12 -15 Q18 -6 24 10" fill="#4CAF50" stroke="#2D8C3E" stroke-width="1.5"/>
-  <path d="M28 16 Q22 -12 16 -18 Q22 -8 26 8" fill="#66BB6A" stroke="#2D8C3E" stroke-width="1.5"/>
-  <path d="M30 14 Q30 -14 30 -20 Q32 -8 32 10" fill="#4CAF50" stroke="#2D8C3E" stroke-width="1.5"/>
-  <path d="M32 16 Q38 -12 44 -18 Q38 -8 34 8" fill="#66BB6A" stroke="#2D8C3E" stroke-width="1.5"/>
-  <path d="M30 18 Q40 -10 48 -15 Q42 -6 36 10" fill="#4CAF50" stroke="#2D8C3E" stroke-width="1.5"/>
-  <!-- Carrot body (rounder tip) -->
-  <path d="M30 108 Q22 85 18 60 Q15 38 22 22 Q26 15 30 14 Q34 15 38 22 Q45 38 42 60 Q38 85 30 108Z" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2.5"/>
-  <!-- Rounded tip -->
-  <ellipse cx="30" cy="108" rx="4" ry="3" fill="#E87830" stroke="#2D2D2D" stroke-width="2"/>
-  <!-- Carrot stripes -->
-  <path d="M22 40 Q30 36 38 40" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <path d="M20 55 Q30 50 40 55" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <path d="M23 70 Q30 66 37 70" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <path d="M26 85 Q30 82 34 85" stroke="#E87830" stroke-width="2" stroke-linecap="round" opacity="0.6"/>
-  <!-- Shine -->
-  <path d="M25 35 Q27 26 30 22" stroke="white" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- Leaves — geometric triangular -->
+  <polygon points="30,18 18,-4 24,14" fill="#43A047" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+  <polygon points="28,16 12,-10 24,10" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+  <polygon points="30,14 30,-16 32,12" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+  <polygon points="32,16 48,-10 36,10" fill="#66BB6A" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+  <polygon points="30,18 42,-4 36,14" fill="#43A047" stroke="#2E7D32" stroke-width="1.5" stroke-linejoin="round"/>
+  <!-- Leaf crown — hexagonal feel -->
+  <polygon points="20,20 26,14 34,14 40,20 36,24 24,24" fill="#4CAF50" stroke="#2E7D32" stroke-width="1.5"/>
+  <!-- Body — faceted geometric shape -->
+  <polygon points="30,114 20,90 16,62 18,38 24,22 36,22 42,38 44,62 40,90" fill="#FF8C42" stroke="#2D2D2D" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- Inner facet (depth) -->
+  <polygon points="30,110 22,88 20,62 22,40 28,24 30,24 30,110" fill="#FFA054" opacity="0.4"/>
+  <!-- Stripes — straight geometric -->
+  <line x1="20" y1="42" x2="40" y2="42" stroke="#D4682A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="18" y1="58" x2="42" y2="58" stroke="#D4682A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="20" y1="74" x2="40" y2="74" stroke="#D4682A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <line x1="24" y1="88" x2="36" y2="88" stroke="#D4682A" stroke-width="2" stroke-linecap="round" opacity="0.5"/>
+  <!-- Shine — angular -->
+  <polygon points="22,36 24,26 26,24 24,36" fill="white" opacity="0.55"/>
+  <rect x="22" y="44" width="3" height="3" fill="white" opacity="0.3" rx="0.5"/>
 </svg>
