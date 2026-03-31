@@ -14,7 +14,7 @@ const INCLUDE = new Set([
   'Rwanda', 'Senegal', 'Seychelles', 'Sierra Leone', 'Somalia',
   'South Africa', 'South Sudan', 'Sudan', 'United Republic of Tanzania',
   'Togo', 'Tunisia', 'Uganda', 'Zambia', 'Zimbabwe', 'eSwatini',
-  'São Tomé and Principe',
+  'São Tomé and Principe', 'SÃ£o TomÃ© and Principe',
   // Americas
   'Antigua and Barbuda', 'Argentina', 'The Bahamas', 'Barbados', 'Belize',
   'Bolivia', 'Brazil', 'Canada', 'Chile', 'Colombia', 'Costa Rica',
@@ -64,6 +64,7 @@ const RENAME = {
   'Ivory Coast': "C\u00f4te d'Ivoire",
   'eSwatini': 'Eswatini',
   'São Tomé and Principe': "S\u00e3o Tom\u00e9 and Pr\u00edncipe",
+  'SÃ£o TomÃ© and Principe': "S\u00e3o Tom\u00e9 and Pr\u00edncipe",
   'Vatican': 'Vatican City',
 };
 
@@ -117,7 +118,7 @@ for (const f of kept) {
 
 // Step 3: Douglas-Peucker simplification
 // Tolerance in degrees — 0.03 ≈ ~3km, removes fine coastline detail while keeping country shapes
-const TOLERANCE = 0.03;
+const TOLERANCE = 0.015;
 
 function sqDist(p, a, b) {
   let dx = b[0] - a[0], dy = b[1] - a[1];

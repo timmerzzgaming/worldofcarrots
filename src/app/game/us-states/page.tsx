@@ -235,11 +235,11 @@ export default function USStatesPage() {
               ],
               'line-width': [
                 'case',
-                ['boolean', ['feature-state', 'correct'], false], 4.5,
-                ['boolean', ['feature-state', 'wrong'], false], 4.5,
-                ['boolean', ['feature-state', 'target'], false], 4.5,
-                ['boolean', ['feature-state', 'hover'], false], 3.5,
-                3,
+                ['boolean', ['feature-state', 'correct'], false], 3,
+                ['boolean', ['feature-state', 'wrong'], false], 3,
+                ['boolean', ['feature-state', 'target'], false], 3,
+                ['boolean', ['feature-state', 'hover'], false], 2.5,
+                1.5,
               ],
             },
           })

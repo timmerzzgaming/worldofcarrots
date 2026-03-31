@@ -150,7 +150,7 @@ export default function StickerAlbumPage() {
           source: 'countries',
           paint: {
             'line-color': '#FFFFFF',
-            'line-width': 2,
+            'line-width': 1.5,
           },
         })
 
@@ -169,7 +169,7 @@ export default function StickerAlbumPage() {
             'line-width': [
               'case',
               ['boolean', ['feature-state', 'collected'], false],
-              3,
+              2,
               0,
             ],
           },

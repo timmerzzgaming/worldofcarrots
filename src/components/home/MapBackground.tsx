@@ -76,7 +76,7 @@ export default function MapBackground() {
               source: COUNTRIES_SOURCE,
               paint: {
                 'line-color': '#2D2D2D',
-                'line-width': 3,
+                'line-width': 1.5,
                 'line-opacity': 0.4,
               },
             })

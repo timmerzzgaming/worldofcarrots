@@ -409,7 +409,7 @@ export default function MultiplayerLobbyPage() {
           source: COUNTRIES_SOURCE,
           paint: {
             'line-color': countryLineColor(),
-            'line-width': 3,
+            'line-width': 1.5,
           },
         })
 
